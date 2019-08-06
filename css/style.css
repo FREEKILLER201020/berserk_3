@@ -1,0 +1,246 @@
+
+
+h2 {
+    background: #009d4b; /* Цвет фона */
+    color: #fff; /* Цвет текста */
+    padding: 10px; /* Поля вокруг текста */
+    position: sticky; /* Приклеиваем заголовок */
+    top: 0; /* К верхнему краю родителя */
+   }
+
+.grid {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 90%;
+  width: 90%;
+}
+
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  will-change: transform;
+}
+
+.sticky--top {
+  top: 0;
+}
+
+* {
+  -webkit-box-sizing: inherit;
+          box-sizing: inherit;
+}
+
+html {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  /*height: 100%;*/
+  font-family: 'Roboto', sans-serif;
+  --bg: #FCFCFC;
+  --bg-active-element: #111111;
+  --sp-color: #000077;
+  /*--color-headings: #0077FF;*/
+  --active-text-color: #f0f0f0;
+  --text-color: #111111;
+}
+
+.color_text{
+  color:var(--text-color);
+}
+
+.sp_input{
+  background-color: var(--bg);
+}
+
+html[data-theme='dark'] {
+  /*--bg: #FCFCFC;*/
+  --bg-active-element: #FCFCFC;
+  /*--color-headings: #0077FF;*/
+  --active-text-color: #111111;
+  /*--text-color: #111111;*/
+  --bg: #333333;
+  /*--bg-panel: #434343;*/
+  /*--color-headings: #3694FF;*/
+  --text-color: #B5B5B5;
+}
+
+ body {
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.75;
+  margin: 0;
+  min-height: 100%;
+  overflow: auto; /* Добавляем полосы прокрутки */
+  background-color: var(--bg);
+} 
+
+
+.header {
+  background-color: var(--bg);
+   /*padding-bottom: 1em; */
+  /*padding-top: 1em;*/
+}
+
+
+.header::after {
+  bottom: 0;
+  -webkit-box-shadow: 0 0.0625em 0.5em rgba(0, 0, 0, .3);
+          box-shadow: 0 0.0625em 0.5em rgba(0, 0, 0, .3);
+  content: '';
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  -webkit-transition: opacity 0.3s;
+  transition: opacity 0.3s;
+  z-index: -1;
+}
+
+.header.is-active::after {
+  opacity: 1;
+}
+
+.main {
+  padding-top: 6em;
+  padding-bottom: 6em;
+}
+
+
+h1 {
+  margin-bottom: 1.5em;
+  margin-top: 0;
+}
+
+/* modules/navigation.css */
+
+.navigation a {
+  color: var(--text-color);
+  display: block;
+  text-decoration: none;
+}
+
+.navigation .is-active {
+  background-color: var(--bg-active-element);
+  color: var(--active-text-color) !important;
+  padding-left: 1em;
+  padding-right: 1em;
+  border-radius: 999px;
+}
+
+.navigation__list {
+  list-style: none;
+  margin: -0.5em;
+  padding: 0;
+}
+
+.navigation__list--inline {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.navigation__item {
+  margin: 0.5em;
+  display: inline-block;
+}
+
+.parent
+{
+  text-align: center;
+}
+
+.child
+{
+  display: inline-block;
+}
+.element
+{
+  font-size: 110%;
+  padding: 5px;
+  border: 5px;
+  border-radius: 999px;
+}
+.element .is-active
+{
+  background-color: #000;
+  color: #fff !important;
+}
+
+table, th, td
+{
+  border: solid 1px #DDD;
+  border-collapse: collapse;
+  padding: 2px 3px;
+  text-align: center;
+}
+th {
+  font-weight:bold;
+}
+
+table.entries {width: 100%;border-spacing: 0px;margin:0;}
+table.entries thead.fixed {position:fixed;top:50vh;}
+
+.bg {
+  /* The image used */
+  background-image: url("../images/404_no_buttons.png");
+
+  /* Full height */
+  height: 100%;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.table1 {
+         display: inline-block;
+         vertical-align: top;
+     }
+/*input[type=checkbox] {
+  height: 0;
+  width: 0;
+  visibility: hidden;
+}*/
+
+/*label {
+  cursor: pointer;
+  text-indent: -9999px;
+  width: 52px;
+  height: 27px;
+  background: grey;
+  float: right;
+  border-radius: 100px;
+  position: relative;
+}
+
+label:after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border-radius: 90px;
+  transition: 0.3s;
+}
+
+input:checked + label {
+  background: var(--sp-color);
+}
+
+input:checked + label:after {
+  left: calc(100% - 5px);
+  transform: translateX(-100%);
+}
+
+label:active:after {
+  width: 45px;
+}*/
+
+html.transition,
+html.transition *,
+html.transition *:before,
+html.transition *:after {
+  transition: all 750ms !important;
+  transition-delay: 0 !important;
+}

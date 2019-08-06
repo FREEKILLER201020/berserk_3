@@ -1,0 +1,122 @@
+drop table if exists public.players CASCADE;
+drop table if exists public.eras CASCADE;
+drop table if exists public.logs CASCADE;
+drop table if exists public.cities CASCADE;
+drop table if exists public.attacks CASCADE;
+drop table if exists public.clans CASCADE;
+
+
+
+
+CREATE TABLE public.clans (
+  timemark timestamp,
+  id integer,
+  title text,
+  points integer,
+  gone timestamp
+  -- PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+);
+
+ALTER TABLE public.clans
+    OWNER to postgres;
+
+CREATE TABLE public.attacks
+(
+  "from" integer,
+  "to" integer,
+  attacker integer ,
+  -- REFERENCES clans(id),
+  defender integer ,
+  -- REFERENCES clans(id),
+  declared timestamp,
+  resolved timestamp,
+  ended timestamp,
+  winer integer,
+  folder text,
+  primary key ("from", "to",attacker,defender,declared,resolved)
+  -- REFERENCES clans(id)
+)
+WITH (
+    OIDS = FALSE
+);
+
+ALTER TABLE public.attacks
+    OWNER to postgres;
+
+CREATE TABLE public.cities (
+  timemark timestamp,
+  id integer,
+  name text,
+  clan integer
+  -- REFERENCES clans(id),
+  -- PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+);
+
+ALTER TABLE public.cities
+    OWNER to postgres;
+
+
+CREATE TABLE public.eras
+(
+  id SERIAL,
+  started date,
+  ended date,
+  lbz json,
+  pointw integer
+)
+WITH (
+    OIDS = FALSE
+);
+
+ALTER TABLE public.eras
+    OWNER to postgres;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Logs`
+--
+
+CREATE TABLE public.logs
+(
+  timemark timestamp,
+  "log" json
+)
+WITH (
+    OIDS = FALSE
+);
+
+ALTER TABLE public.logs
+    OWNER to postgres;
+
+CREATE TABLE public.players
+(
+  timemark timestamp,
+  id integer,
+  nick text,
+  frags integer,
+  deaths integer,
+  level integer,
+  clan integer 
+  -- REFERENCES clans(id),
+  -- PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+);
+
+ALTER TABLE public.players
+    OWNER to postgres;
+
+INSERT INTO public.eras(
+  id, started, ended, lbz, pointw)
+  VALUES (52,'2019-01-28','2019-02-19','{"5":"Рарка","10":"1б","15":"1б + Возмездие","25":"1б + 2б"}',0);
+INSERT INTO public.eras(
+  id, started, ended, lbz, pointw)
+  VALUES (53,'2019-03-22','2019-04-12','{"5":"Рарка","10":"1б","15":"1б + Возмездие","25":"1б + 2б"}',0);

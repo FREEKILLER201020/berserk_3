@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <script src="jquery.js"></script>
+    <script type="text/javascript">
+      function loadSetCards(){}
+    </script>
+    <script type="text/javascript" src="https://berserktcg.ru/static/js/game/cards/cards_ru_RU.js?_155734825307596"></script>
+    <meta charset="utf-16 LE">
+    <title></title>
+  </head>
+  <body id=1>
+    <script type="text/javascript">
+    var res = document.createElement("text");
+    res.setAttribute("id", "res");
+    var divContainer = document.getElementById("1");
+    divContainer.innerHTML = "";
+    divContainer.appendChild(res);
+    document.getElementById("res").innerHTML=JSON.stringify(ProtoCards);
+    </script>
+  </body>
+</html>

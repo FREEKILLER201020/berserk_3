@@ -1,0 +1,8 @@
+{
+  "host": "localhost",
+  "user": "postgres",
+  "password": "Xwh7EmQJXfdz",
+  "port": "",
+  "dbname": "berserk_tests",
+  "dbname2": "berserk"
+}
