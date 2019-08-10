@@ -65,7 +65,7 @@ if (($_SESSION['u'] != null) && ($_SESSION['p'] != null)) {
 	echo "<li class=\"navigation__item child\"><a class=\"element\" style=\"cursor: pointer;\" onclick=\"gotourl('htmltest.php?link=index.php')\">Вход</a></li>";
 }
 ?>
-          <input type="checkbox" class="color_text sp_input" id="switch" name="theme" /><text class="color_text">Moon</text>
+          <input type="checkbox" class="color_text sp_input" id="switch" name="theme" /><text id="moon" class="color_text"></text>
           </ul>
     		</nav>
       </div>
