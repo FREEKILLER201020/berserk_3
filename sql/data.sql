@@ -32,7 +32,7 @@ AS $BODY$
 BEGIN
     RETURN QUERY SELECT 
 	distinct on (id)
-    timemark,id,nick,frags,deaths,level,clan
+    timemark,id,nick,frags,deaths,level,clan,folder
 from players
 order by id, timemark desc;
 END;

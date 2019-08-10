@@ -103,7 +103,8 @@ CREATE TABLE public.players
   frags integer,
   deaths integer,
   level integer,
-  clan integer 
+  clan integer,
+  folder text
   -- REFERENCES clans(id),
   -- PRIMARY KEY (id)
 )

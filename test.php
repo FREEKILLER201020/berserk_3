@@ -318,6 +318,12 @@ for ($i = $start_p; $i < $end_p; $i++) {
 	}
 	$file = file_get_contents(realpath(dirname(__FILE__)) . "/{$folders[$i]['folder']}/clans_{$folders[$i]['file_dir']}.json");
 	$json = json_decode($file, true);
+	if ($json == NULL) {
+		$noerr = 0;
+		$log['clans'] = "error";
+	}
+	// echo $folders[$i]['folder'] . PHP_EOL;
+	// print_r($json);
 	$clans = array();
 	if ($noerr == 1) {
 		$cities = array();
@@ -448,6 +454,8 @@ for ($i = $start_p; $i < $end_p; $i++) {
 				// PLAYERS DATA START
 				$file = file_get_contents(realpath(dirname(__FILE__)) . "/{$folders[$i]['folder']}/clan[{$row['id']}]_{$folders[$i]['file_dir']}.json");
 				$json_players = json_decode($file, true);
+				// print_r($json_players);
+				// echo $folders[$i]['file_dir'] . PHP_EOL;
 				foreach ($json_players['players'] as $player) {
 					$was2 = 0;
 					foreach ($players_server as $player_server) {
@@ -457,7 +465,7 @@ for ($i = $start_p; $i < $end_p; $i++) {
 							if (($player_server->nick != $player['nick']) || ($player_server->deaths != $player['deaths']) || ($player_server->frags != $player['frags']) || ($player_server->level != $player['level']) || ($player_server->clan_id != $row['id'])) {
 								// $connection=Connect($config);
 								$d = date('Y-m-d H:i:s', $folders[$i]['time'] - 3 * 60 * 60);
-								$query = "INSERT INTO players (timemark,id,nick,frags,deaths,level,clan) values ('{$d}',{$player['id']},'{$player['nick']}',{$player['frags']},{$player['deaths']},{$player['level']},{$row['id']});\n";
+								$query = "INSERT INTO players (timemark,id,nick,frags,deaths,level,clan,folder) values ('{$d}',{$player['id']},'{$player['nick']}',{$player['frags']},{$player['deaths']},{$player['level']},{$row['id']},'{$folders[$i]['folder']}');\n";
 								$query_log .= $query;
 								// echo $query . PHP_EOL;
 								if ($debug == 1) {
@@ -473,7 +481,7 @@ for ($i = $start_p; $i < $end_p; $i++) {
 					if ($was2 == 0) {
 						// $connection=Connect($config);
 						$d = date('Y-m-d H:i:s', $folders[$i]['time'] - 3 * 60 * 60);
-						$query = "INSERT INTO players (timemark,id,nick,frags,deaths,level,clan) values ('{$d}',{$player['id']},'{$player['nick']}',{$player['frags']},{$player['deaths']},{$player['level']},{$row['id']});\n";
+						$query = "INSERT INTO players (timemark,id,nick,frags,deaths,level,clan,folder) values ('{$d}',{$player['id']},'{$player['nick']}',{$player['frags']},{$player['deaths']},{$player['level']},{$row['id']},'{$folders[$i]['folder']}');\n";
 						$query_log .= $query;
 						// echo $query . PHP_EOL;
 						if ($debug == 1) {
@@ -499,8 +507,9 @@ for ($i = $start_p; $i < $end_p; $i++) {
 					// print_r($json_players['players']);
 					// $connection=Connect($config);
 					$d = date('Y-m-d H:i:s', $folders[$i]['time'] - 3 * 60 * 60);
-					$query = "INSERT INTO players (timemark,id,nick,frags,deaths,level,clan) values ('{$d}',{$player_server->id},'{$player_server->nick}',{$player_server->frags},{$player_server->deaths},{$player_server->level},-1);\n";
+					$query = "INSERT INTO players (timemark,id,nick,frags,deaths,level,clan,folder) values ('{$d}',{$player_server->id},'{$player_server->nick}',{$player_server->frags},{$player_server->deaths},{$player_server->level},-1,'{$folders[$i]['folder']}');\n";
 					$query_log .= $query;
+					// echo $query . PHP_EOL;
 					if ($debug == 1) {
 						$log["log"] .= "{" . $query . "}";
 						echo $query . PHP_EOL;
