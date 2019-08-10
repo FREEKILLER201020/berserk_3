@@ -289,6 +289,8 @@ function getDates(startDate, endDate) {
       }
 
       function order(){
+        console.log("Order");
+        console.log($('#era').val());
         if ($('#era').val()==-1){
           var bcp=$('#order').val();
           console.log(bcp);
@@ -325,6 +327,7 @@ function getDates(startDate, endDate) {
         }
         else{
           var bcp=$('#order').val();
+          console.log(bcp);
           var x = document.getElementById("order");
           var option = document.createElement("option");
           x.options.length = 0;
@@ -373,7 +376,7 @@ function getDates(startDate, endDate) {
           else{
             document.getElementById("order").value=bcp;
           }
-          document.getElementById("order").value=bcp;
+          // document.getElementById("order").value=bcp;
           console.log("create2");
           // create2();
         }

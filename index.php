@@ -368,7 +368,7 @@ function getDates(startDate, endDate) {
           else{
             document.getElementById("order").value=bcp;
           }
-          document.getElementById("order").value=bcp;
+          // document.getElementById("order").value=bcp;
           console.log("create2");
           // create2();
         }
