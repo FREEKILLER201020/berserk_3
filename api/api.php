@@ -81,7 +81,7 @@ function SessionSet($array) {
 function Players($array) {
 	// $connection = Connect($config);
 	if ($array['clan_id'] < 0) {
-		$query = "select * from players();\n";
+		$query = "select * from players_all();\n";
 	} else {
 		$query = "select * from players(" . $array['clan_id'] . ");\n";
 	}
