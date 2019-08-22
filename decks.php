@@ -338,7 +338,7 @@ formData.append('descr', $('#descr').val());
   });
 
     function player_check(){
-      $('#player_id').val(-1);
+      // $('#player_id').val(-1);
       console.log(data_fill,$('#player').val());
       console.log(data_fill.includes($('#player').val()));
       var divContainer = document.getElementById("showData");
@@ -351,9 +351,9 @@ formData.append('descr', $('#descr').val());
         // $('#table').show();
         $('#player_row').text($('#player').val());
         console.log($('#player_row'));
+              set_session("player_id",idds[data_fill.indexOf($('#player').val())]);
         create();
       }
-      set_session("player_id",idds[data_fill.indexOf($('#player').val())]);
     }
 
 PlayerData();
