@@ -952,7 +952,7 @@ function UploadFile($array, $file, $uploadFileDir, $message) {
 			if (in_array($fileExtension, $allowedfileExtensions)) {
 				// directory in which the uploaded file will be moved
 				$dest_path = $uploadFileDir . $newFileName;
-				echo $dest_path;
+				// echo $dest_path;
 
 				if (move_uploaded_file($fileTmpPath, "../" . $dest_path)) {
 					$message = 'File is successfully uploaded.';
