@@ -7,6 +7,7 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="js/jquery.js"></script>
 		<script src="js/jquery-ui.js"></script>
+    <script src="js/functions.js"></script>
 		<link href="js/jquery-ui.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
@@ -413,113 +414,6 @@ function getDates(startDate, endDate) {
           }
         });
       }
-
-      function CreateTableFromJSON(myBooks) {
-
-
-            // EXTRACT VALUE FOR HTML HEADER.
-            // ('Book ID', 'Book Name', 'Category' and 'Price')
-            // myBooks.sort(function(a, b){
-            //   var srt=document.getElementById("order").value;
-            //   console.log(srt);
-            //   return b.srt - a.srt;
-            // });
-            var col = [];
-            for (var i = 0; i < myBooks.length; i++) {
-                for (var key in myBooks[i]) {
-                    if (col.indexOf(key) === -1) {
-                        col.push(key);
-                    }
-                }
-            }
-            // CREATE DYNAMIC TABLE.
-            var table = document.createElement("table");
-            table.setAttribute("align", "center");
-            table.setAttribute("id", "table1");
-
-            // var table = document.getElementById("myTable");
-            // var header = table.createTHead();
-            var tblBody = table.createTBody();
-            // var row = header.insertRow(0);
-            //
-            //
-            // for (var i = 0; i < col.length; i++) {
-            //     var th = document.createElement("th");      // TABLE HEADER.
-            //     th.innerHTML = col[i];
-            //     row.appendChild(th);
-            //     // var cell = row.insertCell(0);
-            //     // cell.innerHTML = "<b>This is a table header</b>";
-            // }
-
-            // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
-
-            var tr = tblBody.insertRow(-1);                   // TABLE ROW.
-            //
-            // for (var i = 0; i < col.length; i++) {
-            //     var th = document.createElement("th");      // TABLE HEADER.
-            //     th.innerHTML = col[i];
-            //     tr.appendChild(th);
-            // }
-
-            // ADD JSON DATA TO THE TABLE AS ROWS.
-            for (var i = 0; i < myBooks.length; i++) {
-
-                tr = table.insertRow(-1);
-
-                for (var j = 0; j < col.length; j++) {
-                    var tabCell = tr.insertCell(-1);
-                    tabCell.innerHTML = myBooks[i][col[j]];
-                    tabCell.setAttribute("class", "color_text");
-                }
-            }
-
-            // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
-            var divContainer = document.getElementById("showData");
-            divContainer.innerHTML = "";
-            divContainer.appendChild(table)
-            var rrow=document.getElementById('table1').rows[2].cells;
-            var width = [];
-            for(let i = 0; i < rrow.length; i++){
-              width.push(rrow[i].offsetWidth+5);
-            }
-
-            var table2 = document.createElement("table");
-            table2.setAttribute("align", "center");
-            table2.setAttribute("id", "table2");
-
-            var header2 = table2.createTHead();
-            var tblBody2 = table2.createTBody();
-            var row2 = header2.insertRow(0);
-
-
-            for (var i = 0; i < col.length; i++) {
-                var th = document.createElement("th");      // TABLE HEADER.
-                th.innerHTML = col[i];
-                th.setAttribute("class", "color_text");
-                row2.appendChild(th);
-            }
-            var divContainer = document.getElementById("showData2");
-            divContainer.innerHTML = "";
-            divContainer.appendChild(table2);
-            document.getElementById('table2').rows[0].cells;
-            var rrow=document.getElementById('table2').rows[0].cells;
-            var width2 = [];
-            for(let i = 0; i < rrow.length; i++){
-
-              width2.push(rrow[i].offsetWidth+5);
-            }
-            var rrow=document.getElementById('table2').rows[0].cells;
-            for(let i = 0; i < rrow.length; i++){
-              document.getElementById('table2').rows[0].cells[i].width=Math.max(width[i],width2[i]);
-            }
-            var rrow=document.getElementById('table1').rows;
-            for(let i = 0; i < rrow.length; i++){
-              var ccells=document.getElementById('table1').rows[i].cells;
-              for(let j = 0; j < ccells.length; j++){
-                document.getElementById('table1').rows[i].cells[j].width=Math.max(width[j],width2[j]);
-              }
-            }
-        }
     </script>
     <script src="js/script.js"></script>
 </html>

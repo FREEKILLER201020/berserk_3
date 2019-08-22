@@ -1,11 +1,11 @@
-drop table if exists public.cards;
-drop table if exists public.cards_type;
-drop table if exists public.cards_race;
-drop table if exists public.cards_rarity;
-drop table if exists public.cards_crystal;
-drop table if exists public.cards_typeEquipment;
-drop table if exists public.cards_hate_race;
-drop table if exists public.cards_hate_class;
+drop table if exists public.cards cascade;
+drop table if exists public.cards_type cascade;
+drop table if exists public.cards_race cascade;
+drop table if exists public.cards_rarity cascade;
+drop table if exists public.cards_crystal cascade;
+drop table if exists public.cards_typeEquipment cascade;
+drop table if exists public.cards_hate_race cascade;
+drop table if exists public.cards_hate_class cascade;
 
 CREATE TABLE public.cards_type
 (

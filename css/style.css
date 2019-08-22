@@ -1,4 +1,12 @@
-
+img {
+    transition: -webkit-transform 0.25s ease;
+}
+img[src=""] {
+    display: none;
+}
+img:active {
+    -webkit-transform: scale(2);
+}
 
 h2 {
     background: #009d4b; /* Цвет фона */

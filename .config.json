@@ -1,1 +1,10 @@
-{"host":"localhost","user":"postgres","password":"","port":"","dbname":"berserk_tests","dbname2":"berserk"}
+{
+	"password": "", 
+	"host": "localhost", 
+	"user": "postgres", 
+	"port": "", 
+	"dbname2": "berserk", 
+	"dbname": "berserk_tests",
+	"screenshot_dir":"uploaded_files/",
+	"image_size":"info"
+}
