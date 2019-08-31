@@ -11,6 +11,22 @@ class ClanClass {
 	}
 }
 
+class ClanClassMerge {
+	public $timemark;
+	public $id;
+	public $title;
+	public $points;
+	public $gone;
+
+	public function __construct($timemark, $id, $title, $points, $gone) {
+		$this->timemark = $timemark;
+		$this->id = $id;
+		$this->title = $title;
+		$this->points = $points;
+		$this->gone = $gone;
+	}
+}
+
 class ClanClassTest {
 	public $id;
 	public $title;
