@@ -22,6 +22,28 @@ class PlayerClass {
 	}
 }
 
+class PlayerClassMerge {
+	public $timemark;
+	public $id;
+	public $nick;
+	public $frags;
+	public $deaths;
+	public $level;
+	public $clan_id;
+	public $folder;
+
+	public function __construct($timemark, $id, $nick, $frags, $deaths, $level, $clan_id, $folder) {
+		$this->timemark = $timemark;
+		$this->id = $id;
+		$this->nick = $nick;
+		$this->frags = $frags;
+		$this->deaths = $deaths;
+		$this->level = $level;
+		$this->clan_id = $clan_id;
+		$this->folder = $folder;
+	}
+}
+
 class PlayerClassEra {
 	public $timemark;
 	public $nick;

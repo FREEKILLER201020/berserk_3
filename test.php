@@ -792,6 +792,11 @@ $query = "rm -r " . $folder_root . "/new/*";
 if ($move == 1) {
 	exec($query);
 }
+
+pg_free_result($result);
+
+// Закрытие соединения
+pg_close($dbconn);
 // }
 
 // DATA ANALISE END

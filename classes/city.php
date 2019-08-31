@@ -11,6 +11,20 @@ class City {
 	}
 }
 
+class CityMerge {
+	public $timemark;
+	public $id;
+	public $name;
+	public $clan;
+
+	public function __construct($timemark, $i, $n, $c) {
+		$this->timemark = $timemark;
+		$this->id = $i;
+		$this->name = $n;
+		$this->clan = $c;
+	}
+}
+
 class CityWeb {
 	public $Название;
 	public $Клан;

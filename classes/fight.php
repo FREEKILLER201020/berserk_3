@@ -24,6 +24,33 @@ class FightClass {
 		$this->ended = $end;
 	}
 }
+
+class FightClassMerge {
+	// public $id;
+	public $attacker_id; // id атакующего клана
+	public $defender_id; // id защищающегося клана
+	public $from;
+	public $to;
+	public $declared; // время, когда был объявлен бой
+	public $resolved; // вермя, когда состаится бой
+	public $ended; // вермя, когда состаится бой
+	public $winer;
+	public $folder;
+	public $was = 0;
+
+	public function __construct($a, $d, $f, $t, $de, $r, $end, $winer, $folder) {
+		$this->attacker_id = $a;
+		$this->defender_id = $d;
+		$this->from = $f;
+		$this->to = $t;
+		$this->declared = $de;
+		$this->resolved = $r;
+		$this->ended = $end;
+		$this->winer = $winer;
+		$this->folder = $folder;
+	}
+}
+
 class FightClassWeb {
 	// public $id;
 	public $№; // id атакующего клана
