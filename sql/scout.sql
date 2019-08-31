@@ -75,9 +75,9 @@ AS $BODY$
 BEGIN
     RETURN QUERY SELECT 
 	distinct on (id)
-	id, type, health, kick, steps, race, name, proto, rarity, fly, "desc", crystal, "crystalCount", abilities, f, rows, "case", horde, rangeAttack, classes, series, typeEquipment, hate_class, hate_race, "only", unlim, number, author
+	id, type, health, kick, steps, race, name, proto, rarity, fly, "desc", crystal, "crystalCount", abilities, f, rows, "case", horde, rangeAttack, classes, series, typeEquipment, hate_class, hate_race, "only", unlim, number, author,main
 from cards
-order by id desc;
+order by id asc;
 END;
 $BODY$;
 

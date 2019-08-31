@@ -135,6 +135,7 @@ CREATE TABLE public.cards
     unlim integer,
     number integer,
     author text,
+    main integer REFERENCES cards(id),
     PRIMARY KEY (id)
 )
 WITH (

@@ -5,6 +5,7 @@ error_reporting(1);
 // require("functions.php");
 require "functions/progress_bar.php";
 require "functions/string.php";
+require "functions/get_data.php";
 include 'classes/pushover.php';
 require "classes/player.php";
 require "classes/clan.php";
@@ -41,6 +42,7 @@ $notification = 0;
 $period = 0;
 $resave = 0;
 $move = 0;
+$new_scan = 0;
 for ($i = 0; $i < count($argv); $i++) {
 	if ($argv[$i] == "-s") {
 		$save = 1;
@@ -78,6 +80,9 @@ for ($i = 0; $i < count($argv); $i++) {
 	if ($argv[$i] == "-notification") {
 		$notification = 1;
 	}
+	if ($argv[$i] == "-new_scan") {
+		$new_scan = 1;
+	}
 	if ($argv[$i] == "-update") {
 		$period = $argv[$i + 1];
 	}
@@ -86,6 +91,59 @@ for ($i = 0; $i < count($argv); $i++) {
 	}
 }
 $folder_root = "../THE_DATA/DATA";
+
+// GET NEW DATA FROM THE GAME
+if ($new_scan == 1) {
+	$year = date('Y');
+	$month = date('F');
+	$day = date('d');
+	$time = date('l-jS-\of-F-Y-h:i:s-A');
+	$clans = GetClans($config);
+	// $date = new DateTime();
+	print_r($clans);
+	$folder = $folder_root . "/new";
+	$path = $folder . "/$year";
+	exec("mkdir $path");
+	$path .= "/$month";
+	exec("mkdir $path");
+	$path .= "/$day";
+	exec("mkdir $path");
+	// $path=realpath(dirname(__FILE__))."/DATA/$time";
+	// $path_perf.="/Applications/MAMP/htdocs/THE_DATA/DATA/$year/$month/$day/$time";
+	// $path_perf .= realpath(dirname(__FILE__)) . "/../THE_DATA/$data_folder_name/$year/$month/$day/$time";
+	$path .= "/$time";
+	exec("mkdir $path");
+	echo $path . PHP_EOL;
+	$query = " wget -O \"$path/cities_$time.json\" http://berserktcg.ru/api/export/cities.json";
+	echo $query . PHP_EOL;
+	exec($query);
+	$query = " wget -O \"$path/clans_$time.json\" http://berserktcg.ru/api/export/clans.json";
+	exec($query);
+	$query = " wget -O \"$path/fights_$time.json\" http://berserktcg.ru/api/export/attacks.json";
+	exec($query);
+	foreach ($clans as $clan) {
+		$query = " wget -O \"$path/clan[{$clan['id']}]_$time.json\" http://berserktcg.ru/api/export/clan/" . $clan['id'] . ".json";
+		exec($query);
+	}
+	// exit();
+	// // echo $time;
+	// $file = array();
+	// $folders = array();
+	// $folder = "../THE_DATA/$data_folder_name";
+	// $date = "";
+	// $date .= intval(explode('-', $time)[1]) . " ";
+	// $date .= explode('-', $time)[3] . " ";
+	// $date .= explode('-', $time)[4] . " ";
+	// $date .= explode('-', $time)[5] . " ";
+	// $date .= explode('-', $time)[6] . " ";
+	// $file["folder"] = "$folder/$year/$month/$day/$time";
+	// $file["time"] = strtotime($date);
+	// $file["file_dir"] = "$time";
+	// array_push($folders, $file);
+
+	// print_r($folders);
+}
+
 // GET NEW DATA
 if ($load != 1) {
 	$folder = $folder_root . "/new";
@@ -154,7 +212,7 @@ if ($load != 1) {
 
 }
 // print_r($folders);
-arraycheck($folders);
+// arraycheck($folders);
 // SAVE NEW DATA
 if ($save == 1) {
 	$file_load = "big_order_data.json";
@@ -184,8 +242,6 @@ if ($load == 1) {
 	$folders = json_decode($file_load, true);
 	// file_put_contents($file_load, json_encode($data,JSON_UNESCAPED_UNICODE));
 }
-
-// exit();
 
 // ADD CITIES DATA
 

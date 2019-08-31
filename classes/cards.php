@@ -29,6 +29,7 @@ class Card {
 	public $unlim;
 	public $number;
 	public $author;
+	public $main;
 
 	public function __construct($id, $name, $proto) {
 		$this->id = $id;

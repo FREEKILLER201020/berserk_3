@@ -49,6 +49,9 @@ function OnCall($array, $config) {
 	if ($array['type'] == 'cards') {
 		$return = Cards($array);
 	}
+	if ($array['type'] == 'cards_full') {
+		$return = CardsFull($array);
+	}
 	if ($array['type'] == 'decks_all') {
 		$return = DecksALL($array);
 	}
@@ -142,6 +145,51 @@ function Cards($array) {
 
 		// print_r($row);
 		array_push($cards, new Card($line['id'], $line['name'], $line['proto']));
+
+	}
+	return $cards;
+}
+function CardsFull($array) {
+	// $connection = Connect($config);
+	$query = "select * from cards();\n";
+	// $result = $connection->query($query);
+	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+	$cards = array();
+	// echo $query;
+	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+
+		// print_r($row);
+		$tmp = new Card($line['id'], $line['name'], $line['proto']);
+		$tmp->type = "<input class='color_text sp_input' data-lpignore='true' id='card" . $line['id'] . "' name='card" . $line['id'] . "' value='" . $line['type'] . "'>";
+
+		$line["type"];
+		$tmp->health = $line["health"];
+		$tmp->kick = $line["kick"];
+		$tmp->steps = $line["steps"];
+		$tmp->race = $line["race"];
+		$tmp->rarity = $line["rarity"];
+		$tmp->fly = $line["fly"];
+		$tmp->desc = $line["desc"];
+		$tmp->crystal = $line["crystal"];
+		$tmp->crystalCount = $line["crystalCount"];
+		$tmp->abilities = $line["abilities"];
+		$tmp->f = $line["f"];
+		$tmp->rows = $line["rows"];
+		$tmp->case = $line["case"];
+		$tmp->horde = $line["horde"];
+		$tmp->rangeAttack = $line["rangeAttack"];
+		$tmp->classes = $line["classes"];
+		$tmp->series = $line["series"];
+		$tmp->typeEquipment = $line["typeEquipment"];
+		$tmp->hate_calss = $line["hate_calss"];
+		$tmp->hate_race = $line["hate_race"];
+		$tmp->only = $line["only"];
+		$tmp->unlim = $line["unlim"];
+		$tmp->number = $line["number"];
+		$tmp->author = $line["author"];
+		$tmp->main = $line["main"];
+
+		array_push($cards, $tmp);
 
 	}
 	return $cards;

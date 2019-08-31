@@ -1,3 +1,4 @@
+
 img {
     transition: -webkit-transform 0.25s ease;
 }
@@ -179,6 +180,7 @@ table, th, td
   border-collapse: collapse;
   padding: 2px 3px;
   text-align: center;
+  overflow: scroll; <!-- Available options: visible, hidden, scroll, auto -->
 }
 th {
   font-weight:bold;
