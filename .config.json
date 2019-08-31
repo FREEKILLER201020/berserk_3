@@ -1,1 +1,1 @@
-{"password":"","dbname2":"berserk","host":"localhost","user":"postgres","dbname":"berserk_tests","image_size":"info","screenshot_dir":"uploaded_files\/","clans_url":"https:\/\/berserktcg.ru\/api\/export\/clans","clan_data_url":"https:\/\/berserktcg.ru\/api\/export\/clan\/","attacks_url":"https:\/\/berserktcg.ru\/api\/export\/attacks","cities":"https:\/\/berserktcg.ru\/api\/export\/cities","port":""}
+.config_local.json
