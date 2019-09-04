@@ -158,9 +158,9 @@ function Timetable($array) {
 		$tmp[ended] = $line[ended] . " 23:59:59";
 	}
 	if ($array[clan] == -1) {
-		$query = "select * from attacks where ended is null and declared>='$tmp[started]' and declared <='$tmp[ended]'  order by resolved desc;\n";
+		$query = "select * from attacks where ended is null and declared>='$tmp[started]' and declared <='$tmp[ended]'  order by resolved asc;\n";
 	} else {
-		$query = "select * from attacks where ended is null and (attacker=$array[clan] or defender=$array[clan]) and declared>='$tmp[started]' and declared <='$tmp[ended]' order by resolved desc;\n";
+		$query = "select * from attacks where ended is null and (attacker=$array[clan] or defender=$array[clan]) and declared>='$tmp[started]' and declared <='$tmp[ended]' order by resolved asc;\n";
 	}
 	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 	$i = 1;
