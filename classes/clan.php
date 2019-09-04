@@ -11,6 +11,22 @@ class ClanClass {
 	}
 }
 
+class ClanUpdate {
+	public $id;
+	public $title_old;
+	public $title_new;
+	public $cteated;
+	public $gone;
+
+	public function __construct($id, $title_old, $title_new, $created, $gone) {
+		$this->id = $id;
+		$this->title_old = $title_old;
+		$this->title_new = $title_new;
+		$this->created = $created;
+		$this->gone = $gone;
+	}
+}
+
 class ClanClassMerge {
 	public $timemark;
 	public $id;
@@ -32,12 +48,16 @@ class ClanClassTest {
 	public $title;
 	public $points;
 	public $was;
+	public $gone;
+	public $created;
 
-	public function __construct($id, $title, $points, $was) {
+	public function __construct($id, $title, $points, $was, $gone, $created) {
 		$this->id = $id;
 		$this->title = $title;
 		$this->points = $points;
 		$this->was = $was;
+		$this->gone = $gone;
+		$this->created = $created;
 	}
 }
 function GetClanId($dbconn, $title) {

@@ -67,13 +67,199 @@ function OnCall($array, $config) {
 	if ($array['type'] == 'set_session') {
 		$return = SessionSet($array);
 	}
+	if ($array['type'] == 'players_updates') {
+		$return = PlayersUpdates($array);
+	}
+	if ($array['type'] == 'clans_updates') {
+		$return = ClansUpdates($array);
+	}
+	if ($array['type'] == 'history') {
+		$return = History($array);
+	}
+	if ($array['type'] == 'timetable') {
+		$return = Timetable($array);
+	}
 	if ($array['type'] == 'upload') {
 		$uploadFileDir = $config['screenshot_dir'];
 		$message = '';
 		$return = UploadFile($_POST, $_FILES, $uploadFileDir, $message);
 		header("Location: " . $array['back']);
 	}
+	pg_close($dbconn);
 	echo json_encode($return);
+}
+function History($array) {
+	$query = "select * from eras where id=$array[id];\n";
+
+	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+	$timetable = array();
+	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+		$tmp = array();
+		$tmp[started] = $line[started] . " 00:00:00";
+		$tmp[ended] = $line[ended] . " 23:59:59";
+	}
+	if ($array[clan] == -1) {
+		$query = "select * from attacks where ended is not null and declared>='$tmp[started]' and declared <='$tmp[ended]'  order by resolved desc;\n";
+	} else {
+		$query = "select * from attacks where ended is not null and (attacker=$array[clan] or defender=$array[clan]) and declared>='$tmp[started]' and declared <='$tmp[ended]' order by resolved desc;\n";
+	}
+	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+	$i = 1;
+	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+		$query2 = "SELECT distinct on (id) timemark,id,title, points, created, gone from clans where timemark<='$line[resolved]';\n";
+		$result2 = pg_query($query2) or die('Ошибка запроса: ' . pg_last_error());
+		while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
+			if ($line[attacker] == $line2[id]) {
+				$line[attacker] = $line2[title];
+			}
+			if ($line[defender] == $line2[id]) {
+				$line[defender] = $line2[title];
+			}
+			if ($line[winer] == $line2[id]) {
+				$line[winer] = $line2[title];
+			}
+		}
+
+		$query2 = "SELECT distinct on (id) timemark, id, name, clan from cities where timemark<='$line[resolved]';\n";
+		$result2 = pg_query($query2) or die('Ошибка запроса: ' . pg_last_error());
+		while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
+			if ($line[from] == $line2[id]) {
+				$line[from] = $line2[name];
+			}
+			if ($line[to] == $line2[id]) {
+				$line[to] = $line2[name];
+			}
+		}
+		if ($line[from] == -1) {
+			$line[from] = "Варвары";
+		}
+		if ($line[to] == -1) {
+			$line[to] = "Варвары";
+		}
+		$attacker = $line[attacker];
+		$defender = $line[defender];
+		$from = $line[from];
+		$to = $line[to];
+
+		$tmp = new FightClassWeb($i, $attacker, $defender, $from, $to, $line[resolved], $line[ended], $line[winer]);
+		array_push($timetable, $tmp);
+		$i++;
+	}
+	return $timetable;
+}
+function Timetable($array) {
+	$query = "select * from eras where id=$array[id];\n";
+
+	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+	$timetable = array();
+	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+		$tmp = array();
+		$tmp[started] = $line[started] . " 00:00:00";
+		$tmp[ended] = $line[ended] . " 23:59:59";
+	}
+	if ($array[clan] == -1) {
+		$query = "select * from attacks where ended is null and declared>='$tmp[started]' and declared <='$tmp[ended]'  order by resolved desc;\n";
+	} else {
+		$query = "select * from attacks where ended is null and (attacker=$array[clan] or defender=$array[clan]) and declared>='$tmp[started]' and declared <='$tmp[ended]' order by resolved desc;\n";
+	}
+	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+	$i = 1;
+	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+		$query2 = "SELECT distinct on (id) timemark,id,title, points, created, gone from clans where timemark<='$line[resolved]';\n";
+		$result2 = pg_query($query2) or die('Ошибка запроса: ' . pg_last_error());
+		while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
+			if ($line[attacker] == $line2[id]) {
+				$line[attacker] = $line2[title];
+			}
+			if ($line[defender] == $line2[id]) {
+				$line[defender] = $line2[title];
+			}
+			if ($line[winer] == $line2[id]) {
+				$line[winer] = $line2[title];
+			}
+		}
+
+		$query2 = "SELECT distinct on (id) timemark, id, name, clan from cities where timemark<='$line[resolved]';\n";
+		$result2 = pg_query($query2) or die('Ошибка запроса: ' . pg_last_error());
+		while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
+			if ($line[from] == $line2[id]) {
+				$line[from] = $line2[name];
+			}
+			if ($line[to] == $line2[id]) {
+				$line[to] = $line2[name];
+			}
+		}
+		if ($line[from] == -1) {
+			$line[from] = "Варвары";
+		}
+		if ($line[to] == -1) {
+			$line[to] = "Варвары";
+		}
+		$attacker = $line[attacker];
+		$defender = $line[defender];
+		$from = $line[from];
+		$to = $line[to];
+
+		$tmp = new FightClassWeb($i, $attacker, $defender, $from, $to, $line[resolved], $line[ended], $line[winer]);
+		array_push($timetable, $tmp);
+		$i++;
+	}
+	return $timetable;
+}
+function PlayersUpdates($array) {
+
+	$query = "select * from players_updates order by timemark desc;\n";
+
+	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+	$log = array();
+	// echo $query;
+	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+		$tmp = array();
+		$tmp[time] = $line[timemark];
+		if (($line[old_clan] == "") && ($line[new_clan] == "")) {
+			$tmp[log] = "Игрок <b>$line[nick] ($line[id])</b> сменил ник на <b>$line[new_nick]</b>";
+		} else if ($line[old_nick] == "") {
+			if ($line[old_clan] == "Нет клана") {
+				$tmp[log] = "Игрок <b>$line[nick] ($line[id])</b> присоеденился к клану <b>$line[new_clan]</b>";
+			}
+			if ($line[new_clan] == "Нет клана") {
+				$tmp[log] = "Игрок <b>$line[nick] ($line[id])</b> покинул клан <b>$line[old_clan]</b>";
+			}
+			if (($line[new_clan] != "Нет клана") && ($line[old_clan] != "Нет клана")) {
+				$tmp[log] = "Игрок <b>$line[nick] ($line[id])</b> сменил клан с <b>$line[old_clan]</b> на <b>$line[new_clan]</b>";
+			}
+			// $tmp="$line[nick] changed nick to $line[new_nick]";
+		}
+		// print_r($line);
+		// $tmp = new PlayerClass($line["timemark"], $line["id"], Restring($line["nick"]), $line["frags"], $line["deaths"], $line["level"], $line["clan_id"], null);
+		array_push($log, $tmp);
+	}
+	return $log;
+}
+function ClansUpdates($array) {
+
+	$query = "select * from clans_updates order by timemark desc;\n";
+
+	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+	$log = array();
+	// echo $query;
+	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+		$tmp = array();
+		$tmp[time] = $line[timemark];
+		if (($line[title] != "") && ($line[new_title] != "")) {
+			$tmp[log] = "Клан <b>$line[title] ($line[id])</b> сменил название на <b>$line[new_title]</b>";
+		} else if ($line[gone] != "") {
+			$tmp[time] = $line[gone];
+			$tmp[log] = "Клан <b>$line[title] ($line[id])</b> был расформерован";
+		} else if (($line[gone] == "") && ($line[new_title] == "")) {
+			$tmp[time] = $line[created];
+			$tmp[log] = "Клан <b>$line[title] ($line[id])</b> был создан";
+		}
+		// print_r($line);
+		// $tmp = new PlayerClass($line["timemark"], $line["id"], Restring($line["nick"]), $line["frags"], $line["deaths"], $line["level"], $line["clan_id"], null);
+		array_push($log, $tmp);
+	}
+	return $log;
 }
 function SessionSet($array) {
 	$res["ok"] = 0;

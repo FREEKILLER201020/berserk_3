@@ -4,15 +4,51 @@ drop table if exists public.logs CASCADE;
 drop table if exists public.cities CASCADE;
 drop table if exists public.attacks CASCADE;
 drop table if exists public.clans CASCADE;
+drop table if exists public.clans_updates CASCADE;
+drop table if exists public.players_updates CASCADE;
 
 
 
+CREATE TABLE public.clans_updates (
+  timemark timestamp,
+  id text,
+  title text,
+  new_title text,
+  created timestamp,
+  gone timestamp
+  -- primary key ("id", created)
+  -- PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+);
+
+ALTER TABLE public.clans_updates
+    OWNER to postgres;
+
+
+CREATE TABLE public.players_updates (
+  timemark timestamp,
+  id integer,
+  nick text,
+  new_nick text,
+  old_clan text,
+  new_clan text
+  -- PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+);
+
+ALTER TABLE public.players_updates
+    OWNER to postgres;
 
 CREATE TABLE public.clans (
   timemark timestamp,
   id integer,
   title text,
   points integer,
+  created timestamp,
   gone timestamp
   -- PRIMARY KEY (id)
 )
@@ -121,3 +157,18 @@ INSERT INTO public.eras(
 INSERT INTO public.eras(
   id, started, ended, lbz, pointw)
   VALUES (53,'2019-03-22','2019-04-12','{"5":"Рарка","10":"1б","15":"1б + Возмездие","25":"1б + 2б"}',0);
+INSERT INTO public.eras(
+  id, started, ended, pointw)
+  VALUES (54,'2019-05-29','2019-06-18',0);
+INSERT INTO public.eras(
+  id, started, ended, lbz, pointw)
+  VALUES (55,'2019-07-01','2019-07-21','{"5":"Рарка","10":"1б","15":"1б + Возмездие","25":"1б + 2б","50":"2б + Ультра"}',0);
+INSERT INTO public.eras(
+  id, started, ended, lbz, pointw)
+  VALUES (56,'2019-09-01','2019-09-21','{"5":"Рарка","10":"1б","15":"1б + Возмездие","25":"1б + 2б","40":"2б + Неофит"}',0);
+
+
+
+
+
+

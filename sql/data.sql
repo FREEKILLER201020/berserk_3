@@ -13,7 +13,7 @@ AS $BODY$
 BEGIN
     RETURN QUERY SELECT 
     distinct on (id)
-    timemark,id,title, points, gone
+    timemark,id,title, points, created, gone
 from clans
 order by id, timemark desc;
 END;
@@ -37,7 +37,7 @@ AS $BODY$
 BEGIN
     RETURN QUERY SELECT 
     distinct on (id)
-    timemark,id,title, points, gone
+    timemark,id,title, points, created, gone
 from clans
 order by id, timemark asc;
 END;
@@ -60,8 +60,8 @@ AS $BODY$
 BEGIN
     RETURN QUERY SELECT 
 	distinct on (id)
-    timemark,id,title, points, gone
-from clans where gone is not null
+    timemark,id,title, points, created, gone
+from clans
 order by id, timemark desc;
 END;
 $BODY$;
