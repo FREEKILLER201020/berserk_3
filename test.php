@@ -156,23 +156,29 @@ if ($load != 1) {
 	$years = explode("\n", $ls);
 	unset($years[count($years) - 1]);
 	foreach ($years as $year) {
-		$query = "mkdir " . str_replace("new", "scaned", "$folder/$year");
-		// echo $query;
-		exec($query);
+		if ($move == 1) {
+			$query = "mkdir " . str_replace("new", "scaned", "$folder/$year");
+			// echo $query;
+			exec($query);
+		}
 		$ls = shell_exec("ls $folder/$year");
 		$months = explode("\n", $ls);
 		unset($months[count($months) - 1]);
 		foreach ($months as $month) {
-			$query = "mkdir " . str_replace("new", "scaned", "$folder/$year/$month");
-			// echo $query;
-			exec($query);
+			if ($move == 1) {
+				$query = "mkdir " . str_replace("new", "scaned", "$folder/$year/$month");
+				// echo $query;
+				exec($query);
+			}
 			$ls = shell_exec("ls $folder/$year/$month");
 			$days = explode("\n", $ls);
 			unset($days[count($days) - 1]);
 			foreach ($days as $day) {
-				$query = "mkdir " . str_replace("new", "scaned", "$folder/$year/$month/$day");
-				// echo $query;
-				exec($query);
+				if ($move == 1) {
+					$query = "mkdir " . str_replace("new", "scaned", "$folder/$year/$month/$day");
+					// echo $query;
+					exec($query);
+				}
 				$file = array();
 				$ls = shell_exec("ls $folder/$year/$month/$day");
 				$scans = explode("\n", $ls);
