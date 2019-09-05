@@ -71,9 +71,9 @@ foreach ($not as $user) {
 		if (($user->user_clan == $fight->attacker_id) || ($user->user_clan == $fight->defender_id)) {
 			$d = date('Y-m-d H:i:s');
 			echo $d . PHP_EOL;
-			$timestamp1 = strtotime($d);
+			$timestamp1 = strtotime($d) - 60 * 60;
 			$timestamp2 = strtotime($fight->resolved);
-			$d = $timestamp2 - $timestamp1;
+			$d = ($timestamp2 - $timestamp1) / 60;
 			echo $d . PHP_EOL;
 		}
 	}
