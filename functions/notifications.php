@@ -83,7 +83,7 @@ foreach ($not as $user) {
 			$push->setUser($user->user_key);
 
 			$push->setTitle('Скоро битва!');
-			// $push->setMessage('Scan complited! From ' . $start_p . ' to ' . $end_p . ' ' . time());
+			$push->setMessage('Scan complited! From ' . $start_p . ' to ' . $end_p . ' ' . time());
 			// $push->setUrl('http://chris.schalenborgh.be/blog/');
 			// $push->setUrlTitle('cool php blog');
 			// $push->setDevice('pixel2xl');
