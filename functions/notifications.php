@@ -68,7 +68,7 @@ print_r($not);
 
 foreach ($not as $user) {
 	foreach ($fights as $fight) {
-		if (($user->user_id == $fight->attacker_id) || ($user->user_id == $fight->defender_id)) {
+		if (($user->user_clan == $fight->attacker_id) || ($user->user_clan == $fight->defender_id)) {
 			$d = date('Y-m-d H:i:s');
 			$timestamp1 = strtotime($d);
 			$timestamp2 = strtotime($fight->resolved);
