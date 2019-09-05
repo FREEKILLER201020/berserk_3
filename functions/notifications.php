@@ -84,10 +84,10 @@ foreach ($not as $user) {
 
 			$push->setTitle('Скоро битва!');
 			if ($user->user_clan == $fight->attacker_id) {
-				$push->setMessage('Через 30 минут начнется бой против '.$fight->defender.' за '.$fight->to);
+				$push->setMessage('Через 30 минут начнется бой против ' . $fight->defender . ' за ' . $fight->to);
 
 			} else if ($user->user_clan == $fight->defender_id) {
-				$push->setMessage('Через 30 минут начнется бой против .'$fight->attacker.' за '.$fight->to);
+				$push->setMessage('Через 30 минут начнется бой против ' . $fight->attacker . ' за ' . $fight->to);
 
 			}
 			// $push->setUrl('http://chris.schalenborgh.be/blog/');
