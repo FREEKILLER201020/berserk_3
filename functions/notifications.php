@@ -46,7 +46,7 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 	$from = $line[from];
 	$to = $line[to];
 
-	$tmp = new FightClass($attacker, $defender, $from, $to, $line[resolved], $line[winer], $line[ended]);
+	$tmp = new FightClass($attacker, $defender, $from, $to, $line[declared], $line[resolved], $line[winer], $line[ended]);
 	array_push($fights, $tmp);
 	$i++;
 }
