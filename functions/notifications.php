@@ -76,7 +76,7 @@ foreach ($not as $user) {
 			$timestamp2 = strtotime($fight->resolved);
 			$d = round(($timestamp2 - $timestamp1) / 60);
 			echo $d . PHP_EOL;
-			if (($d + 1 >= 30) && ($d - 1 <= 30)) {
+			if ($d == 25) {
 				$push = new Pushover();
 
 				$push->setToken('a5g19h6if4cdvvfrdw8n5najpm68rb');
