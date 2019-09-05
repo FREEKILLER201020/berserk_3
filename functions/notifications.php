@@ -4,7 +4,7 @@ require "../classes/notofication.php";
 include '../classes/pushover.php';
 
 date_default_timezone_set('Europe/London');
-
+$time = 30;
 $file = file_get_contents(realpath(dirname(__FILE__)) . "/../.config.json");
 $config = json_decode($file, true);
 $query = "host={$config['host']} dbname={$config['dbname']} user={$config['user']} password={$config['password']}";
@@ -76,7 +76,8 @@ foreach ($not as $user) {
 			$timestamp2 = strtotime($fight->resolved);
 			$d = round(($timestamp2 - $timestamp1) / 60);
 			echo $d . PHP_EOL;
-			if ($d == 10) {
+
+			if ($d == $time) {
 				$push = new Pushover();
 
 				$push->setToken('a5g19h6if4cdvvfrdw8n5najpm68rb');
@@ -84,10 +85,10 @@ foreach ($not as $user) {
 
 				$push->setTitle('Скоро битва!');
 				if ($user->user_clan == $fight->attacker_id) {
-					$push->setMessage('Через 30 минут начнется бой против ' . $fight->defender . ' за ' . $fight->to);
+					$push->setMessage('Через ' . $time . ' минут начнется бой против ' . $fight->defender . ' за ' . $fight->to);
 
 				} else if ($user->user_clan == $fight->defender_id) {
-					$push->setMessage('Через 30 минут начнется бой против ' . $fight->attacker . ' за ' . $fight->to);
+					$push->setMessage('Через ' . $time . ' минут начнется бой против ' . $fight->attacker . ' за ' . $fight->to);
 
 				}
 				// $push->setUrl('http://chris.schalenborgh.be/blog/');
