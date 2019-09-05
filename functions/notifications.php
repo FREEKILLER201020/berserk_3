@@ -2,6 +2,8 @@
 require "../classes/fight.php";
 require "../classes/notofication.php";
 
+date_default_timezone_set('Europe/London');
+
 $file = file_get_contents(realpath(dirname(__FILE__)) . "/../.config.json");
 $config = json_decode($file, true);
 $query = "host={$config['host']} dbname={$config['dbname']} user={$config['user']} password={$config['password']}";
@@ -64,4 +66,19 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 
 print_r($not);
 
+foreach ($not as $user) {
+	foreach ($fights as $fight) {
+		if (($user->user_id == $fight->attacker_id) || ($user->user_id == $fight->defender_id)) {
+			$d = date('Y-m-d H:i:s');
+			$timestamp1 = strtotime($d);
+			$timestamp2 = strtotime($fight->resolved);
+			$d = $timestamp2 - $timestamp1;
+			echo $d . PHP_EOL;
+		}
+	}
+}
+pg_free_result($result);
+
+// Закрытие соединения
+pg_close($dbconn);
 ?>
