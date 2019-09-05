@@ -83,7 +83,13 @@ foreach ($not as $user) {
 			$push->setUser($user->user_key);
 
 			$push->setTitle('Скоро битва!');
-			$push->setMessage('Scan complited! From ' . $start_p . ' to ' . $end_p . ' ' . time());
+			if ($user->user_clan == $fight->attacker_id) {
+				$push->setMessage('Через 30 минут начнется бой против $fight->defender за $fight->to');
+
+			} else if ($user->user_clan == $fight->defender_id) {
+				$push->setMessage('Через 30 минут начнется бой против $fight->attacker за $fight->to');
+
+			}
 			// $push->setUrl('http://chris.schalenborgh.be/blog/');
 			// $push->setUrlTitle('cool php blog');
 			// $push->setDevice('pixel2xl');
