@@ -76,23 +76,23 @@ foreach ($not as $user) {
 			$timestamp2 = strtotime($fight->resolved);
 			$d = round(($timestamp2 - $timestamp1) / 60);
 			echo $d . PHP_EOL;
-			if ($d == 25) {
-				$push = new Pushover();
+			// if ($d == 25) {
+			$push = new Pushover();
 
-				$push->setToken('a5g19h6if4cdvvfrdw8n5najpm68rb');
-				$push->setUser($user->user_key);
+			$push->setToken('a5g19h6if4cdvvfrdw8n5najpm68rb');
+			$push->setUser($user->user_key);
 
-				$push->setTitle('Скоро битва!');
-				// $push->setMessage('Scan complited! From ' . $start_p . ' to ' . $end_p . ' ' . time());
-				// $push->setUrl('http://chris.schalenborgh.be/blog/');
-				// $push->setUrlTitle('cool php blog');
-				// $push->setDevice('pixel2xl');
-				$push->setPriority(0);
-				// $push->setRetry(60); //Used with Priority = 2; Pushover will resend the notification every 60 seconds until the user accepts.
-				// $push->setExpire(3600); //Used with Priority = 2; Pushover will resend the notification every 60 seconds for 3600 seconds. After that point, it stops sending notifications.
-				// $push->setTimestamp(time());
-				$push->send();
-			}
+			$push->setTitle('Скоро битва!');
+			// $push->setMessage('Scan complited! From ' . $start_p . ' to ' . $end_p . ' ' . time());
+			// $push->setUrl('http://chris.schalenborgh.be/blog/');
+			// $push->setUrlTitle('cool php blog');
+			// $push->setDevice('pixel2xl');
+			$push->setPriority(0);
+			// $push->setRetry(60); //Used with Priority = 2; Pushover will resend the notification every 60 seconds until the user accepts.
+			// $push->setExpire(3600); //Used with Priority = 2; Pushover will resend the notification every 60 seconds for 3600 seconds. After that point, it stops sending notifications.
+			// $push->setTimestamp(time());
+			$push->send();
+			// }
 		}
 	}
 }
