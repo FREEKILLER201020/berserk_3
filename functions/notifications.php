@@ -1,5 +1,6 @@
 <?php
 require "../classes/fight.php";
+require "../classes/notofication.php";
 
 $file = file_get_contents(realpath(dirname(__FILE__)) . "/../.config.json");
 $config = json_decode($file, true);
