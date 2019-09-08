@@ -1066,7 +1066,7 @@ function indexEra($array) {
 			}
 		}
 		if ($was == 0) {
-			array_push($new_players, new PlayerClassEra(0, $player_extra->nick, 0, 0, $player_extra->level, $player_extra->clan_id, $player_extra->clan_title, 0, 0, 0, 0, ""));
+			array_push($new_players, new PlayerClassEra(0, $player_extra->nick, $player_extra->frags, $player_extra->deaths, $player_extra->level, $player_extra->clan_id, $player_extra->clan_title, 0, 0, 0, 0, ""));
 
 		}
 	}
