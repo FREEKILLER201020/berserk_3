@@ -1011,7 +1011,7 @@ function indexEra($array) {
 		// }
 	}
 
-	$query = "select distinct on (id) timemark,id,nick, frags, deaths,level,clan from players where timemark<='" . $array['datee'] . "' order by id,timemark DESC ";
+	$query = "select distinct on (id) timemark,id,nick, frags, deaths,level,clan from players where timemark<='" . $started2 . "' order by id,timemark DESC ";
 	// } else {
 	// 	$query = "select distinct on (id) timemark,id,nick, frags, deaths,level,clan from players where clan=" . $array['clan'] . " and timemark<='" . $array['datee'] . "' order by id,timemark DESC ";
 	// }
