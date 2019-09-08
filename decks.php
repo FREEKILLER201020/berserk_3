@@ -86,7 +86,7 @@ for ($i = 0; $i < count($links) - 1; $i++) {
 <!-- <option selected value="asc"> По возростанию </option> -->
             <!-- <option value="asc"> По возростанию </option> -->
           <!-- </select> -->
-          <!-- <input class="color_text sp_input" type="checkbox" id="debug" name="debug" value="1"><text class="color_text">Debug</text> -->
+          <input class="color_text sp_input" type="hidden" id="debug" name="debug" value="1"><text class="color_text"></text>
 
 
           </ul>
