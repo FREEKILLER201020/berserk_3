@@ -972,7 +972,6 @@ function indexEra($array) {
 		}
 		$id_p = $line["id"];
 	}
-
 	array_push($players, new BigPlayer($rows));
 	$players[count($players) - 1]->Cut();
 	$rows = array();
@@ -1011,7 +1010,68 @@ function indexEra($array) {
 		// print_r($player);
 		// }
 	}
+
+	$query = "select distinct on (id) timemark,id,nick, frags, deaths,level,clan from players where timemark<='" . $array['datee'] . "' order by id,timemark DESC ";
+	// } else {
+	// 	$query = "select distinct on (id) timemark,id,nick, frags, deaths,level,clan from players where clan=" . $array['clan'] . " and timemark<='" . $array['datee'] . "' order by id,timemark DESC ";
+	// }
+	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+	$players_extra = array();
+	// echo $query;
+	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+
+		// print_r($row);
+		// if ($row["timemark"] == $today){
+		$clan_title = "Нет клана";
+		$clan_id = -2;
+		foreach ($clans as $clan) {
+			if ($line["clan"] == $clan->id) {
+				$clan_title = $clan->title;
+				$clan_id = $line["clan"];
+			}
+		}
+		// }
+
+		// if ($array['clan'] == -1) {
+		// if (($nickname==$row["nick"])&&($nickname!=null)){
+		$tmp = new PlayerClass($line["timemark"], $line["id"], Restring($line["nick"]), $line["frags"], $line["deaths"], $line["level"], $clan_id, $clan_title);
+		// }
+		// } else {
+		// 	if ($array['clan'] == $clan_id) {
+		// 		// if (($nickname==$row["nick"])&&($nickname!=null)){
+		// 		$tmp = new PlayerClass($line["timemark"], $line["id"], Restring($line["nick"]), $line["frags"], $line["deaths"], $line["level"], $clan_id, $clan_title);
+		// 		// array_push($players, $tmp);
+		// 		// }
+		// 	}
+		// }
+		if ($line["clan"] == -1) {
+			$line["clan"] = -2;
+		}
+		if ((($array['clan'] != -1) && ($line["clan"] == $array['clan'])) || ($array['clan'] == -1)) {
+			array_push($players_extra, $tmp);
+		}
+
+	}
+
+	// print_r($players_extra);
+	// print_r($new_players);
+
 	$players = $new_players;
+
+	foreach ($players_extra as $player_extra) {
+		$was = 0;
+		foreach ($players as $player) {
+			if ($player_extra->nick == $player->nick) {
+				$was = 1;
+			}
+		}
+		if ($was == 0) {
+			array_push($new_players, new PlayerClassEra(0, $player_extra->nick, 0, 0, $player_extra->level, $player_extra->clan_id, $player_extra->clan_title, 0, 0, 0, 0, ""));
+
+		}
+	}
+	$players = $new_players;
+
 	if ($array['order'] == "nick") {
 		$nicks = array();
 		$ids = array();
