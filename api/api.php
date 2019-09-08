@@ -706,11 +706,10 @@ function Index($array) {
 	// $result = $connection->query($query);
 	// print_r($clans);
 	// exit();
-	if ($array['clan'] < 0) {
-		$query = "select distinct on (id) timemark,id,nick, frags, deaths,level,clan from players where timemark<='" . $array['datee'] . "' order by id,timemark DESC ";
-	} else {
-		$query = "select distinct on (id) timemark,id,nick, frags, deaths,level,clan from players where clan=" . $array['clan'] . " and timemark<='" . $array['datee'] . "' order by id,timemark DESC ";
-	}
+	$query = "select distinct on (id) timemark,id,nick, frags, deaths,level,clan from players where timemark<='" . $array['datee'] . "' order by id,timemark DESC ";
+	// } else {
+	// 	$query = "select distinct on (id) timemark,id,nick, frags, deaths,level,clan from players where clan=" . $array['clan'] . " and timemark<='" . $array['datee'] . "' order by id,timemark DESC ";
+	// }
 	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 	$players = array();
 	// echo $query;
@@ -728,19 +727,25 @@ function Index($array) {
 		}
 		// }
 
-		if ($array['clan'] == -1) {
-			// if (($nickname==$row["nick"])&&($nickname!=null)){
-			$tmp = new PlayerClass($line["timemark"], $line["id"], Restring($line["nick"]), $line["frags"], $line["deaths"], $line["level"], $clan_id, $clan_title);
-			array_push($players, $tmp);
-			// }
-		} else {
-			if ($array['clan'] == $clan_id) {
-				// if (($nickname==$row["nick"])&&($nickname!=null)){
-				$tmp = new PlayerClass($line["timemark"], $line["id"], Restring($line["nick"]), $line["frags"], $line["deaths"], $line["level"], $clan_id, $clan_title);
-				array_push($players, $tmp);
-				// }
-			}
+		// if ($array['clan'] == -1) {
+		// if (($nickname==$row["nick"])&&($nickname!=null)){
+		$tmp = new PlayerClass($line["timemark"], $line["id"], Restring($line["nick"]), $line["frags"], $line["deaths"], $line["level"], $clan_id, $clan_title);
+		// }
+		// } else {
+		// 	if ($array['clan'] == $clan_id) {
+		// 		// if (($nickname==$row["nick"])&&($nickname!=null)){
+		// 		$tmp = new PlayerClass($line["timemark"], $line["id"], Restring($line["nick"]), $line["frags"], $line["deaths"], $line["level"], $clan_id, $clan_title);
+		// 		// array_push($players, $tmp);
+		// 		// }
+		// 	}
+		// }
+		if ($line["clan"] == -1) {
+			$line["clan"] = -2;
 		}
+		if ((($array['clan'] != -1) && ($line["clan"] == $array['clan'])) || ($array['clan'] == -1)) {
+			array_push($players, $tmp);
+		}
+
 	}
 	// }
 	// print_r($players);

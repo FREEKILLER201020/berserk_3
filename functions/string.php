@@ -8,4 +8,5 @@ function ReDate1($string) {
 function ReDate2($string) {
 	return str_replace("Z", "", $string); // Replaces all spaces with hyphens.
 }
+
 ?>

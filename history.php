@@ -60,7 +60,7 @@ if ($_GET[Clan] == "") {
             <!-- <li class="navigation__item child"><a class="element" style="cursor: pointer;" onclick="gotourl('cities.php','Clan=171')">Города</a></li> -->
             <!-- <li class="navigation__item child"><a class="element" style="cursor: pointer;" onclick="gotourl('clans.php')">Кланы</a></li> -->
             <li class="navigation__item child"><a class="element" style="cursor: pointer;" onclick="gotourl('players_updates.php')">Изменения в игроках</a></li>
-            <li class="navigation__item child"><a class="element" style="cursor: pointer;" onclick="gotourl('clans_updates.php')">Изменения в кланах</a></li>
+            <!-- <li class="navigation__item child"><a class="element" style="cursor: pointer;" onclick="gotourl('clans_updates.php')">Изменения в кланах</a></li> -->
             <!-- <li class="navigation__item child">   |   </li> -->
             <!-- <li class="navigation__item child"><a class="element" style="cursor: pointer;" onclick="gotourl('')">О проекте</a></li> -->
             <?php
