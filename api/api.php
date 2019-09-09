@@ -18,7 +18,7 @@ $query = "host={$config['host']} dbname={$config['dbname']} user={$config['user'
 $dbconn = pg_pconnect($query) or die('Не удалось соединиться: ' . pg_last_error());
 // $result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 
-OnCall($_POST, $config);
+OnCall($_REQUEST, $config);
 
 function OnCall($array, $config) {
 	$image_sige = $config["image_size"];
