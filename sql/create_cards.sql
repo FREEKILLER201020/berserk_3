@@ -136,7 +136,8 @@ CREATE TABLE public.cards
     number integer,
     author text,
     main integer REFERENCES cards(id),
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    UNIQUE (proto)
 )
 WITH (
     OIDS = FALSE
