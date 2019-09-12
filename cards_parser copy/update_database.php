@@ -1,6 +1,4 @@
 <?php
-require "../classes/cards.php";
-
 $file = "all_cards.json";
 $json = json_decode(file_get_contents($file), true);
 // print_r($json);
@@ -10,8 +8,8 @@ $config = json_decode($file, true);
 $query = "host={$config['host']} dbname={$config['dbname']} user={$config['user']} password={$config['password']}";
 $dbconn = pg_pconnect($query) or die('Не удалось соединиться: ' . pg_last_error());
 
-// $query = file_get_contents("../sql/create_cards.sql");
-// $result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+$query = file_get_contents("../sql/create_cards.sql");
+$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 
 $keys = array();
 foreach ($json as $key => $value) {
@@ -23,20 +21,6 @@ foreach ($json as $key => $value) {
 		}
 	}
 }
-
-$query = "select * from cards;\n";
-// $result = $connection->query($query);
-$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
-$cards = array();
-// echo $query;
-while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-
-	// print_r($row);
-	array_push($cards, new Card($line['id'], $line['name'], $line['proto']));
-
-}
-// print_r($cards);
-// exit();
 
 // Выполнение SQL-запроса
 foreach ($json as $key => $value) {
@@ -97,7 +81,7 @@ foreach ($json as $key => $value) {
 	}
 
 	$value['kick'] = json_encode($value['kick'], JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE);
-	$value['abilities'] = json_encode($value['abilities'], JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE);
+	$value['attribute'] = json_encode($value['attribute'], JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE);
 	$value['rows'] = json_encode($value['rows'], JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE);
 	$value['case'] = json_encode($value['case'], JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE);
 	$value['horde'] = json_encode($value['horde'], JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE);
@@ -111,17 +95,7 @@ foreach ($json as $key => $value) {
 	}
 
 	$fly = (boolval($value['fly']) ? 'true' : 'false');
-
-	$was = 0;
-	foreach ($cards as $card) {
-		if ($card->proto == $value['proto']) {
-			$was = 1;
-		}
-	}
-	if ($was == 0) {
-		$insert++;
-
-		$query = "INSERT INTO cards (type,health,kick,steps,race,name,proto,rarity,fly,\"desc\",crystal,\"crystalCount\",abilities,f,rows,\"case\",horde,rangeAttack,classes,series,typeEquipment,hate_class,hate_race ,\"only\",unlim,number,author)
+	$query = "INSERT INTO cards (type,health,kick,steps,race,name,proto,rarity,fly,\"desc\",crystal,\"crystalCount\",abilities,f,rows,\"case\",horde,rangeAttack,classes,series,typeEquipment,hate_class,hate_race ,\"only\",unlim,number,author)
   values({$cards_type_id},
     {$value['health']},
     '{$value['kick']}',
@@ -134,7 +108,7 @@ foreach ($json as $key => $value) {
     '{$value['desc']}',
     {$cards_crystal_id},
     {$value['crystalCount']},
-    '{$value['abilities']}',
+    '{$value['attribute']}',
     {$value['f']},
     '{$value['rows']}',
     '{$value['case']}',
@@ -150,44 +124,10 @@ foreach ($json as $key => $value) {
     {$value['number']},
     '{$value['author']}'
   )";
-	} else {
-		$update++;
-		$query = "Update cards set
-		type={$cards_type_id},
-		health={$value['health']},
-		kick='{$value['kick']}',
-		steps={$value['steps']},
-		race={$cards_race_id},
-		name='{$value['name']}',
-		rarity={$cards_rarity_id},
-		fly={$fly},
-		\"desc\"='{$value['desc']}',
-		crystal={$cards_crystal_id},
-		\"crystalCount\"={$value['crystalCount']},
-		abilities='{$value['abilities']}',
-		f={$value['f']},
-		rows='{$value['rows']}',
-		\"case\"='{$value['case']}',
-		horde='{$value['horde']}',
-		rangeAttack='{$value['rangeAttack']}',
-		classes='{$value['classes']}',
-		series={$value['series']},
-		typeEquipment={$cards_typeEquipment_id},
-		hate_class={$cards_hate_class_id},
-		hate_race={$cards_hate_race_id} ,
-		\"only\"={$value['only']},
-		unlim={$value['unlim']},
-		number={$value['number']},
-		author='{$value['author']}'
-		where proto='{$value['proto']}'";
-	}
-	// $query = pg_escape_string($query);
+	// $query=pg_escape_string($query);
 	echo $query . PHP_EOL;
-	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+	$result = pg_query($query);
 }
-
-echo "Insert: " . $insert . PHP_EOL;
-echo "Update: " . $update . PHP_EOL;
 
 // Очистка результата
 pg_free_result($result);
