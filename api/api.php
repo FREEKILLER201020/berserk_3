@@ -423,7 +423,7 @@ function DecksFULL($array) {
 		// // array_push($tmp, $ret2);
 		// array_push($dates, $ret);
 		array_push($decks, new Deck($line['id'], $line['player_id'], $line['cards'], $line['screenshot_id'], $line['description'], $line['timemark'], $line['edited'], $line['type']));
-		// $decks[count($decks) - 1]->GetScreenshot();
+		$decks[count($decks) - 1]->GetScreenshot();
 		$decks[count($decks) - 1]->EditButton();
 		// }
 		$cards = array();
