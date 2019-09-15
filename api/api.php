@@ -55,6 +55,9 @@ function OnCall($array, $config) {
 	if ($array['type'] == 'decks_all') {
 		$return = DecksALL($array);
 	}
+	if ($array['type'] == 'decks_full') {
+		$return = DecksFULL($array);
+	}
 	if ($array['type'] == 'load_cards') {
 		$return = LoadCards($array);
 	}
@@ -322,7 +325,7 @@ function Clan($array) {
 }
 function Cards($array) {
 	// $connection = Connect($config);
-	$query = "select * from cards();\n";
+	$query = "select * from cards;\n";
 	// $result = $connection->query($query);
 	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 	$cards = array();
@@ -337,7 +340,7 @@ function Cards($array) {
 }
 function CardsFull($array) {
 	// $connection = Connect($config);
-	$query = "select * from cards();\n";
+	$query = "select * from cards;\n";
 	// $result = $connection->query($query);
 	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 	$cards = array();
@@ -394,6 +397,77 @@ function SaveDeck($array) {
 	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 	$res["ok"] = 1;
 	return $res;
+}
+function DecksFULL($array) {
+	// print_r($array);
+	// if ($array['id'] == -1) {
+	$decks = array();
+	// $query = "use berserk;\n";
+	// $result = $connection->query($query);
+	// $connection = Connect($config);
+	$query = "\nSELECT * FROM deck ORDER BY (CASE WHEN edited IS NULL THEN 1 ELSE 0 END) DESC,
+         edited DESC;\n";
+	// echo $query;
+	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+
+		// $tmp = array();
+		// $split = explode("-", $line["timemark"]);
+		// $split2 = explode(" ", $split[2]);
+		// $year = (int) $split[0];
+		// $month = (int) $split[1];
+		// $day = (int) $split2[0];
+		// $ret = "$split[0]-$split[1]-$split2[0]";
+		// // $ret2="$year-$month-$day";
+		// // array_push($tmp, $ret);
+		// // array_push($tmp, $ret2);
+		// array_push($dates, $ret);
+		array_push($decks, new Deck($line['id'], $line['player_id'], $line['cards'], $line['screenshot_id'], $line['description'], $line['timemark'], $line['edited'], $line['type']));
+		// $decks[count($decks) - 1]->GetScreenshot();
+		$decks[count($decks) - 1]->EditButton();
+		// }
+		$cards = array();
+		// $query = "use berserk;\n";
+		// $result = $connection->query($query);
+		// $connection = Connect($config);
+		$query2 = "\nSELECT cards FROM deck where id=" . $line['id'] . ";\n";
+		// echo $query;
+		$result2 = pg_query($query2) or die('Ошибка запроса: ' . pg_last_error());
+		while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
+			$line2["cards"] = str_replace("{", " ", $line2["cards"]);
+			$line2["cards"] = str_replace("}", " ", $line2["cards"]);
+			$ids = explode(",", $line2["cards"]);
+
+		}
+		// print_r($ids);
+		if ($ids[0] > 0) {
+			$links = array();
+			foreach ($ids as $id) {
+				array_push($cards, GetCard($id));
+			}
+			// print_r($cards);
+			foreach ($cards as $card) {
+				array_push($links, $card->CreateImage("cards_parser/cards/small/"));
+			}
+			// print_r($links);
+			$decks[count($decks) - 1]->cards = $links;
+		}
+	}
+	// print_r($dates);
+	// $tmp = array();
+
+	// $query = "use berserk;\n";
+	// $result = $connection->query($query);
+	// $connection = Connect($config);
+	// $query = "call {$config["base_database"]}.era_data(\"$idd\");\n";
+	// while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+
+	// 	// print_r($row);$id, $start, $end, $lbz, $points
+	// 	$tmp = new EraClass($line["id"], $line["started"], $line["ended"], $line["lbz"], $line["pointw"]);
+	// 	array_push($eras, $tmp);
+	// }
+	return $decks;
+	// }
 }
 function DecksALL($array) {
 	// print_r($array);
