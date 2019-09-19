@@ -40,6 +40,9 @@ function OnCall($array, $config) {
 	if ($array['type'] == 'index_era') {
 		$return = indexEra($array);
 	}
+	if ($array['type'] == 'era_res_clans') {
+		$return = EraResClans($array);
+	}
 	if ($array['type'] == 'players') {
 		$return = Players($array);
 	}
@@ -90,6 +93,90 @@ function OnCall($array, $config) {
 	}
 	pg_close($dbconn);
 	echo json_encode($return);
+}
+
+function EraResClans($array) {
+	$query = "select * from eras where id=$array[id];\n";
+
+	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+	$timetable = array();
+	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+		$tmp = array();
+		$tmp[started] = $line[started] . " 00:00:00";
+		// $tmp[started] = date('Y-m-d H:i:s', strtotime($tmp[started]) - 24 * 60 * 60);
+		$tmp[ended] = $line[ended] . " 23:59:59";
+		// $tmp[ended] = date('Y-m-d H:i:s', strtotime($tmp[ended]) + 24 * 60 * 60);
+
+	}
+	// print_r($tmp);
+	$results = array();
+	$query = "select distinct on (id) timemark,id,title, points, gone from clans where timemark<='" . $tmp[ended] . "'  and timemark>='" . $tmp[started] . "' order by id, timemark asc";
+	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+
+	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+		// print_r($line);
+		if ($line[gone] = "NULL") {
+			$results[$line[id]][start] = $line[points];
+		}
+	}
+
+	$query = "select distinct on (id) timemark,id,title, points, gone from clans where timemark<='" . $tmp[ended] . "' and timemark>='" . $tmp[started] . "' order by id, timemark desc";
+	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+
+	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+		// print_r($line);
+		if ($line[gone] = "NULL") {
+			$results[$line[id]][end] = $line[points];
+			$results[$line[id]][title] = $line[title];
+		}
+	}
+	$total = array();
+	$st = array();
+	$query = "SELECT distinct on (id) timemark, id, name, clan  from cities where timemark<='" . $tmp[started] . "' order by id, timemark desc;";
+	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+
+	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+		// print_r($line);
+		if (isset($results[$line[clan]])) {
+			$results[$line[clan]][start_c]++;
+			$total[start]++;
+			$st[$line[id]][strat] = 1;
+		}
+	}
+
+	$query = "SELECT distinct on (id) timemark, id, name, clan  from cities where timemark<='" . $tmp[ended] . "' order by id, timemark desc;";
+	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+
+	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+		if (isset($results[$line[clan]])) {
+			// print_r($line);
+			$results[$line[clan]][end_c]++;
+			$total[end]++;
+			$st[$line[id]][end] = 1;
+
+		}
+	}
+
+	// print_r($results);
+	// print_r($total);
+	$return = array();
+	foreach ($results as $r) {
+		if (!isset($r[start])) {
+			$r[start] = 0;
+		}
+		if (!isset($r[end])) {
+			$r[end] = 0;
+		}
+		if (!isset($r[start_c])) {
+			$r[start_c] = 0;
+		}
+		if (!isset($r[end_c])) {
+			$r[end_c] = 0;
+		}
+		array_push($return, new ClanEraRes($r[title], $r[start], $r[end], $r[start_c], $r[end_c]));
+	}
+	return $return;
+
 }
 function History($array) {
 	$query = "select * from eras where id=$array[id];\n";

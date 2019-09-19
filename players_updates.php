@@ -52,6 +52,7 @@ for ($i = 0; $i < count($links) - 1; $i++) {
     				<ul class="navigation__list parent">
             <li class="navigation__item child"><a class="element" style="cursor: pointer;" onclick="gotourl('index.php')">Статистика</a></li>
             <li class="navigation__item child"><a class="element" style="cursor: pointer;" onclick="gotourl('era_res.php')" >Результаты Эр</a></li>
+            <li class="navigation__item child"><a class="element" style="cursor: pointer;" onclick="gotourl('era_res_clans.php')" >Результаты Эр по кланам</a></li>
             <li class="navigation__item child"><a class="element" style="cursor: pointer;" onclick="gotourl('timetable.php','Clan=171')" >Расписание</a></li>
             <li class="navigation__item child"><a class="element" style="cursor: pointer;" onclick="gotourl('history.php','Clan=171')">История</a></li>
             <!-- <li class="navigation__item child"><a class="element" style="cursor: pointer;" onclick="gotourl('cities.php','Clan=171')">Города</a></li> -->

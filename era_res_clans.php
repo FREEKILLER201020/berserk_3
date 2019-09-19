@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>APP Clanberserk - Расписание</title>
+    <title>APP Clanberserk - Результаты Кланов</title>
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="js/jquery.js"></script>
@@ -55,8 +55,9 @@ if ($_GET[Clan] == "") {
     				<ul class="navigation__list parent">
             <li class="navigation__item child"><a class="element" style="cursor: pointer;" onclick="gotourl('index.php')">Статистика</a></li>
             <li class="navigation__item child"><a class="element" style="cursor: pointer;" onclick="gotourl('era_res.php')" >Результаты Эр</a></li>
-            <li class="navigation__item child"><a class="element" style="cursor: pointer;" onclick="gotourl('era_res_clans.php')" >Результаты Эр по кланам</a></li>
-            <li class="navigation__item child"><a class="element is-active" style="cursor: pointer;" onclick="gotourl('timetable.php','Clan=171')" >Расписание</a></li>
+            <li class="navigation__item child"><a class="element is-active" style="cursor: pointer;" onclick="gotourl('era_res_clans.php')" >Результаты Эр по кланам</a></li>
+
+            <li class="navigation__item child"><a class="element" style="cursor: pointer;" onclick="gotourl('timetable.php','Clan=171')" >Расписание</a></li>
             <li class="navigation__item child"><a class="element" style="cursor: pointer;" onclick="gotourl('history.php','Clan=171')">История</a></li>
             <!-- <li class="navigation__item child"><a class="element" style="cursor: pointer;" onclick="gotourl('cities.php','Clan=171')">Города</a></li> -->
             <!-- <li class="navigation__item child"><a class="element" style="cursor: pointer;" onclick="gotourl('clans.php')">Кланы</a></li> -->
@@ -85,9 +86,9 @@ if (($_SESSION['u'] != null) && ($_SESSION['p'] != null)) {
           <select class="color_text sp_input" id="era" name="era">
                 <option value="-1"> --- </option>
           </select>
-          <text class="color_text">Клан:</text>
+          <!-- <text class="color_text">Клан:</text>
           <select class="color_text sp_input" id="clans" name="Clans">
-          </select>
+          </select> -->
           <input class="color_text sp_input" type="hidden" id="debug" name="debug" value="1"><text class="color_text"></text>
       </div>
       <hr>
@@ -106,7 +107,7 @@ if (($_SESSION['u'] != null) && ($_SESSION['p'] != null)) {
       $('#era').on("input", get_eras_data);
       // $('#era').on("change", order);
       $('#era').on("change", create);
-      $('#clans').on("change", create);
+      // $('#clans').on("change", create);
       // $('#debug').on("change", data);
       // $('#date').on("change", data);
 
@@ -153,7 +154,7 @@ function getDates(startDate, endDate) {
           url:"api/api.php", //the page containing php script
           type: "post", //request type,
           dataType: 'json',
-          data: {type:"timetable",id: $('#era').val(),clan:$('#clans').val()},
+          data: {type:"era_res_clans",id: $('#era').val()},
           async: false, // HERE
           success:function(result){
             // document.getElementById("id1").remove();
