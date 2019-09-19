@@ -103,18 +103,18 @@ function EraResClans($array) {
 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 		$tmp = array();
 		$tmp[started] = $line[started] . " 00:00:00";
-		// $tmp[started] = date('Y-m-d H:i:s', strtotime($tmp[started]) - 24 * 60 * 60);
+		$tmp[started] = date('Y-m-d H:i:s', strtotime($tmp[started]) - 24 * 60 * 60);
 		$tmp[ended] = $line[ended] . " 23:59:59";
-		// $tmp[ended] = date('Y-m-d H:i:s', strtotime($tmp[ended]) + 24 * 60 * 60);
+		$tmp[ended] = date('Y-m-d H:i:s', strtotime($tmp[ended]) + 24 * 60 * 60);
 
 	}
 	// print_r($tmp);
 	$results = array();
-	$query = "select distinct on (id) timemark,id,title, points, gone from clans where timemark<='" . $tmp[ended] . "'  and timemark>='" . $tmp[started] . "' order by id, timemark asc";
+	$query = "select distinct on (id) timemark,id,title, points, gone from clans where timemark<='" . $tmp[started] . "' order by id, timemark desc";
 	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 
 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-		// print_r($line);
+		print_r($line);
 		if ($line[gone] = "NULL") {
 			$results[$line[id]][start] = $line[points];
 		}
