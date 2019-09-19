@@ -114,7 +114,7 @@ function EraResClans($array) {
 	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 
 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-		print_r($line);
+		// print_r($line);
 		if ($line[gone] = "NULL") {
 			$results[$line[id]][start] = $line[points];
 		}
