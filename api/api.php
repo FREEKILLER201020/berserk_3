@@ -1,5 +1,7 @@
 <?php
 // require "class.php";
+error_reporting(1);
+
 require "../functions/string.php";
 require "../classes/player.php";
 require "../classes/clan.php";
