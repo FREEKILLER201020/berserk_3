@@ -486,6 +486,7 @@ for ($i = $start_p; $i < $end_p; $i++) {
 			// echo PHP_EOL . "Load_players_all" . PHP_EOL;
 			// $TimeApp->Revil();
 			// mysqli_close($connection);
+			$cities_in_clans_files = array();
 			foreach ($json as $row) {
 				$was = 0;
 				$was_server = 0;
@@ -533,6 +534,9 @@ for ($i = $start_p; $i < $end_p; $i++) {
 
 				// print_r($json_players);
 				// echo $folders[$i]['file_dir'] . PHP_EOL;
+				foreach ($json_players['cities'] as $clan_file_cities) {
+					array_push($cities_in_clans_files, $clan_file_cities);
+				}
 				foreach ($json_players['players'] as $player) {
 					$was2 = 0;
 					foreach ($players_server as $player_server) {
@@ -635,6 +639,12 @@ for ($i = $start_p; $i < $end_p; $i++) {
 					unset($city_json[$ipo]);
 				}
 			}
+			$total = count($city_json);
+			for ($ipo = 0; $ipo < $total; $ipo++) {
+				if (!in_array($city_json[$ipo]["id"], $cities_in_clans_files)) {
+					unset($city_json[$ipo]);
+				}
+			}
 			// $connection = Connect($config);
 			$query = "select * from cities_all();\n";
 			// $result = $connection->query($query);
@@ -655,6 +665,7 @@ for ($i = $start_p; $i < $end_p; $i++) {
 						foreach ($cities_server as $city) {
 							if ($city->id == $row['id']) {
 								$was_city = 1;
+								$city->was = 1;
 								if (($city->name != $row['name']) || ($city->clan != $row['clan'])) {
 									// $connection=Connect($config);
 									$d = date('Y-m-d H:i:s', $folders[$i]['time'] - 3 * 60 * 60);
@@ -684,6 +695,19 @@ for ($i = $start_p; $i < $end_p; $i++) {
 							// mysqli_close($connection);
 						}
 					}
+				}
+			}
+			foreach ($cities_server as $city) {
+				if (($city->was != 1) && ($city->clan_id != -2)) {
+					$d = date('Y-m-d H:i:s', $folders[$i]['time'] - 3 * 60 * 60);
+					$query = "INSERT INTO cities (timemark,id,name,clan) values ('{$d}',$city->id,'$city->name',-2);\n";
+					$query_log .= $query;
+					if ($debug == 1) {
+						$log["log"] .= "{" . $query . "}";
+						echo $query . PHP_EOL;
+					}
+					$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+					echo "This city is gone! check it! " . $city->id . " " . $folders[$i]['file_dir'] . PHP_EOL;
 				}
 			}
 			// echo PHP_EOL . "foreach (city_json" . PHP_EOL;

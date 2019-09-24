@@ -112,29 +112,33 @@ function EraResClans($array) {
 	}
 	// print_r($tmp);
 	$results = array();
-	$query = "select distinct on (id) timemark,id,title, points, gone from clans where timemark<='" . $tmp[started] . "' order by id, timemark desc";
-	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+	// $query = "select distinct on (id) timemark,id,title, points, gone from clans where timemark>='" . $tmp[started] . "' order by id, timemark asc";
+	// // echo $query;
+	// $result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 
-	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-		// print_r($line);
-		if ($line[gone] = "NULL") {
-			$results[$line[id]][start] = $line[points];
-		}
-	}
-
+	// while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+	// 	// print_r($line);
+	// 	if ($line[gone] = "NULL") {
+	// 		$results[$line[id]][start] = $line[points];
+	// 	}
+	// }
+	// print_r($results);
 	$query = "select distinct on (id) timemark,id,title, points, gone from clans where timemark<='" . $tmp[ended] . "' and timemark>='" . $tmp[started] . "' order by id, timemark desc";
 	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 
 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 		// print_r($line);
 		if ($line[gone] = "NULL") {
+			$results[$line[id]][start] = 0;
 			$results[$line[id]][end] = $line[points];
 			$results[$line[id]][title] = $line[title];
 		}
 	}
+	// print_r($results);
+
 	$total = array();
 	$st = array();
-	$query = "SELECT distinct on (id) timemark, id, name, clan  from cities where timemark<='" . $tmp[started] . "' order by id, timemark desc;";
+	$query = "SELECT distinct on (id) timemark, id, name, clan  from cities where timemark>='" . $tmp[started] . "' order by id, timemark asc;";
 	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 
 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
