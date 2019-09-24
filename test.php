@@ -860,12 +860,12 @@ for ($i = $start_p; $i < $end_p; $i++) {
 				}
 			}
 			if ((count($attacks_server) > 0) && ($eras_stage == 0)) {
-				$eras_stage == 1;
+				$eras_stage = 1;
 				array_push($eras_log, "Era started " . $folders[$i]['file_dir']);
 				print_r($eras_log);
 			}
 			if ((count($attacks_server) <= 0) && ($eras_stage == 1)) {
-				$eras_stage == 0;
+				$eras_stage = 0;
 				array_push($eras_log, "Era ended " . $folders[$i]['file_dir']);
 				print_r($eras_log);
 
