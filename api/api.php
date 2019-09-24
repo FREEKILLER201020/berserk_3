@@ -138,9 +138,9 @@ function EraResClans($array) {
 
 	$total = array();
 	$st = array();
-	$query = "SELECT distinct on (id) timemark, id, name, clan  from cities where timemark>='" . $tmp[started] . "' order by id, timemark asc;";
+	$query = "SELECT distinct on (id) timemark, id, name, clan  from cities where clan <> -2 and timemark>='" . $tmp[started] . "' order by id, timemark asc;";
 	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
-
+	// echo $query;
 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 		// print_r($line);
 		if (isset($results[$line[clan]])) {
@@ -150,7 +150,7 @@ function EraResClans($array) {
 		}
 	}
 
-	$query = "SELECT distinct on (id) timemark, id, name, clan  from cities where timemark<='" . $tmp[ended] . "' order by id, timemark desc;";
+	$query = "SELECT distinct on (id) timemark, id, name, clan  from cities where clan <> -2 and timemark<='" . $tmp[ended] . "' order by id, timemark desc;";
 	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 
 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {

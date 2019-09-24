@@ -333,6 +333,8 @@ if ($count > -1) {
 if ($debug == 1) {
 	// echo PHP_EOL . "Scan from $start_p to $end_p" . PHP_EOL;
 }
+$eras_log = array();
+$eras_stage = 0;
 for ($i = $start_p; $i < $end_p; $i++) {
 	if (!isset($folders[$i])) {
 		exit();
@@ -389,6 +391,14 @@ for ($i = $start_p; $i < $end_p; $i++) {
 		$noerr = 0;
 		$log['clans'] = "error";
 	}
+	// if (!isset($json[players])) {
+	// 	$noerr = 0;
+	// 	$log['clans'] = "error";
+	// }
+	// if (!isset($json[cities])) {
+	// 	$noerr = 0;
+	// 	$log['clans'] = "error";
+	// }
 	// echo $folders[$i]['folder'] . PHP_EOL;
 	// print_r($json);
 	$clans = array();
@@ -403,10 +413,31 @@ for ($i = $start_p; $i < $end_p; $i++) {
 			} else {
 				$file = file_get_contents(realpath(dirname(__FILE__)) . "/{$folders[$i]['folder']}/clan[{$row['id']}]_{$folders[$i]['file_dir']}.json");
 				$json_players = json_decode($file, true);
+				if ($json_players[players] == NULL) {
+					$noerr = 0;
+					$log["clan[{$row['id']}]"] = "error";
+					// echo $folders[$i]['file_dir'] . PHP_EOL;
+					// print_r($log);
+					// print_r($json_players);
+				}
 				foreach ($json_players['cities'] as $city) {
 					array_push($cities, $city);
 				}
 				$log["clan[{$row['id']}]"] = "ok";
+				if (!isset($json_players[players])) {
+					$noerr = 0;
+					$log["clan[{$row['id']}]"] = "error";
+					// echo $folders[$i]['file_dir'] . PHP_EOL;
+					// print_r($log);
+					// print_r($json_players);
+				}
+				if (!isset($json_players[cities])) {
+					$noerr = 0;
+					$log["clan[{$row['id']}]"] = "error";
+					// echo $folders[$i]['file_dir'] . PHP_EOL;
+					// print_r($log);
+					// print_r($json_players);
+				}
 			}
 		}
 		$dups = 0;
@@ -698,7 +729,7 @@ for ($i = $start_p; $i < $end_p; $i++) {
 				}
 			}
 			foreach ($cities_server as $city) {
-				if (($city->was != 1) && ($city->clan_id != -2)) {
+				if (($city->was != 1) && ($city->clan != -2)) {
 					$d = date('Y-m-d H:i:s', $folders[$i]['time'] - 3 * 60 * 60);
 					$query = "INSERT INTO cities (timemark,id,name,clan) values ('{$d}',$city->id,'$city->name',-2);\n";
 					$query_log .= $query;
@@ -827,6 +858,17 @@ for ($i = $start_p; $i < $end_p; $i++) {
 					// mysqli_close($connection);
 					$tmp_count++;
 				}
+			}
+			if ((count($attacks_server) > 0) && ($eras_stage == 0)) {
+				$eras_stage == 1;
+				array_push($eras_log, "Era started " . $folders[$i]['file_dir']);
+				print_r($eras_log);
+			}
+			if ((count($attacks_server) < 0) && ($eras_stage == 1)) {
+				$eras_stage == 0;
+				array_push($eras_log, "Era ended " . $folders[$i]['file_dir']);
+				print_r($eras_log);
+
 			}
 			// echo PHP_EOL . "foreach (attacks_server" . PHP_EOL;
 			// $TimeApp->Revil();
