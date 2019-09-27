@@ -3,6 +3,8 @@ header('Content-Type: text/html; charset=utf-8');
 // подрубаем API
 require_once "vendor/autoload.php";
 
+$file = file_put_content(realpath(dirname(__FILE__)) . "log.txt", var_dump($_REQUEST));
+
 $file = file_get_contents(realpath(dirname(__FILE__)) . "/../.config.json");
 $config = json_decode($file, true);
 // print_r($config);
