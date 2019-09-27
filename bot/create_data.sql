@@ -2,8 +2,7 @@ drop table if exists public.users CASCADE;
 
 
 CREATE TABLE public.users (
-  timemark timestamp,
-  id integer,
+  id integer UNIQUE,
   game_id integer
 )
 WITH (
