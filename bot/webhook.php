@@ -42,7 +42,7 @@ $bot->command('help', function ($message) use ($bot) {
 	$bot->sendMessage($message->getChat()->getId(), $answer, null, false, null, $keyboard);
 });
 $bot->command('test', function ($message) use ($bot) {
-	$answer = 'Ура! Я сам что то написал!';
+	$answer = 'Ура! Я сам что то написал!' . var_dump($bot);
 	$bot->sendMessage($message->getChat()->getId(), $answer);
 });
 
