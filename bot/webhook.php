@@ -38,5 +38,6 @@ $bot->command('test', function ($message) use ($bot) {
 	$answer = 'Ура! Я сам что то написал!';
 	$bot->sendMessage($message->getChat()->getId(), $answer);
 });
+pg_close($dbconn);
 $bot->run();
 ?>
