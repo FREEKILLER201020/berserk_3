@@ -3,7 +3,7 @@ header('Content-Type: text/html; charset=utf-8');
 // подрубаем API
 require_once "vendor/autoload.php";
 
-$file = file_put_contents(realpath(dirname(__FILE__)) . "log.txt", var_dump($_REQUEST));
+// $file = file_put_contents(realpath(dirname(__FILE__)) . "/../cards_parser/cards/log.txt", var_dump($_REQUEST));
 
 $file = file_get_contents(realpath(dirname(__FILE__)) . "/../.config.json");
 $config = json_decode($file, true);
@@ -15,6 +15,8 @@ $dbconn = pg_connect($query) or die('Не удалось соединиться:
 
 $token = "681634726:AAHafNwa8T3LXlezmIAUH-JjBGrI0qU-lfY";
 $bot = new \TelegramBot\Api\Client($token);
+
+$id=$bot->getChat()->getId()
 
 // Не понял([a-z0-9]*)
 // $bot->command('([a-z0-9]*)', function ($message) use ($bot) {
@@ -44,7 +46,7 @@ $bot->command('help', function ($message) use ($bot) {
 	$bot->sendMessage($message->getChat()->getId(), $answer, null, false, null, $keyboard);
 });
 $bot->command('test', function ($message) use ($bot) {
-	$answer = 'Ура! Я сам что то написал!' . var_dump($message) . var_dump($_REQUEST);
+	$answer = 'Ура! Я сам что то написал!' . $id;
 	$bot->sendMessage($message->getChat()->getId(), $answer);
 });
 
