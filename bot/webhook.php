@@ -39,6 +39,6 @@ $bot->command('test', function ($message) use ($bot) {
 	$bot->sendMessage($message->getChat()->getId(), $answer);
 });
 
-pg_close($dbconn);
 $bot->run();
+pg_close($dbconn);
 ?>
