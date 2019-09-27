@@ -19,7 +19,7 @@ ini_set('memory_limit', '16384M');
 $file = file_get_contents(realpath(dirname(__FILE__)) . "/.config.json");
 $config = json_decode($file, true);
 $query = "host={$config['host']} dbname={$config['dbname']} user={$config['user']} password={$config['password']}";
-$dbconn = pg_pconnect($query) or die('Не удалось соединиться: ' . pg_last_error());
+$dbconn = pg_connect($query) or die('Не удалось соединиться: ' . pg_last_error());
 
 // $TimeApp = new Timer();
 

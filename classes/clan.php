@@ -86,13 +86,15 @@ function GetClanId($dbconn, $title) {
 
 class ClanEraRes {
 	public $Название;
+	public $ID;
 	public $Очки_на_начало_эры;
 	public $Очки_на_конец_эры;
 	public $Города_на_начало_эры;
 	public $Города_на_конец_эры;
 
-	public function __construct($title, $p1, $p2, $c1, $c2) {
+	public function __construct($title, $id, $p1, $p2, $c1, $c2) {
 		$this->Название = $title;
+		$this->ID = $id;
 		$this->Очки_на_начало_эры = $p1;
 		$this->Очки_на_конец_эры = $p2;
 		$this->Города_на_начало_эры = $c1;
