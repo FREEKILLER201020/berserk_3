@@ -13,6 +13,13 @@ $dbconn = pg_connect($query) or die('Не удалось соединиться:
 
 $token = "681634726:AAHafNwa8T3LXlezmIAUH-JjBGrI0qU-lfY";
 $bot = new \TelegramBot\Api\Client($token);
+
+// Не понял([a-z0-9]*)
+$bot->command('([a-z0-9]*)', function ($message) use ($bot) {
+	$answer = 'Простите, кажется я вас не понял. Введите "/help" что бь посмотреть что я умею.';
+	$bot->sendMessage($message->getChat()->getId(), $answer);
+});
+
 // команда для start
 $bot->command('start', function ($message) use ($bot) {
 	$query = "INSERT INTO users (id) values ({$message->getChat()->getId()});\n";
