@@ -26,15 +26,9 @@ $bot = new \TelegramBot\Api\Client($token);
 // });
 $chatId = 0;
 
-Test();
-
-function Test ($message) use ($bot) {
-    $chatId=$message->getChat()->getId()});
-}
-
 // команда для start
 $bot->command('start', function ($message) use ($bot) {
-	$query = "INSERT INTO users (id) values ({$message->getChat()->getId()});\n";
+	// $query = "INSERT INTO users (id) values ({$message->getChat()->getId()});\n";
 	$answer = 'Добро пожаловать!' . $chatId;
 	// $result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 	$bot->sendMessage($message->getChat()->getId(), $answer);
