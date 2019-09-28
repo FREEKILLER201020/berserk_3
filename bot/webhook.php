@@ -17,13 +17,36 @@ $token = "681634726:AAHafNwa8T3LXlezmIAUH-JjBGrI0qU-lfY";
 $bot = new \TelegramBot\Api\Client($token);
 
 // $id = $bot->getChat()->getId();
-print_r($bot);
+// print_r($bot);
 
 // Не понял([a-z0-9]*)
 // $bot->command('([a-z0-9]*)', function ($message) use ($bot) {
 // $answer = 'Простите, кажется я вас не понял. Введите "/help" что бь посмотреть что я умею.';
 // $bot->sendMessage($bot->getChat()->getId(), $answer);
 // });
+$chatId = 0;
+$bot->on(function ($update) use ($bot, $callback_loc, $find_command) {
+	$callback = $update->getCallbackQuery();
+	$message = $callback->getMessage();
+	$chatId = $message->getChat()->getId();
+	$data = $callback->getData();
+
+	// if ($data == "data_test") {
+	// 	$bot->answerCallbackQuery($callback->getId(), "This is Ansver!", true);
+	// }
+	// if ($data == "data_test2") {
+	// 	$bot->sendMessage($chatId, "Это ответ!");
+	// 	$bot->answerCallbackQuery($callback->getId()); // sending empty message to stop "timeTable" at the button
+	// }
+
+}, function ($update) {
+	$callback = $update->getCallbackQuery();
+	if (is_null($callback) || !strlen($callback->getData())) {
+		return false;
+	}
+
+	return true;
+});
 
 // команда для start
 $bot->command('start', function ($message) use ($bot) {
@@ -47,7 +70,7 @@ $bot->command('help', function ($message) use ($bot) {
 	$bot->sendMessage($message->getChat()->getId(), $answer, null, false, null, $keyboard);
 });
 $bot->command('test', function ($message) use ($bot) {
-	$answer = 'Ура! Я сам что то написал!' . $id;
+	$answer = 'Ура! Я сам что то написал!' . $chatId;
 	$bot->sendMessage($message->getChat()->getId(), $answer);
 });
 
