@@ -14,61 +14,55 @@ $dbconn = pg_connect($query) or die('Не удалось соединиться:
 // $result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 
 $token = "681634726:AAHafNwa8T3LXlezmIAUH-JjBGrI0qU-lfY";
-// $bot = new \TelegramBot\Api\Client($token);
+$bot = new \TelegramBot\Api\Client($token);
 
-try {
-	$bot = new \TelegramBot\Api\Client($token);
-	// or initialize with botan.io tracker api key
-	// $bot = new \TelegramBot\Api\Client('YOUR_BOT_API_TOKEN', 'YOUR_BOTAN_TRACKER_API_KEY');
+$bot->on(function ($Update) use ($bot) {
+	$message = $Update->getMessage();
+	$mtext = $message->getText();
+	$cid = $message->getChat()->getId();
 
-	$bot->command('ping', function ($message) use ($bot) {
-		$bot->sendMessage($message->getChat()->getId(), 'pong!');
-	});
+	if (mb_stripos($mtext, "власть советам") !== false) {
+		$bot->sendMessage($message->getChat()->getId(), "Смерть богатым!");
+	}
+}, function ($message) use ($name) {
+	return true; // когда тут true - команда проходит
+});
+// $id = $bot->getChat()->getId();
+// print_r($bot);
 
-	$bot->run();
-
-} catch (\TelegramBot\Api\Exception $e) {
-	$e->getMessage();
-}
-
-// print_r($_REQUEST);
-
-// // $id = $bot->getChat()->getId();
-// // print_r($bot);
-
-// // Не понял([a-z0-9]*)
-// // $bot->command('([a-z0-9]*)', function ($message) use ($bot) {
-// // $answer = 'Простите, кажется я вас не понял. Введите "/help" что бь посмотреть что я умею.';
-// // $bot->sendMessage($bot->getChat()->getId(), $answer);
-// // });
-// $chatId = 0;
-
-// // команда для start
-// $bot->command('start', function ($message) use ($bot) {
-// 	// $query = "INSERT INTO users (id) values ({$message->getChat()->getId()});\n";
-// 	$answer = 'Добро пожаловать!' . var_export($_REQUEST) . var_export($_POST) . var_export($_GET);
-// 	// $result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
-// 	$bot->sendMessage($message->getChat()->getId(), $answer);
+// Не понял([a-z0-9]*)
+// $bot->command('([a-z0-9]*)', function ($message) use ($bot) {
+// $answer = 'Простите, кажется я вас не понял. Введите "/help" что бь посмотреть что я умею.';
+// $bot->sendMessage($bot->getChat()->getId(), $answer);
 // });
-// // команда для помощи
-// $bot->command('help', function ($message) use ($bot) {
-// 	$answer = 'Команды:
-// /help - вывод справки';
-// 	$keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
-// 		[
-// 			[
-// 				['text' => 'link', 'url' => 'https://core.telegram.org'],
-// 			],
-// 		]
-// 	);
+$chatId = 0;
 
-// 	$bot->sendMessage($message->getChat()->getId(), $answer, null, false, null, $keyboard);
-// });
-// $bot->command('test', function ($message) use ($bot) {
-// 	$answer = 'Ура! Я сам что то написал!' . var_export($_REQUEST);
-// 	$bot->sendMessage($message->getChat()->getId(), $answer);
-// });
+// команда для start
+$bot->command('start', function ($message) use ($bot) {
+	// $query = "INSERT INTO users (id) values ({$message->getChat()->getId()});\n";
+	$answer = 'Добро пожаловать!';
+	// $result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
+	$bot->sendMessage($message->getChat()->getId(), $answer);
+});
+// команда для помощи
+$bot->command('help', function ($message) use ($bot) {
+	$answer = 'Команды:
+/help - вывод справки';
+	$keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
+		[
+			[
+				['text' => 'link', 'url' => 'https://core.telegram.org'],
+			],
+		]
+	);
 
-// $bot->run();
+	$bot->sendMessage($message->getChat()->getId(), $answer, null, false, null, $keyboard);
+});
+$bot->command('test', function ($message) use ($bot) {
+	$answer = 'Ура! Я сам что то написал!' . var_export($_REQUEST);
+	$bot->sendMessage($message->getChat()->getId(), $answer);
+});
+
+$bot->run();
 pg_close($dbconn);
 ?>
