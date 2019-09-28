@@ -16,7 +16,8 @@ $dbconn = pg_connect($query) or die('Не удалось соединиться:
 $token = "681634726:AAHafNwa8T3LXlezmIAUH-JjBGrI0qU-lfY";
 $bot = new \TelegramBot\Api\Client($token);
 
-$id=$bot->getChat()->getId()
+$id = $bot->getChat()->getId();
+print_r($bot);
 
 // Не понял([a-z0-9]*)
 // $bot->command('([a-z0-9]*)', function ($message) use ($bot) {
