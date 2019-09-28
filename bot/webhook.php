@@ -25,28 +25,6 @@ $bot = new \TelegramBot\Api\Client($token);
 // $bot->sendMessage($bot->getChat()->getId(), $answer);
 // });
 $chatId = 0;
-$bot->on(function ($update) use ($bot, $callback_loc, $find_command) {
-	$callback = $update->getCallbackQuery();
-	$message = $callback->getMessage();
-	$chatId = $message->getChat()->getId();
-	$data = $callback->getData();
-
-	// if ($data == "data_test") {
-	// 	$bot->answerCallbackQuery($callback->getId(), "This is Ansver!", true);
-	// }
-	// if ($data == "data_test2") {
-	// 	$bot->sendMessage($chatId, "Это ответ!");
-	// 	$bot->answerCallbackQuery($callback->getId()); // sending empty message to stop "timeTable" at the button
-	// }
-
-}, function ($update) {
-	$callback = $update->getCallbackQuery();
-	if (is_null($callback) || !strlen($callback->getData())) {
-		return false;
-	}
-
-	return true;
-});
 
 // команда для start
 $bot->command('start', function ($message) use ($bot) {
