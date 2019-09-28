@@ -24,6 +24,10 @@ $bot->on(function ($Update) use ($bot) {
 
 	if (mb_stripos($mtext, "власть советам") !== false) {
 		$bot->sendMessage($message->getChat()->getId(), "Смерть богатым!");
+	} else if (mb_stripos($mtext, "привет") !== false) {
+		$bot->sendMessage($message->getChat()->getId(), "Пока");
+	} else {
+		$bot->sendMessage($message->getChat()->getId(), "Я вас не понял...");
 	}
 }, function ($message) use ($name) {
 	return true; // когда тут true - команда проходит
