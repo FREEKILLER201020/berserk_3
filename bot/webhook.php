@@ -31,7 +31,7 @@ $chatId = 0;
 // команда для start
 $bot->command('start', function ($message) use ($bot) {
 	// $query = "INSERT INTO users (id) values ({$message->getChat()->getId()});\n";
-	$answer = 'Добро пожаловать!' . $chatId;
+	$answer = 'Добро пожаловать!' . var_export($_REQUEST) . var_export($_POST) . var_export($_GET);
 	// $result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 	$bot->sendMessage($message->getChat()->getId(), $answer);
 });
