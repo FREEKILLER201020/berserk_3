@@ -20,7 +20,6 @@ $bot->on(function ($Update) use ($bot) {
 	$message = $Update->getMessage();
 	$mtext = $message->getText();
 	$cid = $message->getChat()->getId();
-	$bot->sendMessage($message->getChat()->getId(), "Я вас не понял...");
 
 	if (mb_stripos($mtext, "власть советам") !== false) {
 		$bot->sendMessage($message->getChat()->getId(), "Смерть богатым!");
