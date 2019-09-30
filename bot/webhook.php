@@ -26,6 +26,8 @@ $bot->on(function ($Update) use ($bot) {
 		$bot->sendMessage($message->getChat()->getId(), "Смерть богатым!");
 	} else if (mb_stripos($mtext, "привет") !== false) {
 		$bot->sendMessage($message->getChat()->getId(), "Пока");
+	} else if (mb_stripos($mtext, "/start") !== false) {
+		// $bot->sendMessage($message->getChat()->getId(), "Пока");
 	} else {
 		$bot->sendMessage($message->getChat()->getId(), "Кажется я вас не понял... $user в чате $cid" . var_export($message, true));
 	}
@@ -35,10 +37,7 @@ $bot->on(function ($Update) use ($bot) {
 
 // команда для start
 $bot->command('start', function ($message) use ($bot) {
-	// $query = "INSERT INTO users (id) values ({$message->getChat()->getId()});\n";
-	$answer = 'Добро пожаловать!';
-	// $result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
-	$bot->sendMessage($message->getChat()->getId(), $answer);
+	Start($message, $bot);
 });
 // команда для помощи
 $bot->command('help', function ($message) use ($bot) {
@@ -61,4 +60,11 @@ $bot->command('test', function ($message) use ($bot) {
 
 $bot->run();
 pg_close($dbconn);
+
+function Start($message, $bot) {
+	$query = "INSERT INTO users (id) values ({$message->getChat()->getId()});\n";
+	$answer = 'Добро пожаловать!';
+	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
+	$bot->sendMessage($message->getChat()->getId(), $answer);
+}
 ?>
