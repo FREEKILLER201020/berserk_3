@@ -20,14 +20,14 @@ $bot->on(function ($Update) use ($bot) {
 	$message = $Update->getMessage();
 	$mtext = $message->getText();
 	$cid = $message->getChat()->getId();
-	$user = $message->getUser()->getId();
+	$user = $message->getFrom()->getId();
 
 	if (mb_stripos($mtext, "власть советам") !== false) {
 		$bot->sendMessage($message->getChat()->getId(), "Смерть богатым!");
 	} else if (mb_stripos($mtext, "привет") !== false) {
 		$bot->sendMessage($message->getChat()->getId(), "Пока");
 	} else {
-		$bot->sendMessage($message->getChat()->getId(), "Кажется я вас не понял... $user в чате $cid" . var_export($message));
+		$bot->sendMessage($message->getChat()->getId(), "Кажется я вас не понял... $user в чате $cid" . var_export($message, true));
 	}
 }, function ($message) use ($name) {
 	return true; // когда тут true - команда проходит
