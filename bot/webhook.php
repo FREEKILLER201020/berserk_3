@@ -54,7 +54,7 @@ $bot->command('help', function ($message) use ($bot) {
 	$bot->sendMessage($message->getChat()->getId(), $answer, null, false, null, $keyboard);
 });
 $bot->command('test', function ($message) use ($bot) {
-	$answer = 'Ура! Я сам что то написал!' . var_export($message);
+	$answer = 'Ура! Я сам что то написал!' . var_export($message, true);
 	$bot->sendMessage($message->getChat()->getId(), $answer);
 });
 
