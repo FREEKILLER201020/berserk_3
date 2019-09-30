@@ -26,20 +26,11 @@ $bot->on(function ($Update) use ($bot) {
 	} else if (mb_stripos($mtext, "привет") !== false) {
 		$bot->sendMessage($message->getChat()->getId(), "Пока");
 	} else {
-		$bot->sendMessage($message->getChat()->getId(), "Я вас не понял...");
+		$bot->sendMessage($message->getChat()->getId(), var_export($message));
 	}
 }, function ($message) use ($name) {
 	return true; // когда тут true - команда проходит
 });
-// $id = $bot->getChat()->getId();
-// print_r($bot);
-
-// Не понял([a-z0-9]*)
-// $bot->command('([a-z0-9]*)', function ($message) use ($bot) {
-// $answer = 'Простите, кажется я вас не понял. Введите "/help" что бь посмотреть что я умею.';
-// $bot->sendMessage($bot->getChat()->getId(), $answer);
-// });
-$chatId = 0;
 
 // команда для start
 $bot->command('start', function ($message) use ($bot) {
