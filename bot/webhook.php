@@ -26,7 +26,7 @@ $bot->on(function ($Update) use ($bot) {
 	} else if (mb_stripos($mtext, "привет") !== false) {
 		$bot->sendMessage($message->getChat()->getId(), "Пока");
 	} else {
-		$bot->sendMessage($message->getChat()->getId(), var_export($message));
+		$bot->sendMessage($message->getChat()->getId(), "Кажется я вас не понял... " . var_export($message));
 	}
 }, function ($message) use ($name) {
 	return true; // когда тут true - команда проходит
