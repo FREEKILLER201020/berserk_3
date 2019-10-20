@@ -69,5 +69,6 @@ function Start($message, $bot) {
 	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 	$answer = 'Добро пожаловать!';
 	$bot->sendMessage($message->getChat()->getId(), $answer);
+	$bot->sendMessage($message->getChat()->getId(), $answer);
 }
 ?>
