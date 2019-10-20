@@ -68,7 +68,7 @@ function Start($message, $bot) {
 	$name = $message->getFrom()->getFirstName();
 	$query = "INSERT INTO users (id, username) values ({$message->getFrom()->getId()},'$name');\n";
 	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
-	$answer = 'Добро пожаловать $name!';
+	$answer = 'Добро пожаловать ' . $name . '!';
 	$bot->sendMessage($message->getChat()->getId(), $answer);
 	$answer = '';
 	$bot->sendMessage($message->getChat()->getId(), $answer);
