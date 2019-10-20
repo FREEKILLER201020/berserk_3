@@ -65,10 +65,12 @@ $bot->run();
 pg_close($dbconn);
 
 function Start($message, $bot) {
-	$query = "INSERT INTO users (id) values ({$message->getChat()->getId()});\n";
+	$name = $message->getFrom()->getFirstName();
+	$query = "INSERT INTO users (id, username) values ({$message->getFrom()->getId()},'$name');\n";
 	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
-	$answer = 'Добро пожаловать!';
+	$answer = 'Добро пожаловать $name!';
 	$bot->sendMessage($message->getChat()->getId(), $answer);
+	$answer = '';
 	$bot->sendMessage($message->getChat()->getId(), $answer);
 }
 ?>
