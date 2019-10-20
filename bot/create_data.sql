@@ -3,6 +3,7 @@ drop table if exists public.chats CASCADE;
 drop table if exists public.messages_history CASCADE;
 
 CREATE TABLE public.messages_history (
+  timemark timestamp,
   id integer UNIQUE,
   message text,
   chat_id integer,
