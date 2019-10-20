@@ -68,6 +68,10 @@ function Start($message, $bot) {
 	$name = $message->getFrom()->getFirstName();
 	$query = "INSERT INTO users (id, username) values ({$message->getFrom()->getId()},'$name');\n";
 	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
+	if (mb_stripos($answer, "Не удалось соединиться:") !== false) {
+		$query = "UPDATE users set username='$name' where id={$message->getFrom()->getId()};\n";
+		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
+	}
 	$answer = 'Добро пожаловать ' . $name . '!';
 	$bot->sendMessage($message->getChat()->getId(), $answer);
 	$answer = '';
