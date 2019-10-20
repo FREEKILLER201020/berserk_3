@@ -21,7 +21,7 @@ $bot->on(function ($Update) use ($bot) {
 	$mtext = $message->getText();
 	$cid = $message->getChat()->getId();
 	$user = $message->getFrom()->getId();
-	$query = "INSERT INTO messages_history (messege, chat_id, user_id) values ('$mtext',$cid,$user);\n";
+	$query = "INSERT INTO messages_history (message, chat_id, user_id) values ('$mtext',$cid,$user);\n";
 	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 
 	if (mb_stripos($mtext, "власть советам") !== false) {
