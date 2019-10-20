@@ -83,8 +83,8 @@ $bot->on(function ($update) use ($bot, $callback_loc, $find_command) {
 	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 
 	if ($data == "yes_start") {
-		Meet($message, $bot, $callback);
-	}
+		$bot->sendMessage($message->getChat()->getId(), "Отлично! Напишите пожалуста свой игровой ник, что бы получать больше персональной информации ;)");
+		$bot->answerCallbackQuery($callback->getId());}
 	if ($data == "no_start") {
 		$bot->sendMessage($chatId, "Обидно...");
 		$bot->answerCallbackQuery($callback->getId()); // можно отослать пустое, чтобы просто убрать "часики" на кнопке
@@ -146,11 +146,6 @@ $bot->command('test', function ($message) use ($bot) {
 
 $bot->run();
 pg_close($dbconn);
-
-function Meet($message, $bot, $callback) {
-	$bot->sendMessage($message->getChat()->getId(), "Отлично! Напишите пожалуста свой игровой ник, что бы получать больше персональной информации ;)");
-	$bot->answerCallbackQuery($callback->getId()); // можно отослать пустое, чтобы просто убрать "часики" на кнопке
-}
 
 function Start($message, $bot) {
 	$nick = $message->getFrom()->getUsername();
