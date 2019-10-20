@@ -31,7 +31,7 @@ $bot->on(function ($Update) use ($bot) {
 	} else if (mb_stripos($mtext, "/start") !== false) {
 		// $bot->sendMessage($message->getChat()->getId(), "Пока");
 	} else {
-		$bot->sendMessage($message->getChat()->getId(), $result);
+		$bot->sendMessage($message->getChat()->getId(), $query . " " . $answer);
 	}
 }, function ($message) use ($name) {
 	return true; // когда тут true - команда проходит
