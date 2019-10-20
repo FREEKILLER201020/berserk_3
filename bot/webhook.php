@@ -44,6 +44,11 @@ $bot->on(function ($update) use ($bot) {
 	$callback = $update->getCallbackQuery();
 	$message = $callback->getMessage();
 	$data = $callback->getData();
+	$cid = $message->getChat()->getId();
+	$user = $message->getFrom()->getId();
+	$time = time();
+	$query = "INSERT INTO messages_history (timemark, message, chat_id, user_id) values (current_timestamp,'$data',$cid,$user);\n";
+	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 
 	if (mb_stripos($data, "yes_start") !== false) {
 		$bot->sendMessage($message->getChat()->getId(), "yes_start");
