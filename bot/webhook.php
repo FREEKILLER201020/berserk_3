@@ -120,6 +120,9 @@ $bot->on(function ($update) use ($bot, $callback_loc, $find_command) {
 	// 	$bot->sendMessage($chatId, "Это ответ!");
 	// 	$bot->answerCallbackQuery($callback->getId()); // можно отослать пустое, чтобы просто убрать "часики" на кнопке
 	// }
+	if ($data == "yes_start") {
+		Meet($message, $bot);
+	}
 	if ($data == "no_start") {
 		$bot->sendMessage($chatId, "Обидно...");
 		$bot->answerCallbackQuery($callback->getId()); // можно отослать пустое, чтобы просто убрать "часики" на кнопке
@@ -136,6 +139,11 @@ $bot->on(function ($update) use ($bot, $callback_loc, $find_command) {
 
 $bot->run();
 pg_close($dbconn);
+
+function Meet($message, $bot) {
+	$bot->sendMessage($chatId, "Отлично! Напишите пожалуста свой игровой ник, что бы получать больше персональной информации ;)");
+	$bot->answerCallbackQuery($callback->getId()); // можно отослать пустое, чтобы просто убрать "часики" на кнопке
+}
 
 function Start($message, $bot) {
 	$nick = $message->getFrom()->getUsername();
