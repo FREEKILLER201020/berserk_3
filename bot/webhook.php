@@ -15,9 +15,9 @@ $dbconn = pg_connect($query) or die('Не удалось соединиться:
 
 $token = "681634726:AAHafNwa8T3LXlezmIAUH-JjBGrI0qU-lfY";
 $bot = new \TelegramBot\Api\Client($token);
-// $bot->callbackQuery(function ($message) use ($bot) {
-// 	Start($message, $bot);
-// }
+$bot->callbackQuery(function ($message) use ($bot) {
+	Start($message, $bot);
+}
 $bot->on(function ($Update) use ($bot) {
 	$message = $Update->getMessage();
 	$mtext = $message->getText();
