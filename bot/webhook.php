@@ -35,6 +35,12 @@ $bot->on(function ($Update) use ($bot) {
 		$bot->sendMessage($message->getChat()->getId(), $query . " " . $answer);
 	}
 
+}, function ($message) use ($name) {
+	return true; // когда тут true - команда проходит
+});
+
+$bot->on(function ($update) use ($bot) {
+
 	$callback = $update->getCallbackQuery();
 	$message = $callback->getMessage();
 	$data = $callback->getData();
@@ -45,8 +51,13 @@ $bot->on(function ($Update) use ($bot) {
 		$bot->sendMessage($message->getChat()->getId(), "no_start");
 	}
 
-}, function ($message) use ($name) {
-	return true; // когда тут true - команда проходит
+}, function ($update) {
+	$callback = $update->getCallbackQuery();
+	if (is_null($callback) || !strlen($callback->getData())) {
+		return false;
+	}
+
+	return true;
 });
 
 // команда для start
