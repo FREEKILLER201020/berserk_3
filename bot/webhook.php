@@ -69,43 +69,6 @@ $bot = new \TelegramBot\Api\Client($token);
 // 	return true;
 // });
 
-// команда для start
-$bot->command('start', function ($message) use ($bot) {
-	Start($message, $bot);
-});
-// команда для помощи
-$bot->command('help', function ($message) use ($bot) {
-	$answer = 'Команды:
-/help - вывод справки';
-	$keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
-		[
-			[
-				['text' => 'link', 'url' => 'https://core.telegram.org'],
-			],
-		]
-	);
-
-	$bot->sendMessage($message->getChat()->getId(), $answer, null, false, null, $keyboard);
-});
-$bot->command('test', function ($message) use ($bot) {
-	$answer = 'Ура! Я сам что то написал!' . var_export($message, true);
-	$bot->sendMessage($message->getChat()->getId(), $answer);
-});
-
-// Кнопки у сообщений
-$bot->command("ibutton", function ($message) use ($bot) {
-	$keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
-		[
-			[
-				['callback_data' => 'data_test', 'text' => 'Answer'],
-				['callback_data' => 'data_test2', 'text' => 'ОтветЪ'],
-			],
-		]
-	);
-
-	$bot->sendMessage($message->getChat()->getId(), "тест", false, null, null, $keyboard);
-});
-
 // Обработка кнопок у сообщений
 $bot->on(function ($update) use ($bot, $callback_loc, $find_command) {
 	$callback = $update->getCallbackQuery();
@@ -154,9 +117,31 @@ $bot->on(function ($Update) use ($bot) {
 	if (mb_stripos($mtext, "власть советам") !== false) {
 		$bot->sendMessage($message->getChat()->getId(), "Смерть богатым!");
 	}
-	$bot->sendMessage($message->getChat()->getId(), $answer);
 }, function ($message) use ($name) {
 	return true; // когда тут true - команда проходит
+});
+
+// команда для start
+$bot->command('start', function ($message) use ($bot) {
+	Start($message, $bot);
+});
+// команда для помощи
+$bot->command('help', function ($message) use ($bot) {
+	$answer = 'Команды:
+/help - вывод справки';
+	$keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
+		[
+			[
+				['text' => 'link', 'url' => 'https://core.telegram.org'],
+			],
+		]
+	);
+
+	$bot->sendMessage($message->getChat()->getId(), $answer, null, false, null, $keyboard);
+});
+$bot->command('test', function ($message) use ($bot) {
+	$answer = 'Ура! Я сам что то написал!' . var_export($message, true);
+	$bot->sendMessage($message->getChat()->getId(), $answer);
 });
 
 $bot->run();
