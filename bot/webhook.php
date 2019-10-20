@@ -106,8 +106,10 @@ function Start($message, $bot) {
 	$keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
 		[
 			[
-				['text' => 'Да', 'callback_data' => 'yes_start'],
-				['text' => 'Нет', 'callback_data' => 'no_start'],
+				['callback_data' => 'yes_start', 'text' => 'Да'],
+			],
+			[
+				['callback_data' => 'no_start', 'text' => 'Нет'],
 			],
 		]
 	);
