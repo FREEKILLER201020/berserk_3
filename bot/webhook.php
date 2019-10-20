@@ -50,9 +50,9 @@ $bot->on(function ($update) use ($bot) {
 	$query = "INSERT INTO messages_history (timemark, message, chat_id, user_id) values (current_timestamp,'$data',$cid,$user);\n";
 	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 
-	if (mb_stripos($data, "yes_start") !== false) {
+	if ($data == "yes_start") {
 		$bot->sendMessage($message->getChat()->getId(), "yes_start");
-	} else if (mb_stripos($data, "no_start") !== false) {
+	} else if ($data == "no_start") {
 		$bot->sendMessage($message->getChat()->getId(), "no_start");
 	}
 
@@ -112,5 +112,5 @@ function Start($message, $bot) {
 		]
 	);
 
-	$bot->sendMessage($message->getChat()->getId(), $answer, null, false, null, $keyboard);}
+	$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);}
 ?>
