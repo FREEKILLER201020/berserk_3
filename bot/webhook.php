@@ -29,6 +29,10 @@ $bot->on(function ($Update) use ($bot) {
 		$bot->sendMessage($message->getChat()->getId(), "Смерть богатым!");
 	} else if (mb_stripos($mtext, "привет") !== false) {
 		$bot->sendMessage($message->getChat()->getId(), "Пока");
+	} else if (mb_stripos($mtext, "yes_start") !== false) {
+		$bot->sendMessage($message->getChat()->getId(), "yes_start");
+	} else if (mb_stripos($mtext, "no_start") !== false) {
+		$bot->sendMessage($message->getChat()->getId(), "no_start");
 	} else if (mb_stripos($mtext, "/start") !== false) {
 		// $bot->sendMessage($message->getChat()->getId(), "Пока");
 	} else {
@@ -75,7 +79,15 @@ function Start($message, $bot) {
 	}
 	$answer = 'Добро пожаловать ' . $name . '!';
 	$bot->sendMessage($message->getChat()->getId(), $answer);
-	// $answer = '';
-	// $bot->sendMessage($message->getChat()->getId(), $answer);
-}
+	$answer = 'Вы состаите в каком-нибудь клане?';
+	$keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
+		[
+			[
+				['text' => 'Да', 'callback_data' => 'yes_start'],
+				['text' => 'Нет', 'callback_data' => 'no_start'],
+			],
+		]
+	);
+
+	$bot->sendMessage($message->getChat()->getId(), $answer, null, false, null, $keyboard);}
 ?>
