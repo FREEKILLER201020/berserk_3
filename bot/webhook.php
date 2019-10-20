@@ -110,7 +110,7 @@ $bot->on(function ($Update) use ($bot) {
 	$query = "INSERT INTO messages_history (timemark, message, chat_id, user_id) values (current_timestamp,'$mtext',$cid,$user);\n";
 	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 
-	// $bot->sendMessage($message->getChat()->getId(), LastUserMessage($cid, $user));
+	$bot->sendMessage($message->getChat()->getId(), LastUserMessage($cid, $user));
 
 	if (mb_stripos($mtext, "Сиськи") !== false) {
 		$pic = "http://aftamat4ik.ru/wp-content/uploads/2017/05/14277366494961.jpg";
