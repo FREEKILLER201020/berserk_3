@@ -122,6 +122,13 @@ $bot->on(function ($Update) use ($bot) {
 	return true; // когда тут true - команда проходит
 });
 
+// Reply-Кнопки
+$bot->command("buttons", function ($message) use ($bot) {
+	$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup([[["text" => "Власть советам!"], ["text" => "Сиськи!"]]], true, true);
+
+	$bot->sendMessage($message->getChat()->getId(), "тест", false, null, null, $keyboard);
+});
+
 // команда для start
 $bot->command('start', function ($message) use ($bot) {
 	Start($message, $bot);
