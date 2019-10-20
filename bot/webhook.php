@@ -42,6 +42,7 @@ $bot->on(function ($Update) use ($bot) {
 $bot->on(function ($update) use ($bot) {
 
 	$callback = $update->getCallbackQuery();
+	$bot->sendMessage($message->getChat()->getId(), var_export($callback, true));
 	$message = $callback->getMessage();
 	$data = $callback->getData();
 	$cid = $message->getChat()->getId();
