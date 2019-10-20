@@ -94,15 +94,15 @@ function MakeLine($strongest_line) {
 	$strongest_line_sorted = array();
 	foreach ($strongest_line as $key => $value) {
 		$tmp = array();
-		$tmp[n] = $value;
-		$tmp[cell_id] = $key;
+		$tmp['n'] = $value;
+		$tmp['cell_id'] = $key;
 		array_push($strongest_line_sorted, $tmp);
 	}
 
 	for ($i = 0; $i < count($strongest_line_sorted); $i++) {
 		for ($j = 0; $j < count($strongest_line_sorted); $j++) {
 			// if ((isset($strongest_line_sorted[$i][n])) && (isset($strongest_line_sorted[$j][n]))) {
-			if ($strongest_line_sorted[$i][n] > $strongest_line_sorted[$j][n]) {
+			if ($strongest_line_sorted[$i]['n'] > $strongest_line_sorted[$j]['n']) {
 				$bcp = $strongest_line_sorted[$i];
 				$strongest_line_sorted[$i] = $strongest_line_sorted[$j];
 				$strongest_line_sorted[$j] = $bcp;
@@ -143,16 +143,16 @@ function GetStrongest($array, &$was) {
 			}
 			if ($new == 1) {
 				if ($cell_val > $max) {
-					$return[n] = $cell_val;
-					$return[cell_id] = $cell;
-					$return[row_id] = $row;
+					$return['n'] = $cell_val;
+					$return['cell_id'] = $cell;
+					$return['row_id'] = $row;
 					$max = $cell_val;
 				}
 			}
 		}
 	}
-	$tmp = $return[row_id] . ";" . $return[cell_id];
-	$tmp2 = $return[cell_id] . ";" . $return[row_id];
+	$tmp = $return['row_id'] . ";" . $return['cell_id'];
+	$tmp2 = $return['cell_id'] . ";" . $return['row_id'];
 	array_push($was, $tmp);
 	array_push($was, $tmp2);
 	// print_r($was);
@@ -181,10 +181,62 @@ function MatrixAnaliz($array) {
 		}
 	}
 	$res = array();
-	$res[max] = $max;
-	$res[min] = $min;
-	$res[avr] = $sum / $total;
-	$res[avr_nn] = $sum / $good;
+	$res['max'] = $max;
+	$res['min'] = $min;
+	$res['avr'] = $sum / $total;
+	$res['avr_nn'] = $sum / $good;
+	return $res;
+}
+
+function StrongInARow($array, $row) {
+	$analaz = MatrixAnaliz($array);
+	$res = 0;
+	foreach ($array[$row] as $cell => $cell_val) {
+		if ($cell_val >= $analaz['max'] - $analaz['avr_nn'] * $analaz['avr_nn']) {
+			$res++;
+		}
+	}
+	return $res;
+}
+
+function RowAnalize($array) {
+	// print_r($array);
+	$max = 0;
+	$min = INF;
+	$sum = 0;
+	$good = 0;
+	$total;
+	foreach ($array as $cell => $cell_val) {
+		$total++;
+		if ($cell_val > 0) {
+			$sum += $cell_val;
+			$good++;
+		}
+		if ($cell_val > $max) {
+			$max = $cell_val;
+		}
+		if ($cell_val < $min) {
+			$min = $cell_val;
+		}
+	}
+	$res = array();
+	$res['max'] = $max;
+	$res['min'] = $min;
+	$res['avr'] = $sum / $total;
+	$res['avr_nn'] = $sum / $good;
+	$res['nulls'] = $total - $good;
+	$res['big'] = 0;
+	$res['low'] = 0;
+	$res['norm'] = 0;
+	foreach ($array as $cell => $cell_val) {
+		if (($cell_val > 0) && ($cell_val < $res['avr_nn'])) {
+			$res['low']++;
+		} else if (($cell_val > $res['avr_nn']) && ($cell_val < $res['max'] - $res['avr_nn'] * $res['avr_nn'])) {
+			$res['norm']++;
+		} else if ($cell_val > $res['max'] - $res['avr_nn'] * $res['avr_nn']) {
+			$res['big']++;
+		}
+	}
 	return $res;
 }
 

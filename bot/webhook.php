@@ -21,6 +21,8 @@ $bot->on(function ($Update) use ($bot) {
 	$mtext = $message->getText();
 	$cid = $message->getChat()->getId();
 	$user = $message->getFrom()->getId();
+	$query = "INSERT INTO messages_history (messege, chat_id, user_id) values ('$mtext',$cid,$user);\n";
+	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 
 	if (mb_stripos($mtext, "власть советам") !== false) {
 		$bot->sendMessage($message->getChat()->getId(), "Смерть богатым!");
@@ -63,8 +65,8 @@ pg_close($dbconn);
 
 function Start($message, $bot) {
 	$query = "INSERT INTO users (id) values ({$message->getChat()->getId()});\n";
-	$answer = 'Добро пожаловать!';
 	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
+	$answer = 'Добро пожаловать!';
 	$bot->sendMessage($message->getChat()->getId(), $answer);
 }
 ?>

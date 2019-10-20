@@ -62,21 +62,21 @@ class Colors {
 		return array_keys($this->background_colors);
 	}
 	public function mapColorBG($val, $analaz) {
-		if (($val > 0) && ($val < $analaz[avr_nn])) {
+		if (($val > 0) && ($val < $analaz['avr_nn'])) {
 			return "green";
-		} else if (($val > $analaz[avr_nn]) && ($val < $analaz[max] - $analaz[avr_nn] * $analaz[avr_nn])) {
+		} else if (($val > $analaz['avr_nn']) && ($val < $analaz['max'] - $analaz['avr_nn'] * $analaz['avr_nn'])) {
 			return "yellow";
-		} else if ($val > $analaz[max] - $analaz[avr_nn] * $analaz[avr_nn]) {
+		} else if ($val > $analaz['max'] - $analaz['avr_nn'] * $analaz['avr_nn']) {
 			return "red";
 		}
 
 	}
 	public function mapColor($val, $analaz) {
-		if (($val > 0) && ($val < $analaz[avr_nn])) {
+		if (($val > 0) && ($val < $analaz['avr_nn'])) {
 			return "red";
-		} else if (($val > $analaz[avr_nn]) && ($val < $analaz[max] - $analaz[avr_nn] * $analaz[avr_nn])) {
+		} else if (($val > $analaz['avr_nn']) && ($val < $analaz['max'] - $analaz['avr_nn'] * $analaz['avr_nn'])) {
 			return "red";
-		} else if ($val > $analaz[max] - $analaz[avr_nn] * $analaz[avr_nn]) {
+		} else if ($val > $analaz['max'] - $analaz['avr_nn'] * $analaz['avr_nn']) {
 			return "white";
 		}
 

@@ -30,9 +30,9 @@ $result = pg_query($query);
 $all_cards = array();
 $res_bcp = $result;
 while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-	$line[cards] = str_replace('{', '', $line[cards]);
-	$line[cards] = str_replace('}', '', $line[cards]);
-	$cards = explode(',', $line[cards]);
+	$line['cards'] = str_replace('{', '', $line['cards']);
+	$line['cards'] = str_replace('}', '', $line['cards']);
+	$cards = explode(',', $line['cards']);
 	// print_r($line);
 	foreach ($cards as $card) {
 		if ($card != "") {
@@ -48,9 +48,9 @@ $all_cards_unique = array_unique($all_cards);
 $matrix = CreateMatrix($all_cards_unique);
 $result = pg_query($query);
 while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-	$line[cards] = str_replace('{', '', $line[cards]);
-	$line[cards] = str_replace('}', '', $line[cards]);
-	$cards = explode(',', $line[cards]);
+	$line['cards'] = str_replace('{', '', $line['cards']);
+	$line['cards'] = str_replace('}', '', $line['cards']);
+	$cards = explode(',', $line['cards']);
 	// print_r($line);
 	$current_cards = array();
 	foreach ($cards as $card) {
@@ -69,22 +69,37 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 }
 echo count($matrix) . PHP_EOL;
 PrintTable($matrix);
+// exit();
 $analaz = MatrixAnaliz($matrix);
 $main = array();
 foreach ($matrix as $row_id => $row) {
 	foreach ($row as $cell_id => $cell) {
-		if ($cell > $analaz[max] - $analaz[avr_nn] * $analaz[avr_nn]) {
-			array_push($main, $cell_id);
+		if ($cell > $analaz['max'] - $analaz['avr_nn'] * $analaz['avr_nn']) {
+			$tmp = array();
+			$tmp['cell_id'] = $cell_id;
+			$tmp['row_id'] = $row_id;
+			array_push($main, $tmp);
 		}
 	}
 }
-$main = array_unique($main);
+// $main = array_unique($main);
+// print_r($main);
+$realstrongcards = array();
 foreach ($main as $main1) {
-	foreach ($cards_all as $card) {
-		if ($main1 == $card->id) {
-			echo $card->name . PHP_EOL;
+	if ($main1['cell_id'] == $main1['row_id']) {
+		if (StrongInARow($matrix, $main1['cell_id']) == 1) {
+			foreach ($cards_all as $card) {
+				if ($main1['cell_id'] == $card->id) {
+					echo $card->name . PHP_EOL;
+					array_push($realstrongcards, $main1['cell_id']);
+				}
+			}
 		}
 	}
+}
+print_r($realstrongcards);
+foreach ($realstrongcards as $card) {
+	print_r(RowAnalize($matrix[$card]));
 }
 exit();
 $max = 0;
@@ -93,17 +108,17 @@ $len = 0;
 foreach ($matrix as $row_id => $row) {
 	$len++;
 	$tmp = array();
-	$tmp[n] = 0;
-	$tmp[cell_id] = 0;
-	$tmp[row_id] = 0;
+	$tmp['n'] = 0;
+	$tmp['cell_id'] = 0;
+	$tmp['row_id'] = 0;
 	foreach ($row as $cell_id => $cell) {
 		if ($row_id > $max) {
 			$max = $row_id;
 		}
-		if ($cell > $tmp[n]) {
-			$tmp[n] = $cell;
-			$tmp[cell_id] = $cell_id;
-			$tmp[row_id] = $row_id;
+		if ($cell > $tmp['n']) {
+			$tmp['n'] = $cell;
+			$tmp['cell_id'] = $cell_id;
+			$tmp['row_id'] = $row_id;
 		}
 	}
 	array_push($strongest, $tmp);
@@ -112,7 +127,7 @@ foreach ($matrix as $row_id => $row) {
 for ($i = 0; $i < count($strongest); $i++) {
 	for ($j = 0; $j < count($strongest); $j++) {
 		// if ((isset($strongest[$i][n])) && (isset($strongest[$j][n]))) {
-		if ($strongest[$i][n] > $strongest[$j][n]) {
+		if ($strongest[$i]['n'] > $strongest[$j][n]) {
 			$bcp = $strongest[$i];
 			$strongest[$i] = $strongest[$j];
 			$strongest[$j] = $bcp;
@@ -148,13 +163,13 @@ file_put_contents($file_load, json_encode($array_of_strong, JSON_UNESCAPED_UNICO
 // print_r($array_of_strong);
 $sum_of_strong = 0;
 foreach ($array_of_strong as $strong) {
-	$sum_of_strong += $strong[n];
+	$sum_of_strong += $strong['n'];
 }
 $avr_of_strong = $sum_of_strong / count($array_of_strong);
 echo $sum_of_strong . PHP_EOL;
 echo $avr_of_strong . PHP_EOL;
 exit();
-$strongest_line = $matrix[$strongest[0][row_id]];
+$strongest_line = $matrix[$strongest[0]['row_id']];
 $strongest_line_sorted = MakeLine($strongest_line);
 
 print_r($strongest_line_sorted);
@@ -163,8 +178,8 @@ print_r($strongest_line_sorted);
 $res = array();
 for ($i = 0; $i < $tp_count; $i++) {
 	foreach ($cards_all as $card) {
-		if ($strongest_line_sorted[$i][n] > 0) {
-			if ($strongest_line_sorted[$i][cell_id] == $card->id) {
+		if ($strongest_line_sorted[$i]['n'] > 0) {
+			if ($strongest_line_sorted[$i]['cell_id'] == $card->id) {
 				array_push($res, $card->name);
 			}
 		}
