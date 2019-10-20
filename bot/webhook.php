@@ -198,7 +198,7 @@ function Start($message, $bot) {
 }
 
 function LastUserMessage($chat_id, $user_id) {
-	$query = "select distinct on (id) id,massage from messages_history where user_id=$user_id and chat_id=$chat_id order by timemark desc";
+	$query = "select distinct on (id) id,message from messages_history where user_id=$user_id and chat_id=$chat_id order by id,timemark desc";
 	$result = pg_query($query);
 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 		$res = $line["message"];
