@@ -20,6 +20,7 @@ ALTER TABLE public.messages_history
 CREATE TABLE public.users (
   id integer UNIQUE,
   username text,
+  name text,
   game_id integer
 )
 WITH (
