@@ -32,7 +32,7 @@ $bot->on(function ($Update) use ($bot) {
 	} else if (mb_stripos($mtext, "/start") !== false) {
 		// $bot->sendMessage($message->getChat()->getId(), "Пока");
 	} else {
-		$bot->sendMessage($message->getChat()->getId(), $query . " " . $answer);
+		$bot->sendMessage($message->getChat()->getId(), var_export($Update, true));
 	}
 
 }, function ($message) use ($name) {
