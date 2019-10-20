@@ -141,7 +141,7 @@ $bot->run();
 pg_close($dbconn);
 
 function Meet($message, $bot, $callback) {
-	$bot->sendMessage($chatId, "Отлично! Напишите пожалуста свой игровой ник, что бы получать больше персональной информации ;)");
+	$bot->sendMessage($message->getChat()->getId(), "Отлично! Напишите пожалуста свой игровой ник, что бы получать больше персональной информации ;)");
 	$bot->answerCallbackQuery($callback->getId()); // можно отослать пустое, чтобы просто убрать "часики" на кнопке
 }
 
