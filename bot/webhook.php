@@ -113,11 +113,15 @@ $bot->on(function ($update) use ($bot, $callback_loc, $find_command) {
 	$chatId = $message->getChat()->getId();
 	$data = $callback->getData();
 
-	if ($data == "data_test") {
-		$bot->answerCallbackQuery($callback->getId(), "This is Ansver!", true);
-	}
-	if ($data == "data_test2") {
-		$bot->sendMessage($chatId, "Это ответ!");
+	// if ($data == "data_test") {
+	// 	$bot->answerCallbackQuery($callback->getId(), "This is Ansver!", true);
+	// }
+	// if ($data == "data_test2") {
+	// 	$bot->sendMessage($chatId, "Это ответ!");
+	// 	$bot->answerCallbackQuery($callback->getId()); // можно отослать пустое, чтобы просто убрать "часики" на кнопке
+	// }
+	if ($data == "no_start") {
+		$bot->sendMessage($chatId, "Обидно...");
 		$bot->answerCallbackQuery($callback->getId()); // можно отослать пустое, чтобы просто убрать "часики" на кнопке
 	}
 
