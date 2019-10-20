@@ -140,8 +140,6 @@ $bot->on(function ($update) use ($bot, $callback_loc, $find_command) {
 $bot->on(function ($Update) use ($bot) {
 
 	$message = $Update->getMessage();
-	$mtext = $message->getText();
-	$cid = $message->getChat()->getId();
 
 	$mtext = $message->getText();
 	$cid = $message->getChat()->getId();
