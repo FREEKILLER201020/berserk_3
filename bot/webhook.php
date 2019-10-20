@@ -115,7 +115,7 @@ $bot->on(function ($Update) use ($bot) {
 
 		$bot->sendPhoto($message->getChat()->getId(), $pic);
 	}
-	if (mb_stripos($mtext, "Да!") !== false) {
+	if ((mb_stripos($mtext, "Да!") !== false) && (LastUserMessage($cid, $user) == "/start")) {
 		$answer = 'Отлично! Вы хотели бы получать персональные уведомления';
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
 			[
@@ -129,6 +129,11 @@ $bot->on(function ($Update) use ($bot) {
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 		// $bot->sendMessage($message->getChat()->getId(), "Отлично! Напишите, пожалуста, свой игровой ник, что бы получать больше персональной информации ;)");
 	}
+	if ((mb_stripos($mtext, "Нет :(") !== false) && (LastUserMessage($cid, $user) == "/start")) {
+		$answer = 'Ничего страшного. При желании, присоединяйтесь к нам!';
+		$bot->sendMessage($message->getChat()->getId(), $answer);
+	}
+
 }, function ($message) use ($name) {
 	return true; // когда тут true - команда проходит
 });
@@ -188,5 +193,14 @@ function Start($message, $bot) {
 		, true, true);
 
 	$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+}
+
+function LastUserMessage($chat_id, $user_id) {
+	$query = "select distinct on (id) id,massage from messages_history where user_id=$user_id and chat_id=$chat_id order by timemark desc";
+	$result = pg_query($query);
+	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+		$res = $line["message"];
+	}
+	return $res;
 }
 ?>
