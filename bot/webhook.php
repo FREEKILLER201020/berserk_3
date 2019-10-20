@@ -29,15 +29,22 @@ $bot->on(function ($Update) use ($bot) {
 		$bot->sendMessage($message->getChat()->getId(), "Смерть богатым!");
 	} else if (mb_stripos($mtext, "привет") !== false) {
 		$bot->sendMessage($message->getChat()->getId(), "Пока");
-	} else if (mb_stripos($mtext, "yes_start") !== false) {
-		$bot->sendMessage($message->getChat()->getId(), "yes_start");
-	} else if (mb_stripos($mtext, "no_start") !== false) {
-		$bot->sendMessage($message->getChat()->getId(), "no_start");
 	} else if (mb_stripos($mtext, "/start") !== false) {
 		// $bot->sendMessage($message->getChat()->getId(), "Пока");
 	} else {
 		$bot->sendMessage($message->getChat()->getId(), $query . " " . $answer);
 	}
+
+	$callback = $update->getCallbackQuery();
+	$message = $callback->getMessage();
+	$data = $callback->getData();
+
+	if (mb_stripos($data, "yes_start") !== false) {
+		$bot->sendMessage($message->getChat()->getId(), "yes_start");
+	} else if (mb_stripos($data, "no_start") !== false) {
+		$bot->sendMessage($message->getChat()->getId(), "no_start");
+	}
+
 }, function ($message) use ($name) {
 	return true; // когда тут true - команда проходит
 });
