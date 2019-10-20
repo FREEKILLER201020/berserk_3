@@ -137,6 +137,59 @@ $bot->on(function ($update) use ($bot, $callback_loc, $find_command) {
 	return true;
 });
 
+// обработка инлайнов
+$bot->inlineQuery(function ($inlineQuery) use ($bot) {
+	mb_internal_encoding("UTF-8");
+	$qid = $inlineQuery->getId();
+	$text = $inlineQuery->getQuery();
+
+	// Это - базовое содержимое сообщения, оно выводится, когда тыкаем на выбранный нами инлайн
+	$str = "Что другие?
+Свора голодных нищих.
+Им все равно...
+В этом мире немытом
+Душу человеческую
+Ухорашивают рублем,
+И если преступно здесь быть бандитом,
+То не более преступно,
+Чем быть королем...
+Я слышал, как этот прохвост
+Говорил тебе о Гамлете.
+Что он в нем смыслит?
+<b>Гамлет</b> восстал против лжи,
+В которой варился королевский двор.
+Но если б теперь он жил,
+То был бы бандит и вор.";
+	$base = new \TelegramBot\Api\Types\Inline\InputMessageContent\Text($str, "Html");
+
+	// Это список инлайнов
+	// инлайн для стихотворения
+	$msg = new \TelegramBot\Api\Types\Inline\QueryResult\Article("1", "С. Есенин", "Отрывок из поэмы `Страна негодяев`");
+	$msg->setInputMessageContent($base); // указываем, что в ответ к этому сообщению надо показать стихотворение
+
+	// инлайн для картинки
+	$full = "http://aftamat4ik.ru/wp-content/uploads/2017/05/14277366494961.jpg"; // собственно урл на картинку
+	$thumb = "http://aftamat4ik.ru/wp-content/uploads/2017/05/14277366494961-150x150.jpg"; // и миниятюра
+
+	$photo = new \TelegramBot\Api\Types\Inline\QueryResult\Photo("2", $full, $thumb);
+
+	// инлайн для музыки
+	$url = "http://aftamat4ik.ru/wp-content/uploads/2017/05/mongol-shuudan_-_kozyr-nash-mandat.mp3";
+	$mp3 = new \TelegramBot\Api\Types\Inline\QueryResult\Audio("3", $url, "Монгол Шуудан - Козырь наш Мандат!");
+
+	// инлайн для видео
+	$vurl = "http://aftamat4ik.ru/wp-content/uploads/2017/05/bb.mp4";
+	$thumb = "http://aftamat4ik.ru/wp-content/uploads/2017/05/joker_5-150x150.jpg";
+	$video = new \TelegramBot\Api\Types\Inline\QueryResult\Video("4", $vurl, $thumb, "video/mp4", "коммунальные службы", "тут тоже может быть описание");
+
+	// отправка
+	try {
+		$result = $bot->answerInlineQuery($qid, [$msg, $photo, $mp3, $video], 100, false);
+	} catch (Exception $e) {
+		file_put_contents("rdata", print_r($e, true));
+	}
+});
+
 $bot->run();
 pg_close($dbconn);
 
