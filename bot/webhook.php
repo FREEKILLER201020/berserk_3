@@ -15,59 +15,59 @@ $dbconn = pg_connect($query) or die('Не удалось соединиться:
 
 $token = "681634726:AAHafNwa8T3LXlezmIAUH-JjBGrI0qU-lfY";
 $bot = new \TelegramBot\Api\Client($token);
-$bot->callbackQuery(function ($message) use ($bot) {
-	$bot->sendMessage($message->getChat()->getId(), "no_start");
-	Start($message, $bot);
-});
-$bot->on(function ($Update) use ($bot) {
-	$message = $Update->getMessage();
-	$mtext = $message->getText();
-	$cid = $message->getChat()->getId();
-	$user = $message->getFrom()->getId();
-	$time = time();
-	$query = "INSERT INTO messages_history (timemark, message, chat_id, user_id) values (current_timestamp,'$mtext',$cid,$user);\n";
-	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
+// $bot->callbackQuery(function ($message) use ($bot) {
+// 	$bot->sendMessage($message->getChat()->getId(), "no_start");
+// 	Start($message, $bot);
+// });
+// $bot->on(function ($Update) use ($bot) {
+// 	$message = $Update->getMessage();
+// 	$mtext = $message->getText();
+// 	$cid = $message->getChat()->getId();
+// 	$user = $message->getFrom()->getId();
+// 	$time = time();
+// 	$query = "INSERT INTO messages_history (timemark, message, chat_id, user_id) values (current_timestamp,'$mtext',$cid,$user);\n";
+// 	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 
-	if (mb_stripos($mtext, "власть советам") !== false) {
-		$bot->sendMessage($message->getChat()->getId(), "Смерть богатым!");
-	} else if (mb_stripos($mtext, "привет") !== false) {
-		$bot->sendMessage($message->getChat()->getId(), "Пока");
-	} else if (mb_stripos($mtext, "/start") !== false) {
-		// $bot->sendMessage($message->getChat()->getId(), "Пока");
-	} else {
-		$bot->sendMessage($message->getChat()->getId(), var_export($Update, true));
-	}
+// 	if (mb_stripos($mtext, "власть советам") !== false) {
+// 		$bot->sendMessage($message->getChat()->getId(), "Смерть богатым!");
+// 	} else if (mb_stripos($mtext, "привет") !== false) {
+// 		$bot->sendMessage($message->getChat()->getId(), "Пока");
+// 	} else if (mb_stripos($mtext, "/start") !== false) {
+// 		// $bot->sendMessage($message->getChat()->getId(), "Пока");
+// 	} else {
+// 		$bot->sendMessage($message->getChat()->getId(), var_export($Update, true));
+// 	}
 
-}, function ($message) use ($name) {
-	return true; // когда тут true - команда проходит
-});
+// }, function ($message) use ($name) {
+// 	return true; // когда тут true - команда проходит
+// });
 
-$bot->on(function ($update) use ($bot) {
+// $bot->on(function ($update) use ($bot) {
 
-	$callback = $update->getCallbackQuery();
-	$bot->sendMessage($message->getChat()->getId(), var_export($callback, true));
-	$message = $callback->getMessage();
-	$data = $callback->getData();
-	$cid = $message->getChat()->getId();
-	$user = $message->getFrom()->getId();
-	$time = time();
-	$query = "INSERT INTO messages_history (timemark, message, chat_id, user_id) values (current_timestamp,'$data',$cid,$user);\n";
-	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
+// 	$callback = $update->getCallbackQuery();
+// 	$bot->sendMessage($message->getChat()->getId(), var_export($callback, true));
+// 	$message = $callback->getMessage();
+// 	$data = $callback->getData();
+// 	$cid = $message->getChat()->getId();
+// 	$user = $message->getFrom()->getId();
+// 	$time = time();
+// 	$query = "INSERT INTO messages_history (timemark, message, chat_id, user_id) values (current_timestamp,'$data',$cid,$user);\n";
+// 	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 
-	if ($data == "yes_start") {
-		$bot->sendMessage($message->getChat()->getId(), "yes_start");
-	} else if ($data == "no_start") {
-		$bot->sendMessage($message->getChat()->getId(), "no_start");
-	}
+// 	if ($data == "yes_start") {
+// 		$bot->sendMessage($message->getChat()->getId(), "yes_start");
+// 	} else if ($data == "no_start") {
+// 		$bot->sendMessage($message->getChat()->getId(), "no_start");
+// 	}
 
-}, function ($update) {
-	$callback = $update->getCallbackQuery();
-	if (is_null($callback) || !strlen($callback->getData())) {
-		return false;
-	}
+// }, function ($update) {
+// 	$callback = $update->getCallbackQuery();
+// 	if (is_null($callback) || !strlen($callback->getData())) {
+// 		return false;
+// 	}
 
-	return true;
-});
+// 	return true;
+// });
 
 // команда для start
 $bot->command('start', function ($message) use ($bot) {
