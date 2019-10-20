@@ -84,10 +84,11 @@ $bot->on(function ($update) use ($bot, $callback_loc, $find_command) {
 
 	if ($data == "yes_start") {
 		$bot->sendMessage($message->getChat()->getId(), "Отлично! Напишите пожалуста свой игровой ник, что бы получать больше персональной информации ;)");
-		$bot->answerCallbackQuery($callback->getId());}
+		$bot->answerCallbackQuery($callback->getId(), "yes", false);
+	}
 	if ($data == "no_start") {
 		$bot->sendMessage($chatId, "Обидно...");
-		$bot->answerCallbackQuery($callback->getId()); // можно отослать пустое, чтобы просто убрать "часики" на кнопке
+		$bot->answerCallbackQuery($callback->getId(), "no", false); // можно отослать пустое, чтобы просто убрать "часики" на кнопке
 	}
 
 }, function ($update) {
