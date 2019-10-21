@@ -237,10 +237,10 @@ $bot->command('I', function ($message) use ($bot) {
 		$clan_name = $line["title"];
 	}
 	$answer = 'Вот что мне известно:
-	Никнейм: $nick
-	Фраги: $frags
-	Смерти: $deaths
-	Уровень: $level
+	Никнейм: ' . $nick . '
+	Фраги: ' . $frags . '
+	Смерти: ' . $deaths . '
+	Уровень: ' . $level . '
 	Клан: $clan_name';
 	$bot->sendMessage($message->getChat()->getId(), $answer);
 });
