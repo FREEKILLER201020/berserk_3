@@ -185,6 +185,8 @@ $bot->on(function ($Update) use ($bot) {
 		$time = intval($mtext);
 		if ($time > 0) {
 			$answer = $time;
+			$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
+			$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 		} else {
 			$answer = 'Простите, я вас не понял. Попробовать еще раз?';
 			$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
@@ -198,8 +200,7 @@ $bot->on(function ($Update) use ($bot) {
 
 			$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 		}
-		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
-		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+
 	}
 	if ((mb_stripos($mtext, "Нет :(") !== false) && (LastUserMessage($cid, $user, 2) == "/start")) {
 		$answer = 'Ничего страшного. При желании, присоединяйтесь к нам!';
