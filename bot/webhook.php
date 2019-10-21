@@ -117,12 +117,12 @@ $bot->on(function ($Update) use ($bot) {
 
 		$bot->sendPhoto($message->getChat()->getId(), $pic);
 	}
-	if ((mb_stripos($mtext, "Да хочу!") !== false) && (LastUserMessage($cid, $user, 2) == "Да!") || (mb_stripos($mtext, "Да хочу!") !== false) && (LastUserMessage($cid, $user, 5) == "Да!")) {
+	if ((mb_stripos($mtext, "Да хочу!") !== false) && (LastUserMessage($cid, $user, 2) == "Да!") || (mb_stripos($mtext, "Да хочу!") !== false) && (LastUserMessage($cid, $user, 7) == "Да!") && (LastUserMessage($cid, $user, 5) == "Да хочу!")) {
 		$answer = 'Пожалуйста, напишите свой игровой никнейм. Я попробую вас найти.';
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 	}
-	if ((mb_stripos($mtext, "Нет, спасибо.") !== false) && (LastUserMessage($cid, $user, 2) == "Да!") || (mb_stripos($mtext, "Нет, спасибо.") !== false) && (LastUserMessage($cid, $user, 5) == "Да!")) {
+	if ((mb_stripos($mtext, "Нет, спасибо.") !== false) && (LastUserMessage($cid, $user, 2) == "Да!") || (mb_stripos($mtext, "Да хочу!") !== false) && (LastUserMessage($cid, $user, 7) == "Да!") && (LastUserMessage($cid, $user, 5) == "Да хочу!")) {
 		$answer = 'Хорошо. Вы всегда сможете настроить это позже выполнив команду "/start" или "/settings".';
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
