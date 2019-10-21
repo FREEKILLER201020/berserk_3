@@ -122,12 +122,12 @@ $bot->on(function ($Update) use ($bot) {
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 	}
-	if ((mb_stripos($mtext, "Нет, спасибо.") !== false) && (LastUserMessage($cid, $user, 2) == "Да!") || (mb_stripos($mtext, "Да хочу!") !== false) && (LastUserMessage($cid, $user, 4) == "Да!") && (LastUserMessage($cid, $user, 3) == "Да хочу!")) {
+	if ((mb_stripos($mtext, "Нет, спасибо.") !== false) && (LastUserMessage($cid, $user, 2) == "Да!") || (mb_stripos($mtext, "Нет, спасибо.") !== false) && (LastUserMessage($cid, $user, 4) == "Да!") && (LastUserMessage($cid, $user, 3) == "Да хочу!")) {
 		$answer = 'Хорошо. Вы всегда сможете настроить это позже выполнив команду "/start" или "/settings".';
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 	}
-	if ((LastUserMessage($cid, $user, 3) == "Да!") && (LastUserMessage($cid, $user, 2) == "Да хочу!")) {
+	if ((LastUserMessage($cid, $user, 3) == "Да!") && (LastUserMessage($cid, $user, 2) == "Да хочу!") || (LastUserMessage($cid, $user, 2) == "Да хочу!") && (LastUserMessage($cid, $user, 4) == "Да хочу!") && (LastUserMessage($cid, $user, 5) == "Да!")) {
 		$query = "SELECT distinct on (id) id,nick,clan,frags,deaths,level from players where nick='$mtext' order by id,timemark desc";
 		$result = pg_query($query);
 		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
