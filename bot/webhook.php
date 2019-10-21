@@ -136,6 +136,8 @@ $bot->on(function ($Update) use ($bot) {
 		$query = "UPDATE users set game_id=$id where id={$message->getFrom()->getId()};\n";
 		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 		$answer = 'Приятно познакомится, ' . $mtext . '! Ваш клан - ' . $clan_name . '.';
+		// $keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup([[["text" => "Власть советам!"], ["text" => "Сиськи!"]]], true, true);
+
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, null);
 	}
 	if ((mb_stripos($mtext, "Да!") !== false) && (LastUserMessage($cid, $user, 2) == "/start")) {
@@ -164,6 +166,7 @@ $bot->on(function ($Update) use ($bot) {
 // Reply-Кнопки
 $bot->command("buttons", function ($message) use ($bot) {
 	$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup([[["text" => "Власть советам!"], ["text" => "Сиськи!"]]], true, true);
+	$keyboard->setOneTimeKeyboard(true);
 
 	$bot->sendMessage($message->getChat()->getId(), "тест", false, null, null, $keyboard);
 });
