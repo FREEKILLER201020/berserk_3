@@ -251,7 +251,7 @@ $bot->command('test', function ($message) use ($bot) {
 });
 
 $bot->command('I', function ($message) use ($bot) {
-	$query = "SELECT distinct on (id) id,game_id from users where id={$message->getFrom()->getId()} order by id desc";
+	$query = "SELECT distinct on (id) id,game_id from users where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()} order by id desc";
 	$result = pg_query($query);
 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 		$game_id = $line["game_id"];
@@ -314,12 +314,13 @@ function Notif2($message, $bot) {
 function Start($message, $bot) {
 	$nick = $message->getFrom()->getUsername();
 	$name = $message->getFrom()->getFirstName();
-	$query = "INSERT INTO users (id, username,name) values ({$message->getFrom()->getId()},'$nick','$name');\n";
+	$query = "INSERT INTO users (id, username,name,chat_id) values ({$message->getFrom()->getId()},'$nick','$name',{$message->getChat()->getId()});\n";
 	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 	if (mb_stripos($answer, "Не удалось соединиться:") !== false) {
-		$query = "UPDATE users set username='$nick' and name='$name' where id={$message->getFrom()->getId()};\n";
+		$query = "UPDATE users set username='$nick' and name='$name' where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()};\n";
 		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 	}
+	SetState($message, $bot, "start");
 	if ($message->getChat()->getType != "private") {
 		$answer = 'Простите, кажется это групповой чат. На данный момент я не могу гарантировать коректную работу в групповых чатах. Простите :(';
 		$bot->sendMessage($message->getChat()->getId(), $answer);
@@ -346,5 +347,13 @@ function LastUserMessage($chat_id, $user_id, $back) {
 		$res = $line["message"];
 	}
 	return $res;
+}
+
+function SetState($message, $bot, $state) {
+	// $nick = $message->getFrom()->getUsername();
+	// $name = $message->getFrom()->getFirstName();
+
+	$query = "UPDATE users set chat_state='$state' where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()};\n";
+	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 }
 ?>

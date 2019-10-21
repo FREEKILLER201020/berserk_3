@@ -38,8 +38,10 @@ ALTER TABLE public.messages_history
 CREATE TABLE public.users (
   id integer UNIQUE,
   username text,
+  chat_id integer,
   name text,
-  game_id integer
+  game_id integer,
+  chat_state text
 )
 WITH (
     OIDS = FALSE
