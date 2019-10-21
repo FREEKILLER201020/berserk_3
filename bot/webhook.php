@@ -126,13 +126,16 @@ $bot->on(function ($Update) use ($bot) {
 		$result = pg_query($query);
 		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 			$clan_id = $line["message"];
+			$id = $line["id"];
 		}
 		$query = "SELECT distinct on (id) id,name from clans where id=$clan_id order by id,timemark desc";
 		$result = pg_query($query);
 		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 			$clan_name = $line["name"];
 		}
-		$answer = 'Приятно познакомится, $mtext! Ваш клан - $clan_name.';
+		$query = "UPDATE users set game_id=$id where id={$message->getFrom()->getId()};\n";
+		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
+		$answer = 'Приятно познакомится, ' . $mtext . '! Ваш клан - ' . $clan_name . '.';
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, null);
 	}
 	if ((mb_stripos($mtext, "Да!") !== false) && (LastUserMessage($cid, $user, 2) == "/start")) {
