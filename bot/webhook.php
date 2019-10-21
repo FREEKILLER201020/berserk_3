@@ -241,7 +241,7 @@ $bot->command('I', function ($message) use ($bot) {
 	Фраги: ' . $frags . '
 	Смерти: ' . $deaths . '
 	Уровень: ' . $level . '
-	Клан: $clan_name';
+	Клан: ' . $clan_name;
 	$bot->sendMessage($message->getChat()->getId(), $answer);
 });
 
