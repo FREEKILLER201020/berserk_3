@@ -110,15 +110,23 @@ $bot->on(function ($Update) use ($bot) {
 	$query = "INSERT INTO messages_history (timemark, message, chat_id, user_id) values (current_timestamp,'$mtext',$cid,$user);\n";
 	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 
-	$bot->sendMessage($message->getChat()->getId(), LastUserMessage($cid, $user));
+	// $bot->sendMessage($message->getChat()->getId(), LastUserMessage($cid, $user));
 
 	if (mb_stripos($mtext, "Сиськи") !== false) {
 		$pic = "http://aftamat4ik.ru/wp-content/uploads/2017/05/14277366494961.jpg";
 
 		$bot->sendPhoto($message->getChat()->getId(), $pic);
 	}
-	if ((mb_stripos($mtext, "Да!") !== false) && (LastUserMessage($cid, $user) == "/start")) {
-		$answer = 'Отлично! Вы хотели бы получать персональные уведомления';
+	if ((mb_stripos($mtext, "Да хочу!") !== false) && (LastUserMessage($cid, $user, 2) == "Да!")) {
+		$answer = 'Пожалуйста, напишите свой игровой никнейм. Я попробую вас найти.';
+		$bot->sendMessage($message->getChat()->getId(), $answer);
+	}
+	if ((LastUserMessage($cid, $user, 3) == "Да!") && (LastUserMessage($cid, $user, 2) == "Да хочу!")) {
+		$answer = "SELECT distinct on (id) id,nick,clan_id,frags,deaths,level from players where nick'$mtext' order by id,timemark desc";
+		$bot->sendMessage($message->getChat()->getId(), $answer);
+	}
+	if ((mb_stripos($mtext, "Да!") !== false) && (LastUserMessage($cid, $user, 2) == "/start")) {
+		$answer = 'Отлично! Вы хотели бы получать персональные уведомления?';
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
 			[
 				[
@@ -131,7 +139,7 @@ $bot->on(function ($Update) use ($bot) {
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 		// $bot->sendMessage($message->getChat()->getId(), "Отлично! Напишите, пожалуста, свой игровой ник, что бы получать больше персональной информации ;)");
 	}
-	if ((mb_stripos($mtext, "Нет :(") !== false) && (LastUserMessage($cid, $user) == "/start")) {
+	if ((mb_stripos($mtext, "Нет :(") !== false) && (LastUserMessage($cid, $user, 2) == "/start")) {
 		$answer = 'Ничего страшного. При желании, присоединяйтесь к нам!';
 		$bot->sendMessage($message->getChat()->getId(), $answer);
 	}
@@ -197,8 +205,8 @@ function Start($message, $bot) {
 	$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 }
 
-function LastUserMessage($chat_id, $user_id) {
-	$query = "select id,message from messages_history where user_id=$user_id and chat_id=$chat_id order by id,timemark desc limit 2";
+function LastUserMessage($chat_id, $user_id, $back) {
+	$query = "select id,message from messages_history where user_id=$user_id and chat_id=$chat_id order by id,timemark desc limit $back";
 	$result = pg_query($query);
 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 		$res = $line["message"];
