@@ -119,13 +119,19 @@ $bot->on(function ($Update) use ($bot) {
 	}
 	if ((mb_stripos($mtext, "Да хочу!") !== false) && (LastUserMessage($cid, $user, 2) == "Да!")) {
 		$answer = 'Пожалуйста, напишите свой игровой никнейм. Я попробую вас найти.';
-		$bot->sendMessage($message->getChat()->getId(), $answer);
+		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
+		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+	}
+	if ((mb_stripos($mtext, "Нет, спасибо.") !== false) && (LastUserMessage($cid, $user, 2) == "Да!")) {
+		$answer = 'Хорошо. Вы всегда сможете настроить это позже выполнив команду "/start" или "/settings".';
+		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
+		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 	}
 	if ((LastUserMessage($cid, $user, 3) == "Да!") && (LastUserMessage($cid, $user, 2) == "Да хочу!")) {
 		$query = "SELECT distinct on (id) id,nick,clan,frags,deaths,level from players where nick='$mtext' order by id,timemark desc";
 		$result = pg_query($query);
 		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-			$clan_id = $line["message"];
+			$clan_id = $line["clan"];
 			$id = $line["id"];
 		}
 		$query = "SELECT distinct on (id) id,title from clans where id=$clan_id order by id,timemark desc";
@@ -136,8 +142,8 @@ $bot->on(function ($Update) use ($bot) {
 		$query = "UPDATE users set game_id=$id where id={$message->getFrom()->getId()};\n";
 		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 		$answer = 'Приятно познакомится, ' . $mtext . '! Ваш клан - ' . $clan_name . '.';
-		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 
+		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 	}
 	if ((mb_stripos($mtext, "Да!") !== false) && (LastUserMessage($cid, $user, 2) == "/start")) {
@@ -156,8 +162,8 @@ $bot->on(function ($Update) use ($bot) {
 	}
 	if ((mb_stripos($mtext, "Нет :(") !== false) && (LastUserMessage($cid, $user, 2) == "/start")) {
 		$answer = 'Ничего страшного. При желании, присоединяйтесь к нам!';
-		$bot->sendMessage($message->getChat()->getId(), $answer);
-	}
+		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
+		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);}
 
 }, function ($message) use ($name) {
 	return true; // когда тут true - команда проходит
