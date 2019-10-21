@@ -128,10 +128,10 @@ $bot->on(function ($Update) use ($bot) {
 			$clan_id = $line["message"];
 			$id = $line["id"];
 		}
-		$query = "SELECT distinct on (id) id,name from clans where id=$clan_id order by id,timemark desc";
+		$query = "SELECT distinct on (id) id,title from clans where id=$clan_id order by id,timemark desc";
 		$result = pg_query($query);
 		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-			$clan_name = $line["name"];
+			$clan_name = $line["title"];
 		}
 		$query = "UPDATE users set game_id=$id where id={$message->getFrom()->getId()};\n";
 		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
