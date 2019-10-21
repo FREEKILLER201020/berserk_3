@@ -181,7 +181,7 @@ $bot->on(function ($Update) use ($bot) {
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 		// $bot->sendMessage($message->getChat()->getId(), "Отлично! Напишите, пожалуста, свой игровой ник, что бы получать больше персональной информации ;)");
 	}
-	if ((LastUserMessage($cid, $user, 3) == "/notifications") && (LastUserMessage($cid, $user, 2) == "Да.")) {
+	if (((LastUserMessage($cid, $user, 3) == "/notifications") && (LastUserMessage($cid, $user, 2) == "Да.")) || ((LastUserMessage($cid, $user, 5) == "/notifications") && (LastUserMessage($cid, $user, 2) == "Да.") && (LastUserMessage($cid, $user, 4) == "Да."))) {
 		$time = intval($mtext);
 		if ($time > 0) {
 			$answer = $time;
@@ -201,6 +201,11 @@ $bot->on(function ($Update) use ($bot) {
 			$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 		}
 
+	}
+	if (((LastUserMessage($cid, $user, 3) == "/notifications") && (LastUserMessage($cid, $user, 2) == "Нет.")) || ((LastUserMessage($cid, $user, 5) == "/notifications") && (LastUserMessage($cid, $user, 2) == "Нет.") && (LastUserMessage($cid, $user, 4) == "Да."))) {
+		$answer = "part2";
+		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
+		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 	}
 	if ((mb_stripos($mtext, "Нет :(") !== false) && (LastUserMessage($cid, $user, 2) == "/start")) {
 		$answer = 'Ничего страшного. При желании, присоединяйтесь к нам!';
