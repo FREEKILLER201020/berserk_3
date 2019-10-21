@@ -122,8 +122,18 @@ $bot->on(function ($Update) use ($bot) {
 		$bot->sendMessage($message->getChat()->getId(), $answer);
 	}
 	if ((LastUserMessage($cid, $user, 3) == "Да!") && (LastUserMessage($cid, $user, 2) == "Да хочу!")) {
-		$answer = "SELECT distinct on (id) id,nick,clan_id,frags,deaths,level from players where nick'$mtext' order by id,timemark desc";
-		$bot->sendMessage($message->getChat()->getId(), $answer);
+		$query = "SELECT distinct on (id) id,nick,clan,frags,deaths,level from players where nick='$mtext' order by id,timemark desc";
+		$result = pg_query($query);
+		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+			$clan_id = $line["message"];
+		}
+		$query = "SELECT distinct on (id) id,name from clans where id=$clan_id order by id,timemark desc";
+		$result = pg_query($query);
+		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+			$clan_name = $line["name"];
+		}
+		$answer = 'Приятно познакомится, $mtext! Ваш клан - $clan_name.';
+		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, null);
 	}
 	if ((mb_stripos($mtext, "Да!") !== false) && (LastUserMessage($cid, $user, 2) == "/start")) {
 		$answer = 'Отлично! Вы хотели бы получать персональные уведомления?';
