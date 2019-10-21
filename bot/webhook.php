@@ -175,6 +175,17 @@ $bot->on(function ($Update) use ($bot) {
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 		// $bot->sendMessage($message->getChat()->getId(), "Отлично! Напишите, пожалуста, свой игровой ник, что бы получать больше персональной информации ;)");
 	}
+	if ((mb_stripos($mtext, "Да.") !== false) && (LastUserMessage($cid, $user, 2) == "/notifications")) {
+		$answer = 'Хорошо. За какое время до начала боя (в минутах) мне стоит вас уведомлять?';
+		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
+		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+		// $bot->sendMessage($message->getChat()->getId(), "Отлично! Напишите, пожалуста, свой игровой ник, что бы получать больше персональной информации ;)");
+	}
+	if ((LastUserMessage($cid, $user, 3) == "/notifications") && (LastUserMessage($cid, $user, 2) == "Да.")) {
+		$answer = intval($mtext);
+		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
+		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+	}
 	if ((mb_stripos($mtext, "Нет :(") !== false) && (LastUserMessage($cid, $user, 2) == "/start")) {
 		$answer = 'Ничего страшного. При желании, присоединяйтесь к нам!';
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
@@ -195,6 +206,9 @@ $bot->command("buttons", function ($message) use ($bot) {
 // команда для start
 $bot->command('start', function ($message) use ($bot) {
 	Start($message, $bot);
+});
+$bot->command('notifications', function ($message) use ($bot) {
+	Notif1($message, $bot);
 });
 // команда для помощи
 $bot->command('help', function ($message) use ($bot) {
@@ -248,6 +262,34 @@ $bot->command('I', function ($message) use ($bot) {
 $bot->run();
 pg_close($dbconn);
 
+function Notif1($message, $bot) {
+	$answer = 'Вы хотите получать напоминания перед началом боев вашего клана?';
+	$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+		[
+			[
+				["text" => "Да."],
+				["text" => "Нет."],
+			],
+		]
+		, true, true);
+
+	$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+}
+
+function Notif2($message, $bot) {
+	$answer = 'Вы хотите получать резельтаты боев вашего клана?';
+	$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+		[
+			[
+				["text" => "Да."],
+				["text" => "Нет."],
+			],
+		]
+		, true, true);
+
+	$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+}
+
 function Start($message, $bot) {
 	$nick = $message->getFrom()->getUsername();
 	$name = $message->getFrom()->getFirstName();
@@ -256,6 +298,10 @@ function Start($message, $bot) {
 	if (mb_stripos($answer, "Не удалось соединиться:") !== false) {
 		$query = "UPDATE users set username='$nick' and name='$name' where id={$message->getFrom()->getId()};\n";
 		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
+	}
+	if ($message->getChat()->getType != "private") {
+		$answer = 'Простите, кажется это групповой чат. На данный момент я не могу гарантировать коректную работу в групповых чатах. Простите :(';
+		$bot->sendMessage($message->getChat()->getId(), $answer);
 	}
 	$answer = 'Добро пожаловать ' . $name . '!' . $message->getChat()->getType();
 	$bot->sendMessage($message->getChat()->getId(), $answer);
