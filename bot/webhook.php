@@ -117,17 +117,43 @@ $bot->on(function ($Update) use ($bot) {
 
 		$bot->sendPhoto($message->getChat()->getId(), $pic);
 	}
-	if ((mb_stripos($mtext, "Да хочу!") !== false) && (LastUserMessage($cid, $user, 2) == "Да!") || (mb_stripos($mtext, "Да хочу!") !== false) && (LastUserMessage($cid, $user, 4) == "Да!") && (LastUserMessage($cid, $user, 3) == "Да хочу!")) {
+	// start 1) вы состоите в каком-нибудь клане?
+	// да
+	if ((mb_stripos($mtext, "Да!") !== false) && (GetState($message, $bot) == "start")) {
+		$answer = 'Отлично! Вы хотели бы получать персональные уведомления?';
+		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+			[
+				[
+					["text" => "Да хочу!"],
+					["text" => "Нет, спасибо."],
+				],
+			]
+			, true, true);
+
+		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+		// $bot->sendMessage($message->getChat()->getId(), "Отлично! Напишите, пожалуста, свой игровой ник, что бы получать больше персональной информации ;)");
+	}
+	// Нет
+	if ((mb_stripos($mtext, "Нет :(") !== false) && (GetState($message, $bot) == "start")) {
+		$answer = 'Ничего страшного. При желании, присоединяйтесь к нам!';
+		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
+		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+	}
+	// start 2) Вы хотели бы получать персональные уведомления?
+	// да
+	if ((mb_stripos($mtext, "Да хочу!") !== false) && (GetState($message, $bot) == "start")) {
 		$answer = 'Пожалуйста, напишите свой игровой никнейм. Я попробую вас найти.';
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 	}
-	if ((mb_stripos($mtext, "Нет, спасибо.") !== false) && (LastUserMessage($cid, $user, 2) == "Да!") || (mb_stripos($mtext, "Нет, спасибо.") !== false) && (LastUserMessage($cid, $user, 4) == "Да!") && (LastUserMessage($cid, $user, 3) == "Да хочу!")) {
+	// нет
+	if ((mb_stripos($mtext, "Нет, спасибо.") !== false) && (GetState($message, $bot) == "start")) {
 		$answer = 'Хорошо. Вы всегда сможете настроить это позже выполнив команду "/start" или "/settings".';
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 	}
-	if ((LastUserMessage($cid, $user, 3) == "Да!") && (LastUserMessage($cid, $user, 2) == "Да хочу!") || (LastUserMessage($cid, $user, 2) == "Да хочу!") && (LastUserMessage($cid, $user, 4) == "Да хочу!") && (LastUserMessage($cid, $user, 5) == "Да!")) {
+	// start 3) Пожалуйста, напишите свой игровой никнейм. Я попробую вас найти.
+	if ((GetState($message, $bot) == "start") && (LastUserMessage($cid, $user, 2) == "Да хочу!")) {
 		$query = "SELECT distinct on (id) id,nick,clan,frags,deaths,level from players where nick='$mtext' order by id,timemark desc";
 		$result = pg_query($query);
 		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
@@ -161,56 +187,39 @@ $bot->on(function ($Update) use ($bot) {
 		}
 
 	}
-	if ((mb_stripos($mtext, "Да!") !== false) && (LastUserMessage($cid, $user, 2) == "/start")) {
-		$answer = 'Отлично! Вы хотели бы получать персональные уведомления?';
-		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
-			[
-				[
-					["text" => "Да хочу!"],
-					["text" => "Нет, спасибо."],
-				],
-			]
-			, true, true);
 
-		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
-		// $bot->sendMessage($message->getChat()->getId(), "Отлично! Напишите, пожалуста, свой игровой ник, что бы получать больше персональной информации ;)");
-	}
-	if (((mb_stripos($mtext, "Да.") !== false) && (LastUserMessage($cid, $user, 2) == "/notifications")) || ((mb_stripos($mtext, "Да.") !== false) && (LastUserMessage($cid, $user, 4) == "/notifications") && (LastUserMessage($cid, $user, 3) == "Да."))) {
-		$answer = 'Хорошо. За какое время до начала боя (в минутах) мне стоит вас уведомлять?';
-		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
-		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
-		// $bot->sendMessage($message->getChat()->getId(), "Отлично! Напишите, пожалуста, свой игровой ник, что бы получать больше персональной информации ;)");
-	}
-	if (((LastUserMessage($cid, $user, 3) == "/notifications") && (LastUserMessage($cid, $user, 2) == "Да.")) || ((LastUserMessage($cid, $user, 5) == "/notifications") && (LastUserMessage($cid, $user, 2) == "Да.") && (LastUserMessage($cid, $user, 4) == "Да."))) {
-		$time = intval($mtext);
-		if ($time > 0) {
-			$answer = $time;
-			$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
-			$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
-		} else {
-			$answer = 'Простите, я вас не понял. Попробовать еще раз?';
-			$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
-				[
-					[
-						["text" => "Да."],
-						["text" => "Нет."],
-					],
-				]
-				, true, true);
+	// if (((mb_stripos($mtext, "Да.") !== false) && (LastUserMessage($cid, $user, 2) == "/notifications")) || ((mb_stripos($mtext, "Да.") !== false) && (LastUserMessage($cid, $user, 4) == "/notifications") && (LastUserMessage($cid, $user, 3) == "Да."))) {
+	// 	$answer = 'Хорошо. За какое время до начала боя (в минутах) мне стоит вас уведомлять?';
+	// 	$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
+	// 	$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+	// 	// $bot->sendMessage($message->getChat()->getId(), "Отлично! Напишите, пожалуста, свой игровой ник, что бы получать больше персональной информации ;)");
+	// }
+	// if (((LastUserMessage($cid, $user, 3) == "/notifications") && (LastUserMessage($cid, $user, 2) == "Да.")) || ((LastUserMessage($cid, $user, 5) == "/notifications") && (LastUserMessage($cid, $user, 2) == "Да.") && (LastUserMessage($cid, $user, 4) == "Да."))) {
+	// 	$time = intval($mtext);
+	// 	if ($time > 0) {
+	// 		$answer = $time;
+	// 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
+	// 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+	// 	} else {
+	// 		$answer = 'Простите, я вас не понял. Попробовать еще раз?';
+	// 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+	// 			[
+	// 				[
+	// 					["text" => "Да."],
+	// 					["text" => "Нет."],
+	// 				],
+	// 			]
+	// 			, true, true);
 
-			$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
-		}
+	// 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+	// 	}
 
-	}
-	if (((mb_stripos($mtext, "Нет.") !== false) && (LastUserMessage($cid, $user, 2) == "/notifications")) || ((mb_stripos($mtext, "Нет.") !== false) && (LastUserMessage($cid, $user, 4) == "/notifications") && (LastUserMessage($cid, $user, 3) == "Да."))) {
-		$answer = "part2";
-		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
-		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
-	}
-	if ((mb_stripos($mtext, "Нет :(") !== false) && (LastUserMessage($cid, $user, 2) == "/start")) {
-		$answer = 'Ничего страшного. При желании, присоединяйтесь к нам!';
-		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
-		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);}
+	// }
+	// if (((mb_stripos($mtext, "Нет.") !== false) && (LastUserMessage($cid, $user, 2) == "/notifications")) || ((mb_stripos($mtext, "Нет.") !== false) && (LastUserMessage($cid, $user, 4) == "/notifications") && (LastUserMessage($cid, $user, 3) == "Да."))) {
+	// 	$answer = "part2";
+	// 	$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
+	// 	$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+	// }
 
 }, function ($message) use ($name) {
 	return true; // когда тут true - команда проходит
@@ -321,7 +330,7 @@ function Start($message, $bot) {
 		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 	}
 	SetState($message, $bot, "start");
-	if ($message->getChat()->getType != "private") {
+	if ($message->getChat()->getType() != "private") {
 		$answer = 'Простите, кажется это групповой чат. На данный момент я не могу гарантировать коректную работу в групповых чатах. Простите :(';
 		$bot->sendMessage($message->getChat()->getId(), $answer);
 	}
@@ -355,5 +364,14 @@ function SetState($message, $bot, $state) {
 
 	$query = "UPDATE users set chat_state='$state' where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()};\n";
 	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
+}
+
+function GetState($message, $bot) {
+	$query = "SELECT distinct on (id) id,chat_state from users where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()} order by id desc";
+	$result = pg_query($query);
+	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+		$state = $line["chat_state"];
+	}
+	return $state;
 }
 ?>
