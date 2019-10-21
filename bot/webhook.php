@@ -175,14 +175,29 @@ $bot->on(function ($Update) use ($bot) {
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 		// $bot->sendMessage($message->getChat()->getId(), "Отлично! Напишите, пожалуста, свой игровой ник, что бы получать больше персональной информации ;)");
 	}
-	if ((mb_stripos($mtext, "Да.") !== false) && (LastUserMessage($cid, $user, 2) == "/notifications")) {
+	if (((mb_stripos($mtext, "Да.") !== false) && (LastUserMessage($cid, $user, 2) == "/notifications")) || ((mb_stripos($mtext, "Да.") !== false) && (LastUserMessage($cid, $user, 2) == "/notifications"))) {
 		$answer = 'Хорошо. За какое время до начала боя (в минутах) мне стоит вас уведомлять?';
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 		// $bot->sendMessage($message->getChat()->getId(), "Отлично! Напишите, пожалуста, свой игровой ник, что бы получать больше персональной информации ;)");
 	}
 	if ((LastUserMessage($cid, $user, 3) == "/notifications") && (LastUserMessage($cid, $user, 2) == "Да.")) {
-		$answer = intval($mtext);
+		$time = intval($mtext);
+		if ($time > 0) {
+			$answer = $time;
+		} else {
+			$answer = 'Простите, я вас не понял. Попробовать еще раз?';
+			$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+				[
+					[
+						["text" => "Да."],
+						["text" => "Нет."],
+					],
+				]
+				, true, true);
+
+			$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+		}
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 	}
