@@ -215,6 +215,36 @@ $bot->command('test', function ($message) use ($bot) {
 	$bot->sendMessage($message->getChat()->getId(), $answer);
 });
 
+$bot->command('I', function ($message) use ($bot) {
+	$query = "SELECT distinct on (id) id,game_id from users where id={$message->getFrom()->getId()} order by id desc";
+	$result = pg_query($query);
+	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+		$game_id = $line["game_id"];
+	}
+	$query = "SELECT distinct on (id) id,nick,clan,frags,deaths,level from players where id=$game_id order by id,timemark desc";
+	$result = pg_query($query);
+	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+		$frags = $line["frags"];
+		$deaths = $line["deaths"];
+		$level = $line["level"];
+		$clan_id = $line["clan"];
+		$nick = $line["nick"];
+		// $id = $line["id"];
+	}
+	$query = "SELECT distinct on (id) id,title from clans where id=$clan_id order by id,timemark desc";
+	$result = pg_query($query);
+	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+		$clan_name = $line["title"];
+	}
+	$answer = 'Вот что мне известно:
+	Никнейм: $nick
+	Фраги: $frags
+	Смерти: $deaths
+	Уровень: $level
+	Клан: $clan_name';
+	$bot->sendMessage($message->getChat()->getId(), $answer);
+});
+
 $bot->run();
 pg_close($dbconn);
 
