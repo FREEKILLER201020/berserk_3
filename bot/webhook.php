@@ -202,7 +202,7 @@ $bot->on(function ($Update) use ($bot) {
 		}
 
 	}
-	if (((LastUserMessage($cid, $user, 3) == "/notifications") && (LastUserMessage($cid, $user, 2) == "Нет.")) || ((LastUserMessage($cid, $user, 5) == "/notifications") && (LastUserMessage($cid, $user, 2) == "Нет.") && (LastUserMessage($cid, $user, 4) == "Да."))) {
+	if (((mb_stripos($mtext, "Нет.") !== false) && (LastUserMessage($cid, $user, 2) == "/notifications")) || ((mb_stripos($mtext, "Нет.") !== false) && (LastUserMessage($cid, $user, 4) == "/notifications") && (LastUserMessage($cid, $user, 3) == "Да."))) {
 		$answer = "part2";
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
