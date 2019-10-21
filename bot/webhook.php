@@ -136,9 +136,9 @@ $bot->on(function ($Update) use ($bot) {
 		$query = "UPDATE users set game_id=$id where id={$message->getFrom()->getId()};\n";
 		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 		$answer = 'Приятно познакомится, ' . $mtext . '! Ваш клан - ' . $clan_name . '.';
-		// $keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup([[["text" => "Власть советам!"], ["text" => "Сиськи!"]]], true, true);
+		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 
-		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, null);
+		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 	}
 	if ((mb_stripos($mtext, "Да!") !== false) && (LastUserMessage($cid, $user, 2) == "/start")) {
 		$answer = 'Отлично! Вы хотели бы получать персональные уведомления?';
