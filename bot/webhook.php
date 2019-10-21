@@ -117,12 +117,12 @@ $bot->on(function ($Update) use ($bot) {
 
 		$bot->sendPhoto($message->getChat()->getId(), $pic);
 	}
-	if ((mb_stripos($mtext, "Да хочу!") !== false) && (LastUserMessage($cid, $user, 2) == "Да!")) {
+	if ((mb_stripos($mtext, "Да хочу!") !== false) && (LastUserMessage($cid, $user, 2) == "Да!") || (mb_stripos($mtext, "Да хочу!") !== false) && (LastUserMessage($cid, $user, 5) == "Да!")) {
 		$answer = 'Пожалуйста, напишите свой игровой никнейм. Я попробую вас найти.';
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 	}
-	if ((mb_stripos($mtext, "Нет, спасибо.") !== false) && (LastUserMessage($cid, $user, 2) == "Да!")) {
+	if ((mb_stripos($mtext, "Нет, спасибо.") !== false) && (LastUserMessage($cid, $user, 2) == "Да!") || (mb_stripos($mtext, "Нет, спасибо.") !== false) && (LastUserMessage($cid, $user, 5) == "Да!")) {
 		$answer = 'Хорошо. Вы всегда сможете настроить это позже выполнив команду "/start" или "/settings".';
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
@@ -141,10 +141,25 @@ $bot->on(function ($Update) use ($bot) {
 		}
 		$query = "UPDATE users set game_id=$id where id={$message->getFrom()->getId()};\n";
 		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
-		$answer = 'Приятно познакомится, ' . $mtext . '! Ваш клан - ' . $clan_name . '.';
 
-		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
-		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+		if (isset($id)) {
+			$answer = 'Приятно познакомится, ' . $mtext . '! Ваш клан: ' . $clan_name . '.';
+			$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
+			$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+		} else {
+			$answer = 'Мне не удалось вас найти... Хотите попробовать еще раз?';
+			$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+				[
+					[
+						["text" => "Да хочу!"],
+						["text" => "Нет, спасибо."],
+					],
+				]
+				, true, true);
+
+			$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+		}
+
 	}
 	if ((mb_stripos($mtext, "Да!") !== false) && (LastUserMessage($cid, $user, 2) == "/start")) {
 		$answer = 'Отлично! Вы хотели бы получать персональные уведомления?';
