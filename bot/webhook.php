@@ -257,7 +257,7 @@ function Start($message, $bot) {
 		$query = "UPDATE users set username='$nick' and name='$name' where id={$message->getFrom()->getId()};\n";
 		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 	}
-	$answer = 'Добро пожаловать ' . $name . '!';
+	$answer = 'Добро пожаловать ' . $name . '!' . $message->getChat()->getType();
 	$bot->sendMessage($message->getChat()->getId(), $answer);
 	$answer = 'Вы состоите в каком-нибудь клане?';
 	$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
