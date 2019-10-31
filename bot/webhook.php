@@ -112,11 +112,11 @@ $bot->on(function ($Update) use ($bot) {
 
 	// $bot->sendMessage($message->getChat()->getId(), LastUserMessage($cid, $user));
 
-	if (mb_stripos($mtext, "Сиськи") !== false) {
-		$pic = "http://aftamat4ik.ru/wp-content/uploads/2017/05/14277366494961.jpg";
+	// if (mb_stripos($mtext, "Сиськи") !== false) {
+	// 	$pic = "http://aftamat4ik.ru/wp-content/uploads/2017/05/14277366494961.jpg";
 
-		$bot->sendPhoto($message->getChat()->getId(), $pic);
-	}
+	// 	$bot->sendPhoto($message->getChat()->getId(), $pic);
+	// }
 	// start 1) вы состоите в каком-нибудь клане?
 	// да
 	if ((mb_stripos($mtext, "Да!") !== false) && (GetState($message, $bot) == "start")) {
@@ -200,17 +200,24 @@ $bot->on(function ($Update) use ($bot) {
 	}
 	// нет
 	if ((mb_stripos($mtext, "Нет.") !== false) && (GetState($message, $bot) == "notifications1")) {
-		$answer = "part2";
+		// $answer = "part2";
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+		Notif2();
 	}
 	// notif1 2) За какое время до начала боя (в минутах) мне стоит вас уведомлять?
 	if ((LastUserMessage($cid, $user, 2) == "Да.") && (GetState($message, $bot) == "notifications1")) {
 		$time = intval($mtext);
 		if ($time > 0) {
-			$answer = $time;
+			$query = "INSERT INTO bot_notification (chat_id,user_id,game_id,pre_start) values ({$message->getFrom()->getId()},'$nick','$name',{$message->getChat()->getId()});\n";
+			$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
+			if (mb_stripos($answer, "Не удалось соединиться:") !== false) {
+				$query = "UPDATE users set username='$nick' and name='$name' where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()};\n";
+				$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
+			}
 			$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 			$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+			Notif2();
 		} else {
 			$answer = 'Простите, я вас не понял. Попробовать еще раз?';
 			$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(

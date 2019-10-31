@@ -240,4 +240,75 @@ function RowAnalize($array) {
 	return $res;
 }
 
+function Buble($array) {
+	$max = 0;
+	$vals = array();
+	foreach ($array as $el => $value) {
+		array_push($vals, $value);
+		if ($el > $max) {
+			$max = $el;
+		}
+	}
+	// return $max;
+	for ($i = 0; $i <= $max; $i++) {
+		for ($j = 0; $j <= $max; $j++) {
+			if ((isset($array[$i])) && (isset($array[$j]))) {
+				if ($array[$i] > $array[$j]) {
+					$tmp = $array[$i];
+					$array[$i] = $array[$j];
+					$array[$j] = $tmp;
+				}
+			}
+
+		}
+	}
+	return $array;
+}
+
+function SortLine($array) {
+	$max = 0;
+	$vals = array();
+	foreach ($array as $el => $value) {
+		array_push($vals, $value);
+		if ($el > $max) {
+			$max = $el;
+		}
+	}
+	$vals = array_unique($vals);
+	$vals = Buble($vals);
+	// return $vals;
+	// return $max;
+	$res = array();
+	foreach ($vals as $val) {
+		foreach ($array as $el => $value) {
+			if ($val == $value) {
+				$tmp = array();
+				$tmp[$el] = $value;
+				array_push($res, $tmp);
+			}
+		}
+	}
+	return $res;
+	for ($i = 0; $i < $max; $i++) {
+		for ($j = 0; $j < $max; $j++) {
+			if ((isset($array[$i])) && (isset($array[$j]))) {
+				if ($array[$i] < $array[$j]) {
+					$tmp = $array[$i];
+					$array[$i] = $array[$j];
+					$array[$j] = $tmp;
+				}
+			}
+
+		}
+	}
+	return $array;
+}
+
+function Hard($a, $b) {
+	for ($i = 0; $i < $b - 1; $i++) {
+		$a *= $a;
+	}
+	return $a;
+}
+
 ?>

@@ -5,7 +5,7 @@ require "functions/matrix.php";
 require "classes/cards.php";
 require "classes/colors.php";
 
-$tp_count = 20;
+$tp_count = 10;
 
 $file = file_get_contents(realpath(dirname(__FILE__)) . "/.config.json");
 $config = json_decode($file, true);
@@ -21,7 +21,22 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 
 	// print_r($row);
 	array_push($cards_all, new Card($line['id'], $line['name'], $line['proto']));
+	$cards_all[count($cards_all) - 1]->type_id = $line['type'];
 
+}
+
+$query = "select * from cards_type;\n";
+$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+$cards_types = array();
+// echo $query;
+while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+
+	// print_r($row);
+	$cards_types[$line['id']] = $line['desc'];
+}
+
+foreach ($cards_all as $card) {
+	$card->type = $cards_types[$card->type_id];
 }
 
 $query = "select * from deck where player_id=12138;\n";
@@ -67,8 +82,8 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 		}
 	}
 }
-echo count($matrix) . PHP_EOL;
-PrintTable($matrix);
+// echo count($matrix) . PHP_EOL;
+// PrintTable($matrix);
 // exit();
 $analaz = MatrixAnaliz($matrix);
 $main = array();
@@ -84,24 +99,193 @@ foreach ($matrix as $row_id => $row) {
 }
 // $main = array_unique($main);
 // print_r($main);
+// exit();
 $realstrongcards = array();
 foreach ($main as $main1) {
 	if ($main1['cell_id'] == $main1['row_id']) {
-		if (StrongInARow($matrix, $main1['cell_id']) == 1) {
-			foreach ($cards_all as $card) {
-				if ($main1['cell_id'] == $card->id) {
-					echo $card->name . PHP_EOL;
-					array_push($realstrongcards, $main1['cell_id']);
-				}
+		// if (StrongInARow($matrix, $main1['cell_id']) == 1) {
+		foreach ($cards_all as $card) {
+			if (($main1['cell_id'] == $card->id) && ($card->type_id == 1)) {
+				// echo $card->name . PHP_EOL;
+				array_push($realstrongcards, $main1['cell_id']);
 			}
+			// }
 		}
 	}
 }
-print_r($realstrongcards);
-foreach ($realstrongcards as $card) {
-	print_r(RowAnalize($matrix[$card]));
+$realstrongcards = array_unique($realstrongcards);
+if (count($realstrongcards) < 1) {
+	echo "Мало данных" . $extra . PHP_EOL;
+	exit();
 }
+// print_r($realstrongcards);
+// exit();
+
+$extra = "";
+echo "Сборки методом прямого добора" . PHP_EOL . "++++++++++++++++++++++++++++++" . PHP_EOL;
+
+foreach ($realstrongcards as $card) {
+	// print_r(RowAnalize($matrix[$card]));
+	// foreach ($cards_all as $cr) {
+	// 	if ($cr->id == $card) {
+	// 		print_r($cr);
+	// 	}
+	// }
+	$res = array();
+	// print_r($matrix[$card]);
+	// exit();
+	$line = SortLine($matrix[$card]);
+	$pos = 0;
+	// echo $card . PHP_EOL;
+	while ((count($res) < $tp_count) && ($pos < count($line) - 1)) {
+		foreach ($line as $key => $value) {
+			$new = 1;
+			foreach ($res as $key2 => $value2) {
+				if ($key2 == $key) {
+					$new = 0;
+				}
+			}
+			if ($new == 1) {
+				foreach ($value as $sub_key => $sub_value) {
+					if ($sub_value > Hard($analaz["avr_nn"], 2)) {
+						array_push($res, $line[$key]);
+					}
+				}
+			}
+		}
+		$pos++;
+		// print_r($line[$pos]);
+		$card2 = array_keys($line[$pos])[0];
+		// print_r($card2);
+		// echo $card2 . PHP_EOL;
+		// exit();
+		$line = SortLine($matrix[$card2]);
+	}
+	// print_r($res);
+	echo "Сборка на основе: ";
+	foreach ($cards_all as $card1) {
+		if ($card1->id == $card) {
+			echo $card1->name . $extra . PHP_EOL;
+		}
+	}
+	$pos = 0;
+	foreach ($res as $key => $value) {
+		if ($pos < $tp_count) {
+			foreach ($value as $sub_key => $sub_value) {
+				foreach ($cards_all as $card1) {
+					if ($card1->id == $sub_key) {
+						echo $card1->name . $extra . PHP_EOL;
+					}
+				}
+			}
+			$pos++;
+		}
+	}
+	echo "==============================" . $extra . PHP_EOL;
+}
+
+// print_r($cards_all);
+// exit();
+echo PHP_EOL . "Сборки методом весового добора" . PHP_EOL . "++++++++++++++++++++++++++++++" . PHP_EOL;
+
+foreach ($realstrongcards as $card) {
+	// print_r(RowAnalize($matrix[$card]));
+	// foreach ($cards_all as $cr) {
+	// 	if ($cr->id == $card) {
+	// 		print_r($cr);
+	// 	}
+	// }
+	$res = array();
+	// print_r($matrix[$card]);
+	// exit();
+	$base_line = SortLine($matrix[$card]);
+	// print_r($base_line);
+	// exit();
+	$line = array();
+	foreach ($base_line as $key => $value) {
+		foreach ($value as $sub_key => $sub_value) {
+			if ($sub_value > Hard($analaz["avr_nn"], 2)) {
+				$new_line = SortLine($matrix[$sub_key]);
+				foreach ($new_line as $key2 => $val2) {
+					// if (in_array($key2, $line)) {
+					// 	$max = 0;
+					// 	foreach ($line as $key_search => $value_search) {
+					// 		if (($key_search == $key2) && ($value_search > $max)) {
+					// 			$max = $value_search;
+					// 		}
+					// 	}
+					// 	$line[$key2] = $max;
+					// } else {
+					array_push($line, $new_line[$key2]);
+					// }
+				}
+			}
+			// print_r($new_line);
+		}
+	}
+	// print_r($line);
+	$base_line = array();
+	foreach ($line as $key => $value) {
+		foreach ($value as $sub_key => $sub_value) {
+			if ($base_line[$sub_key] < $sub_value) {
+				$base_line[$sub_key] = $sub_value;
+			}
+		}
+	}
+	// print_r($base_line);
+	// echo count($base_line) . PHP_EOL;
+	$base_line = SortLine($base_line);
+	// print_r($base_line);
+	// exit();
+	$pos = 0;
+	// echo $card . PHP_EOL;
+	while ((count($res) < $tp_count) && ($pos < count($base_line) - 1)) {
+		foreach ($base_line[$pos] as $key => $value) {
+			// echo $key . " " . $value . PHP_EOL;
+			// exit();
+			// if (!in_array($key, $res)) {
+			// foreach ($value as $sub_key => $sub_value) {
+			// if ($sub_value > $analaz["avr_nn"]) {
+			$tmp = array();
+			$tmp[$key] = $value;
+			array_push($res, $tmp);
+			// }
+			// }
+			// }
+		}
+		$pos++;
+		// print_r($line[$pos]);
+		// $card2 = array_keys($line[$pos])[0];
+		// print_r($card2);
+		// echo $card2 . PHP_EOL;
+		// exit();
+		// $line = SortLine($matrix[$card2]);
+	}
+	// print_r($res);
+	echo "Сборка на основе: ";
+	foreach ($cards_all as $card1) {
+		if ($card1->id == $card) {
+			echo $card1->name . $extra . PHP_EOL;
+		}
+	}
+	$pos = 0;
+	foreach ($res as $key => $value) {
+		if ($pos < $tp_count) {
+			foreach ($value as $sub_key => $sub_value) {
+				foreach ($cards_all as $card1) {
+					if ($card1->id == $sub_key) {
+						echo $card1->name . $extra . PHP_EOL;
+					}
+				}
+			}
+			$pos++;
+		}
+	}
+	echo "==============================" . $extra . PHP_EOL;
+}
+// echo Hard(2, 1) . PHP_EOL;
 exit();
+
 $max = 0;
 $strongest = array();
 $len = 0;
