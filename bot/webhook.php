@@ -208,7 +208,7 @@ $bot->on(function ($Update) use ($bot) {
 	// notif1 2) За какое время до начала боя (в минутах) мне стоит вас уведомлять?
 	if ((LastUserMessage($cid, $user, 2) == "Да.") && (GetState($message, $bot) == "notifications1")) {
 		$time = intval($mtext);
-		// $nick = $message->getFrom()->getUsername();
+		$nick = $message->getFrom()->getUsername();
 		$name = $message->getFrom()->getFirstName();
 		if ($time > 0) {
 			$query = "INSERT INTO bot_notification (chat_id,user_id,notification_type,pre_start_time) values ({$message->getFrom()->getId()},{$message->getFrom()->getId()},1,{$time});\n";
@@ -238,6 +238,31 @@ $bot->on(function ($Update) use ($bot) {
 			$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 		}
 
+	}
+	// notif2 1) Вы хотите получать напоминания по результатам боев вашего клана?
+	// да
+	if ((mb_stripos($mtext, "Да.") !== false) && (GetState($message, $bot) == "notifications2")) {
+		$nick = $message->getFrom()->getUsername();
+		$name = $message->getFrom()->getFirstName();
+		$query = "INSERT INTO bot_notification (chat_id,user_id,notification_type,pre_start_time) values ({$message->getFrom()->getId()},{$message->getFrom()->getId()},2,0);\n";
+		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
+		// $answer = $query;
+		if (mb_stripos($answer, "Не удалось соединиться:") !== false) {
+			$query = "UPDATE users set username='$nick' and name='$name' where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()};\n";
+			$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
+		}
+		if (mb_stripos($answer, "Не удалось соединиться:") !== false) {
+			$answer = "Хорошо, запомнил.";
+		}
+		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
+		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+	}
+	// нет
+	if ((mb_stripos($mtext, "Нет.") !== false) && (GetState($message, $bot) == "notifications2")) {
+		// $answer = "part2";
+		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
+		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+		Notif2();
 	}
 
 }, function ($message) use ($name) {
