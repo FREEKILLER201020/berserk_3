@@ -14,7 +14,7 @@ $dbconn = pg_connect($query) or die('Не удалось соединиться:
 $token = "681634726:AAHafNwa8T3LXlezmIAUH-JjBGrI0qU-lfY";
 $bot = new \TelegramBot\Api\Client($token);
 
-$query = "SELECT * from bot_notofication";
+$query = "SELECT * from bot_notification";
 $result = pg_query($query);
 $notifications = array();
 while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
