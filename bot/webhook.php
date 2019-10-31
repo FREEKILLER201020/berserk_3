@@ -203,7 +203,7 @@ $bot->on(function ($Update) use ($bot) {
 		// $answer = "part2";
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
-		Notif2();
+		Notif2($message, $bot);
 	}
 	// notif1 2) За какое время до начала боя (в минутах) мне стоит вас уведомлять?
 	if ((LastUserMessage($cid, $user, 2) == "Да.") && (GetState($message, $bot) == "notifications1")) {
@@ -223,7 +223,7 @@ $bot->on(function ($Update) use ($bot) {
 			}
 			$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 			$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
-			Notif2();
+			Notif2($message, $bot);
 		} else {
 			$answer = 'Простите, я вас не понял. Попробовать еще раз?';
 			$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
@@ -256,14 +256,14 @@ $bot->on(function ($Update) use ($bot) {
 		}
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
-		Notif2();
+		Notif2($message, $bot);
 	}
 	// нет
 	if ((mb_stripos($mtext, "Нет.") !== false) && (GetState($message, $bot) == "notifications2")) {
 		// $answer = "part2";
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
-		Notif2();
+		Notif2($message, $bot);
 	}
 
 }, function ($message) use ($name) {
