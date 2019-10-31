@@ -213,15 +213,16 @@ $bot->on(function ($Update) use ($bot) {
 		if ($time > 0) {
 			$query = "INSERT INTO bot_notification (chat_id,user_id,game_id,pre_start) values ({$message->getFrom()->getId()},'$nick','$name',{$message->getChat()->getId()});\n";
 			$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
+			$answer = $query;
 			if (mb_stripos($answer, "Не удалось соединиться:") !== false) {
 				$query = "UPDATE users set username='$nick' and name='$name' where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()};\n";
 				$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 			}
 			if (mb_stripos($answer, "Не удалось соединиться:") !== false) {
-				$answer = "Хорошо, запомнил.";
+				// $answer = "Хорошо, запомнил.";
 			}
 			$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
-			$bot->sendMessage($message->getChat()->getId(), $query, false, null, null, $keyboard);
+			$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 			Notif2();
 		} else {
 			$answer = 'Простите, я вас не понял. Попробовать еще раз?';
