@@ -13,8 +13,41 @@ $dbconn = pg_connect($query) or die('Не удалось соединиться:
 
 $token = "681634726:AAHafNwa8T3LXlezmIAUH-JjBGrI0qU-lfY";
 $bot = new \TelegramBot\Api\Client($token);
-$answer = 'test!';
-$bot->sendMessage(249857309, $answer);
+
+$query = "SELECT * from bot_notofication";
+$result = pg_query($query);
+$notifications = array();
+while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+	$tmp = new Notification($line["id"], $line["chat_id"], $line["user_id"], $line["type"], $line["time"]);
+	array_push($notifications, $tmp);
+}
+foreach ($notifications as $otification) {
+	if ($notification->type == 1) {
+		$answer = 'Fight is comming';
+		$bot->sendMessage($notification->chat_id, $answer);
+	}
+}
+
+// $answer = 'test!';
+// $bot->sendMessage(249857309, $answer);
 pg_close($dbconn);
 $bot->run();
+
+class Notification {
+
+	public $id;
+	public $chat_id;
+	public $user_id;
+	public $type;
+	public $time;
+
+	public function __construct($id, $chat_id, $user_id, $type, $time) {
+		$this->id = $id;
+		$this->chat_id = $chat_id;
+		$this->user_id = $user_id;
+		$this->type = $type;
+		$this->time = $time;
+
+	}
+}
 ?>

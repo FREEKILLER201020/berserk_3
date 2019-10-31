@@ -5,7 +5,7 @@ drop table if exists public.bot_notification CASCADE;
 
 
 CREATE TABLE public.bot_notification (
-  id integer UNIQUE,
+  id SERIAL,
   chat_id integer,
   user_id integer,
   notification_type integer,
