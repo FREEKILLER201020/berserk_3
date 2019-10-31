@@ -21,7 +21,7 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 	$tmp = new Notification($line["id"], $line["chat_id"], $line["user_id"], $line["notification_type"], $line["pre_start_time"]);
 	array_push($notifications, $tmp);
 }
-foreach ($notifications as $otification) {
+foreach ($notifications as $notification) {
 	if ($notification->type == 1) {
 		$answer = 'Fight is comming';
 		$bot->sendMessage($notification->chat_id, $answer);
