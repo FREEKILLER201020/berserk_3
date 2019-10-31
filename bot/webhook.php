@@ -218,7 +218,7 @@ $bot->on(function ($Update) use ($bot) {
 				$query = "UPDATE users set username='$nick' and name='$name' where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()};\n";
 				$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 			}
-			if (mb_stripos($answer, "Не удалось соединиться:") !== false) {
+			if (mb_stripos($answer, "Не удалось соединиться:") == false) {
 				$answer = "Хорошо, запомнил.";
 			}
 			$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
@@ -251,11 +251,12 @@ $bot->on(function ($Update) use ($bot) {
 			$query = "UPDATE users set username='$nick' and name='$name' where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()};\n";
 			$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 		}
-		if (mb_stripos($answer, "Не удалось соединиться:") !== false) {
+		if (mb_stripos($answer, "Не удалось соединиться:") == false) {
 			$answer = "Хорошо, запомнил.";
 		}
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+		Notif2();
 	}
 	// нет
 	if ((mb_stripos($mtext, "Нет.") !== false) && (GetState($message, $bot) == "notifications2")) {
