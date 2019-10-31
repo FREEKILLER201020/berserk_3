@@ -211,7 +211,17 @@ $bot->on(function ($Update) use ($bot) {
 		$nick = $message->getFrom()->getUsername();
 		$name = $message->getFrom()->getFirstName();
 		if ($time > 0) {
-			$query = "INSERT INTO bot_notification (chat_id,user_id,notification_type,pre_start_time) values ({$message->getFrom()->getId()},{$message->getFrom()->getId()},1,{$time});\n";
+			$query = "SELECT * FROM bot_notification where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=1";
+			$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
+			while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+				$is = 1;
+			}
+			if ($is == 1) {
+				$query = "UPDATE bot_notification set pre_start_time=$time where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=1;\n";
+
+			} else {
+				$query = "INSERT INTO bot_notification (chat_id,user_id,notification_type,pre_start_time) values ({$message->getFrom()->getId()},{$message->getFrom()->getId()},1,{$time});\n";
+			}
 			$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 			// $answer = $query;
 			if (mb_stripos($answer, "Не удалось соединиться:") !== false) {
@@ -244,7 +254,17 @@ $bot->on(function ($Update) use ($bot) {
 	if ((mb_stripos($mtext, "Да.") !== false) && (GetState($message, $bot) == "notifications2")) {
 		$nick = $message->getFrom()->getUsername();
 		$name = $message->getFrom()->getFirstName();
-		$query = "INSERT INTO bot_notification (chat_id,user_id,notification_type,pre_start_time) values ({$message->getFrom()->getId()},{$message->getFrom()->getId()},2,0);\n";
+		$is = 0;
+		$query = "SELECT * FROM bot_notification where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=2";
+		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
+		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+			$is = 1;
+		}
+		if ($is == 1) {
+			$query = "UPDATE bot_notification set pre_start_time=0 where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=2;\n";
+		} else {
+			$query = "INSERT INTO bot_notification (chat_id,user_id,notification_type,pre_start_time) values ({$message->getFrom()->getId()},{$message->getFrom()->getId()},2,0);\n";
+		}
 		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 		// $answer = $query;
 		if (mb_stripos($answer, "Не удалось соединиться:") !== false) {
