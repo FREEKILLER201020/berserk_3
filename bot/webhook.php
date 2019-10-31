@@ -221,7 +221,7 @@ $bot->on(function ($Update) use ($bot) {
 				$answer = "Хорошо, запомнил.";
 			}
 			$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
-			$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+			$bot->sendMessage($message->getChat()->getId(), $query, false, null, null, $keyboard);
 			Notif2();
 		} else {
 			$answer = 'Простите, я вас не понял. Попробовать еще раз?';
