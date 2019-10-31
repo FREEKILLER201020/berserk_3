@@ -208,10 +208,10 @@ $bot->on(function ($Update) use ($bot) {
 	// notif1 2) За какое время до начала боя (в минутах) мне стоит вас уведомлять?
 	if ((LastUserMessage($cid, $user, 2) == "Да.") && (GetState($message, $bot) == "notifications1")) {
 		$time = intval($mtext);
-		$nick = $message->getFrom()->getUsername();
+		// $nick = $message->getFrom()->getUsername();
 		$name = $message->getFrom()->getFirstName();
 		if ($time > 0) {
-			$query = "INSERT INTO bot_notification (chat_id,user_id,game_id,pre_start) values ({$message->getFrom()->getId()},'$nick','$name',{$message->getChat()->getId()});\n";
+			$query = "INSERT INTO bot_notification (chat_id,user_id,notification_type,pre_start_time) values ({$message->getFrom()->getId()},{$message->getFrom()->getId()},1,{$time});\n";
 			$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 			$answer = $query;
 			if (mb_stripos($answer, "Не удалось соединиться:") !== false) {

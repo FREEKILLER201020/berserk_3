@@ -8,10 +8,10 @@ CREATE TABLE public.bot_notification (
   id integer UNIQUE,
   chat_id integer,
   user_id integer,
-  game_id integer,
-  pre_start integer,
-  pre_start_time integer,
-  results integer
+  notification_type integer,
+  -- pre_start integer,
+  pre_start_time integer
+  -- results integer
 )
 WITH (
     OIDS = FALSE
