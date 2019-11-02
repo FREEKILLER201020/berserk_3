@@ -2,7 +2,7 @@
 header('Content-Type: text/html; charset=utf-8');
 // подрубаем API
 require_once "vendor/autoload.php";
-require "/../api/api.php";
+require "../api/api.php";
 
 // $file = file_put_contents(realpath(dirname(__FILE__)) . "/../cards_parser/cards/log.txt", var_dump($_REQUEST));
 
