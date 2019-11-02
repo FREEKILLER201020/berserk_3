@@ -2,6 +2,7 @@
 header('Content-Type: text/html; charset=utf-8');
 // подрубаем API
 require_once "vendor/autoload.php";
+require "../api/api.php";
 
 $file = file_get_contents(realpath(dirname(__FILE__)) . "/../.config.json");
 $config = json_decode($file, true);
@@ -23,7 +24,15 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 }
 foreach ($notifications as $notification) {
 	if ($notification->type == 1) {
-		$answer = 'Fight is comming';
+		$array = array();
+		$array['type'] = "history";
+		$array['id'] = "52";
+		$array['clan'] = "171";
+
+// print_r($dbconn);
+		// print_r(OnCall($array, null));
+		$answer = implode(",", OnCall($array, null));
+		// $answer = 'Fight is comming';
 		$bot->sendMessage($notification->chat_id, $answer);
 	}
 }

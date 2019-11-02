@@ -332,7 +332,7 @@ $bot->command('db', function ($message) use ($bot) {
 	$array['clan'] = "171";
 
 // print_r($dbconn);
-	print_r(OnCall($array, null));
+	// print_r(OnCall($array, null));
 	$answer = implode(",", OnCall($array, null));
 	$bot->sendMessage($message->getChat()->getId(), $answer);
 });
