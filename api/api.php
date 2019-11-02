@@ -1,19 +1,38 @@
 <?php
 // require "class.php";
 error_reporting(1);
+// print_r(pathinfo(get_included_files()[0]));
+$a = pathinfo(get_included_files()[0])[dirname];
+$a = explode("/", $a);
+// print_r($a);
+if ($a[count($a) - 1] == "berserk_3") {
+	require pathinfo(get_included_files()[0])[dirname] . "/functions/string.php";
+	require pathinfo(get_included_files()[0])[dirname] . "/classes/player.php";
+	require pathinfo(get_included_files()[0])[dirname] . "/classes/clan.php";
+	require pathinfo(get_included_files()[0])[dirname] . "/classes/era.php";
+	require pathinfo(get_included_files()[0])[dirname] . "/classes/fight.php";
+	require pathinfo(get_included_files()[0])[dirname] . "/classes/city.php";
+	require pathinfo(get_included_files()[0])[dirname] . "/classes/deck.php";
+	require pathinfo(get_included_files()[0])[dirname] . "/classes/cards.php";
+	$file = file_get_contents(realpath(pathinfo(get_included_files()[0])[dirname] . "/.config.json"));
+} else {
+// exit();
 
-require "../functions/string.php";
-require "../classes/player.php";
-require "../classes/clan.php";
-require "../classes/era.php";
-require "../classes/fight.php";
-require "../classes/city.php";
-require "../classes/deck.php";
-require "../classes/cards.php";
+	require pathinfo(get_included_files()[0])[dirname] . "/../functions/string.php";
+	require pathinfo(get_included_files()[0])[dirname] . "/../classes/player.php";
+	require pathinfo(get_included_files()[0])[dirname] . "/../classes/clan.php";
+	require pathinfo(get_included_files()[0])[dirname] . "/../classes/era.php";
+	require pathinfo(get_included_files()[0])[dirname] . "/../classes/fight.php";
+	require pathinfo(get_included_files()[0])[dirname] . "/../classes/city.php";
+	require pathinfo(get_included_files()[0])[dirname] . "/../classes/deck.php";
+	require pathinfo(get_included_files()[0])[dirname] . "/../classes/cards.php";
+	$file = file_get_contents(realpath(pathinfo(get_included_files()[0])[dirname] . "/../.config.json"));
+}
 
 // print_r($_POST);
 session_start();
-$file = file_get_contents(realpath(dirname(__FILE__)) . "/../.config.json");
+// $file = file_get_contents(realpath(pathinfo(get_included_files()[0])[dirname] . "/.config.json"));
+
 $config = json_decode($file, true);
 // print_r($config);
 $query = "host={$config['host']} dbname={$config['dbname']} user={$config['user']} password={$config['password']}";
@@ -96,6 +115,7 @@ function OnCall($array, $config) {
 	}
 	pg_close($dbconn);
 	echo json_encode($return);
+	return $return;
 }
 
 function EraResClans($array) {

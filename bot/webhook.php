@@ -2,6 +2,7 @@
 header('Content-Type: text/html; charset=utf-8');
 // подрубаем API
 require_once "vendor/autoload.php";
+require "/../api/api.php";
 
 // $file = file_put_contents(realpath(dirname(__FILE__)) . "/../cards_parser/cards/log.txt", var_dump($_REQUEST));
 
@@ -321,6 +322,18 @@ $bot->command('help', function ($message) use ($bot) {
 });
 $bot->command('test', function ($message) use ($bot) {
 	$answer = 'Ура! Я сам что то написал!' . var_export($message, true);
+	$bot->sendMessage($message->getChat()->getId(), $answer);
+});
+
+$bot->command('db', function ($message) use ($bot) {
+	$array = array();
+	$array['type'] = "history";
+	$array['id'] = "52";
+	$array['clan'] = "171";
+
+// print_r($dbconn);
+	print_r(OnCall($array, null));
+	$answer = implode(",", OnCall($array, null));
 	$bot->sendMessage($message->getChat()->getId(), $answer);
 });
 
