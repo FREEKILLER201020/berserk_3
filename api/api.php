@@ -116,7 +116,7 @@ function OnCall($array, $config) {
 	}
 	pg_close($dbconn);
 	echo json_encode($return);
-	return $return;
+	return json_encode($return);
 }
 
 function EraResClans($array) {
