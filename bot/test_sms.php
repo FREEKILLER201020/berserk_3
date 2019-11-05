@@ -40,8 +40,10 @@ foreach ($notifications as $notification) {
 		foreach ($json as $key => $row) {
 			array_push($strings, $key);
 			foreach ($row as $key2 => $cell) {
-				array_push($strings, $key2);
-				array_push($strings, $cell);
+				if (($key2 == "Атакует") || ($key2 == "Защищается") || ($key2 == "Начало_боя") || ($key2 == "Победитель") || ($key2 == "Город1") || ($key2 == "Город2")) {
+					array_push($strings, $key2);
+					array_push($strings, $cell);
+				}
 			}
 		}
 		$strings = array_unique($strings);
