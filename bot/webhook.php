@@ -328,30 +328,6 @@ Content Cell  | Content Cell
 Content Cell  | Content Cell</pre>";
 	$bot->sendMessage($message->getChat()->getId(), $answer, "html", null, null, $keyboard);
 });
-$bot->command('table2', function ($message) use ($bot) {
-	$answer = "<pre>
-First Header  | Second Header | Second Header
-------------- | ------------- | -------------
-Content Cell  | Content Cell  | Content Cell
-Content Cell  | Content Cell  | Content Cell </pre>";
-	$bot->sendMessage($message->getChat()->getId(), $answer, "html", null, null, $keyboard);
-});
-$bot->command('table3', function ($message) use ($bot) {
-	$answer = "<pre>
-First Header  | Second Header | Second Header | Second Header
-------------- | ------------- | ------------- | -------------
-Content Cell  | Content Cell  | Content Cell  | Content Cell
-Content Cell  | Content Cell  | Content Cell  | Content Cell </pre>";
-	$bot->sendMessage($message->getChat()->getId(), $answer, "html", null, null, $keyboard);
-});
-$bot->command('table4', function ($message) use ($bot) {
-	$answer = "<pre>
-First Header  | Second Header | Second Header | Second Header | Second Header
-------------- | ------------- | ------------- | ------------- | -------------
-Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell
-Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell </pre>";
-	$bot->sendMessage($message->getChat()->getId(), $answer, "html", null, null, $keyboard);
-});
 $bot->command('test', function ($message) use ($bot) {
 	$answer = 'Ура! Я сам что то написал!' . var_export($message, true);
 	$bot->sendMessage($message->getChat()->getId(), $answer);
@@ -366,10 +342,17 @@ $bot->command('db', function ($message) use ($bot) {
 // print_r($dbconn);
 	// print_r(OnCall($array, null));
 	$answer = OnCall($array, null);
+	$json = json_decode($answer, true);
+	$answer = "<pre>" . PHP_EOL;
+	$js = $json[0];
+	foreach ($js as $key => $value) {
+		$answer .= " $key |";
+	}
+	$answer .= PHP_EOL . "<pre>" . PHP_EOL;
 	if (strlen($answer) > 4096) {
 		$answer = "message is longer then 4096 characters";
 	}
-	$bot->sendMessage($message->getChat()->getId(), $answer);
+	$bot->sendMessage($message->getChat()->getId(), $answer, "html", null, null, null);
 });
 
 $bot->command('I', function ($message) use ($bot) {
