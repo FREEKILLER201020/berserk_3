@@ -32,6 +32,7 @@ foreach ($notifications as $notification) {
 // print_r($dbconn);
 		// print_r(OnCall($array, null));
 		$answer = OnCall($array, null);
+		print_r(json_decode($answer, true));
 		if (strlen($answer) > 4096) {
 			$answer = "message is longer then 4096 characters";
 		}
