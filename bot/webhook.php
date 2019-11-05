@@ -345,10 +345,19 @@ $bot->command('db', function ($message) use ($bot) {
 	$json = json_decode($answer, true);
 	$answer = "<pre>" . PHP_EOL;
 	$js = $json[0];
+	$keys = array();
 	foreach ($js as $key => $value) {
-		$answer .= " $key |";
+		array_push($keys, $key);
 	}
-	$answer .= PHP_EOL . "<pre>" . PHP_EOL;
+	foreach ($keys as $key) {
+		$key = str_replace("Начало_боя", "Начало", $key);
+	}
+	foreach ($keys as $key) {
+		if (($key == "Атакует") || ($key == "Защищается") || ($key == "Начало") || ($key == "Победитель")) {
+			$answer .= " $key |";
+		}
+	}
+	$answer .= PHP_EOL . "</pre>" . PHP_EOL;
 	if (strlen($answer) > 4096) {
 		$answer = "message is longer then 4096 characters";
 	}
