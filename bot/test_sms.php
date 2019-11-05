@@ -93,7 +93,7 @@ foreach ($notifications as $notification) {
 				$answer .= "$key|";
 			}
 		}
-		$answer = substr($answer, 0, strlen($answer) - 2);
+		$answer = substr($answer, 0, -1);
 		$answer .= PHP_EOL . "</pre>" . PHP_EOL;
 		echo $answer;
 		if (strlen($answer) > 4096) {
