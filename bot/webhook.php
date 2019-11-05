@@ -334,6 +334,7 @@ $bot->command('db', function ($message) use ($bot) {
 // print_r($dbconn);
 	// print_r(OnCall($array, null));
 	$answer = implode(",", OnCall($array, null));
+	$answer .= "here!";
 	$bot->sendMessage($message->getChat()->getId(), $answer);
 });
 
