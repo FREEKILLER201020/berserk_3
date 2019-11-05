@@ -32,13 +32,18 @@ foreach ($notifications as $notification) {
 // print_r($dbconn);
 		// print_r(OnCall($array, null));
 		$answer = OnCall($array, null);
-		print_r(json_decode($answer, true));
+		$json = json_decode($answer, true);
+		$answer = "<pre>" . PHP_EOL;
+		$js = $json[0];
+		print_r($js);
+		foreach ($js as $key => $value) {
+			$answer .= " $key |";
+		}
+		$answer .= PHP_EOL . "<pre>" . PHP_EOL;
 		if (strlen($answer) > 4096) {
 			$answer = "message is longer then 4096 characters";
 		}
-		echo PHP_EOL . PHP_EOL . PHP_EOL . PHP_EOL . $answer;
-		// $answer = 'Fight is comming';
-		$bot->sendMessage($notification->chat_id, $answer);
+		$bot->sendMessage($message->getChat()->getId(), $answer, "html", null, null, null);
 	}
 }
 
