@@ -325,7 +325,7 @@ $bot->command('table', function ($message) use ($bot) {
   ------------- | -------------
   Content Cell  | Content Cell
   Content Cell  | Content Cell</pre>";
-	$bot->sendMessage($message->getChat()->getId(), $answer);
+	$bot->sendMessage($message->getChat()->getId(), $answer, "html", null, null, $keyboard);
 });
 $bot->command('test', function ($message) use ($bot) {
 	$answer = 'Ура! Я сам что то написал!' . var_export($message, true);
