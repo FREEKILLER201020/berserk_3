@@ -334,7 +334,9 @@ $bot->command('db', function ($message) use ($bot) {
 // print_r($dbconn);
 	// print_r(OnCall($array, null));
 	$answer = implode(",", OnCall($array, null));
-	$answer .= "here!";
+	if (strlen($answer) > 4096) {
+		$answer = "message is longer then 4096 characters";
+	}
 	$bot->sendMessage($message->getChat()->getId(), $answer);
 });
 
