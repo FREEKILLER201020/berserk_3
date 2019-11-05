@@ -37,7 +37,7 @@ foreach ($notifications as $notification) {
 		$js = $json[0];
 		$keys = array();
 		$strings = array();
-		foreach ($table as $key => $row) {
+		foreach ($json as $key => $row) {
 			array_push($strings, $key);
 			foreach ($row as $key2 => $cell) {
 				array_push($strings, $key2);
