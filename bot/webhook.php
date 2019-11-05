@@ -346,23 +346,6 @@ $bot->command('db', function ($message) use ($bot) {
 	$answer = "<pre>" . PHP_EOL;
 	$js = $json[0];
 	$keys = array();
-	$strings = array();
-	foreach ($table as $key => $row) {
-		array_push($strings, $key);
-		foreach ($row as $key2 => $cell) {
-			array_push($strings, $key2);
-			array_push($strings, $cell);
-		}
-	}
-	$strings = array_unique($strings);
-	// print_r($strings);
-	$max_len = 0;
-	foreach ($strings as $string) {
-		if (strlen($string) > $max_len) {
-			$max_len = strlen($string);
-		}
-	}
-	echo $max_len;
 	foreach ($js as $key => $value) {
 		array_push($keys, $key);
 	}
@@ -371,9 +354,10 @@ $bot->command('db', function ($message) use ($bot) {
 	}
 	foreach ($keys as $key) {
 		if (($key == "Атакует") || ($key == "Защищается") || ($key == "Начало") || ($key == "Победитель")) {
-			$answer .= " $key |";
+			$answer .= "$key|";
 		}
 	}
+	$answer = substr($answer, 0, strlen($answer) - 2);
 	$answer .= PHP_EOL . "</pre>" . PHP_EOL;
 	if (strlen($answer) > 4096) {
 		$answer = "message is longer then 4096 characters";
