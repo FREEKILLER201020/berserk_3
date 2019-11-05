@@ -32,6 +32,7 @@ foreach ($notifications as $notification) {
 // print_r($dbconn);
 		// print_r(OnCall($array, null));
 		$answer = implode(",", OnCall($array, null));
+		echo PHP_EOL . PHP_EOL . PHP_EOL . PHP_EOL . $answer;
 		// $answer = 'Fight is comming';
 		$bot->sendMessage($notification->chat_id, $answer);
 	}
