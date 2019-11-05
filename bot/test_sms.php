@@ -95,6 +95,7 @@ foreach ($notifications as $notification) {
 		}
 		$answer = substr($answer, 0, strlen($answer) - 2);
 		$answer .= PHP_EOL . "</pre>" . PHP_EOL;
+		echo $answer;
 		if (strlen($answer) > 4096) {
 			$answer = "message is longer then 4096 characters";
 		}
