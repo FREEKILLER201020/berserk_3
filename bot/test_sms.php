@@ -24,6 +24,52 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 }
 foreach ($notifications as $notification) {
 	if ($notification->type == 1) {
+// 		$array = array();
+		// 		$array['type'] = "history";
+		// 		$array['id'] = "52";
+		// 		$array['clan'] = "171";
+
+// // print_r($dbconn);
+		// 		// print_r(OnCall($array, null));
+		// 		$answer = OnCall($array, null);
+		// 		$json = json_decode($answer, true);
+		// 		$answer = "<pre>" . PHP_EOL;
+		// 		$js = $json[0];
+		// 		$keys = array();
+		// 		$strings = array();
+		// 		foreach ($json as $key => $row) {
+		// 			array_push($strings, $key);
+		// 			foreach ($row as $key2 => $cell) {
+		// 				if (($key2 == "Атакует") || ($key2 == "Защищается") || ($key2 == "Начало_боя") || ($key2 == "Победитель") || ($key2 == "Город1") || ($key2 == "Город2")) {
+		// 					array_push($strings, $key2);
+		// 					array_push($strings, $cell);
+		// 				}
+		// 			}
+		// 		}
+		// 		$strings = array_unique($strings);
+		// 		// print_r($strings);
+		// 		$max_len = 0;
+		// 		foreach ($strings as $string) {
+		// 			if (strlen($string) > $max_len) {
+		// 				$max_len = strlen($string);
+		// 			}
+		// 		}
+		// 		echo $max_len;
+		// 		foreach ($js as $key => $value) {
+		// 			array_push($keys, $key);
+		// 		}
+		// 		foreach ($keys as $key => $value) {
+		// 			$keys[$key] = str_replace("Начало_боя", "Начало", $value);
+		// 		}
+		// 		foreach ($keys as $key) {
+		// 			if (($key == "Атакует") || ($key == "Защищается") || ($key == "Начало") || ($key == "Победитель")) {
+		// 				$answer .= " $key |";
+		// 			}
+		// 		}
+		// 		$answer .= PHP_EOL . "</pre>" . PHP_EOL;
+		// 		if (strlen($answer) > 4096) {
+		// 			$answer = "message is longer then 4096 characters";
+		// 		}
 		$array = array();
 		$array['type'] = "history";
 		$array['id'] = "52";
@@ -36,25 +82,6 @@ foreach ($notifications as $notification) {
 		$answer = "<pre>" . PHP_EOL;
 		$js = $json[0];
 		$keys = array();
-		$strings = array();
-		foreach ($json as $key => $row) {
-			array_push($strings, $key);
-			foreach ($row as $key2 => $cell) {
-				if (($key2 == "Атакует") || ($key2 == "Защищается") || ($key2 == "Начало_боя") || ($key2 == "Победитель") || ($key2 == "Город1") || ($key2 == "Город2")) {
-					array_push($strings, $key2);
-					array_push($strings, $cell);
-				}
-			}
-		}
-		$strings = array_unique($strings);
-		// print_r($strings);
-		$max_len = 0;
-		foreach ($strings as $string) {
-			if (strlen($string) > $max_len) {
-				$max_len = strlen($string);
-			}
-		}
-		echo $max_len;
 		foreach ($js as $key => $value) {
 			array_push($keys, $key);
 		}
@@ -63,9 +90,10 @@ foreach ($notifications as $notification) {
 		}
 		foreach ($keys as $key) {
 			if (($key == "Атакует") || ($key == "Защищается") || ($key == "Начало") || ($key == "Победитель")) {
-				$answer .= " $key |";
+				$answer .= "$key|";
 			}
 		}
+		$answer = substr($answer, 0, strlen($answer) - 2);
 		$answer .= PHP_EOL . "</pre>" . PHP_EOL;
 		if (strlen($answer) > 4096) {
 			$answer = "message is longer then 4096 characters";
