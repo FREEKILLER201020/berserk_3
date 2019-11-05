@@ -321,11 +321,36 @@ $bot->command('help', function ($message) use ($bot) {
 	$bot->sendMessage($message->getChat()->getId(), $answer, null, false, null, $keyboard);
 });
 $bot->command('table', function ($message) use ($bot) {
-	$answer = "<pre>First Header  | Second Header
-  ------------- | -------------
-  Content Cell  | Content Cell
-  Content Cell  | Content Cell</pre>";
-	$bot->sendMessage($message->getChat()->getId(), $answer, "markdown", null, null, $keyboard);
+	$answer = "<pre>
+First Header  | Second Header
+------------- | -------------
+Content Cell  | Content Cell
+Content Cell  | Content Cell</pre>";
+	$bot->sendMessage($message->getChat()->getId(), $answer, "html", null, null, $keyboard);
+});
+$bot->command('table2', function ($message) use ($bot) {
+	$answer = "<pre>
+First Header  | Second Header | Second Header
+------------- | ------------- | -------------
+Content Cell  | Content Cell  | Content Cell
+Content Cell  | Content Cell  | Content Cell </pre>";
+	$bot->sendMessage($message->getChat()->getId(), $answer, "html", null, null, $keyboard);
+});
+$bot->command('table3', function ($message) use ($bot) {
+	$answer = "<pre>
+First Header  | Second Header | Second Header | Second Header
+------------- | ------------- | ------------- | -------------
+Content Cell  | Content Cell  | Content Cell  | Content Cell
+Content Cell  | Content Cell  | Content Cell  | Content Cell </pre>";
+	$bot->sendMessage($message->getChat()->getId(), $answer, "html", null, null, $keyboard);
+});
+$bot->command('table4', function ($message) use ($bot) {
+	$answer = "<pre>
+First Header  | Second Header | Second Header | Second Header | Second Header
+------------- | ------------- | ------------- | ------------- | -------------
+Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell
+Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell </pre>";
+	$bot->sendMessage($message->getChat()->getId(), $answer, "html", null, null, $keyboard);
 });
 $bot->command('test', function ($message) use ($bot) {
 	$answer = 'Ура! Я сам что то написал!' . var_export($message, true);
