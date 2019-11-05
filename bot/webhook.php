@@ -321,10 +321,10 @@ $bot->command('help', function ($message) use ($bot) {
 	$bot->sendMessage($message->getChat()->getId(), $answer, null, false, null, $keyboard);
 });
 $bot->command('table', function ($message) use ($bot) {
-	$answer = " First Header  | Second Header
+	$answer = "<pre>First Header  | Second Header
   ------------- | -------------
   Content Cell  | Content Cell
-  Content Cell  | Content Cell";
+  Content Cell  | Content Cell</pre>";
 	$bot->sendMessage($message->getChat()->getId(), $answer);
 });
 $bot->command('test', function ($message) use ($bot) {
