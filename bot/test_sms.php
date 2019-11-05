@@ -43,7 +43,7 @@ foreach ($notifications as $notification) {
 		if (strlen($answer) > 4096) {
 			$answer = "message is longer then 4096 characters";
 		}
-		$bot->sendMessage($message->getChat()->getId(), $answer, "html", null, null, null);
+		$bot->sendMessage($notification->chat_id, $answer, "html", null, null, null);
 	}
 }
 
