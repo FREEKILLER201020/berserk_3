@@ -320,7 +320,7 @@ $bot->command('help', function ($message) use ($bot) {
 
 	$bot->sendMessage($message->getChat()->getId(), $answer, null, false, null, $keyboard);
 });
-$bot->command('test', function ($message) use ($bot) {
+$bot->command('table', function ($message) use ($bot) {
 	$answer = " First Header  | Second Header
   ------------- | -------------
   Content Cell  | Content Cell
