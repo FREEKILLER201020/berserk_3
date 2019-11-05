@@ -349,8 +349,8 @@ $bot->command('db', function ($message) use ($bot) {
 	foreach ($js as $key => $value) {
 		array_push($keys, $key);
 	}
-	foreach ($keys as $key) {
-		$key = str_replace("Начало_боя", "Начало", $key);
+	foreach ($keys as $key => $value) {
+		$keys[$key] = str_replace("Начало_боя", "Начало", $value);
 	}
 	foreach ($keys as $key) {
 		if (($key == "Атакует") || ($key == "Защищается") || ($key == "Начало") || ($key == "Победитель")) {
