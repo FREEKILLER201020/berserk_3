@@ -346,6 +346,7 @@ $bot->command('db', function ($message) use ($bot) {
 	$answer = "<pre>" . PHP_EOL;
 	$js = $json[0];
 	$keys = array();
+	$length = array();
 	foreach ($js as $key => $value) {
 		array_push($keys, $key);
 	}
@@ -355,6 +356,11 @@ $bot->command('db', function ($message) use ($bot) {
 	foreach ($keys as $key) {
 		if (($key == "Атакует") || ($key == "Защищается") || ($key == "Начало") || ($key == "Победитель")) {
 			$answer .= " $key |";
+		}
+	}
+	foreach ($json as $js) {
+		foreach ($js as $key => $value) {
+
 		}
 	}
 	$answer .= PHP_EOL . "</pre>" . PHP_EOL;

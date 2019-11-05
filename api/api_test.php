@@ -1,5 +1,6 @@
 <?php
 require "api.php";
+require "../functions/matrix.php";
 
 // echo realpath(dirname(__FILE__)) . "/../.config.json";
 // print_r(pathinfo(get_included_files()[0]));
@@ -16,5 +17,30 @@ $array['id'] = "52";
 $array['clan'] = "171";
 
 // print_r($dbconn);
-echo implode(",", OnCall($array, null));
+$array = array();
+$array['type'] = "history";
+$array['id'] = "52";
+$array['clan'] = "171";
+
+// print_r($dbconn);
+// print_r(OnCall($array, null));
+$answer = OnCall($array, null);
+$json = json_decode($answer, true);
+PrintTable($json);
+
+// $answer = "<pre>" . PHP_EOL;
+// $js = $json[0];
+// $keys = array();
+// $length = array();
+// foreach ($js as $key => $value) {
+// 	array_push($keys, $key);
+// }
+// foreach ($keys as $key => $value) {
+// 	$keys[$key] = str_replace("Начало_боя", "Начало", $value);
+// }
+// foreach ($keys as $key) {
+// 	if (($key == "Атакует") || ($key == "Защищается") || ($key == "Начало") || ($key == "Победитель")) {
+// 		$answer .= " $key |";
+// 	}
+// }
 ?>
