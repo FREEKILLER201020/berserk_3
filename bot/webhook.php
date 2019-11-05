@@ -321,6 +321,13 @@ $bot->command('help', function ($message) use ($bot) {
 	$bot->sendMessage($message->getChat()->getId(), $answer, null, false, null, $keyboard);
 });
 $bot->command('test', function ($message) use ($bot) {
+	$answer = " First Header  | Second Header
+  ------------- | -------------
+  Content Cell  | Content Cell
+  Content Cell  | Content Cell";
+	$bot->sendMessage($message->getChat()->getId(), $answer);
+});
+$bot->command('test', function ($message) use ($bot) {
 	$answer = 'Ура! Я сам что то написал!' . var_export($message, true);
 	$bot->sendMessage($message->getChat()->getId(), $answer);
 });
