@@ -35,9 +35,34 @@ foreach ($notifications as $notification) {
 		$json = json_decode($answer, true);
 		$answer = "<pre>" . PHP_EOL;
 		$js = $json[0];
-		print_r($js);
+		$keys = array();
+		$strings = array();
+		foreach ($table as $key => $row) {
+			array_push($strings, $key);
+			foreach ($row as $key2 => $cell) {
+				array_push($strings, $key2);
+				array_push($strings, $cell);
+			}
+		}
+		$strings = array_unique($strings);
+		// print_r($strings);
+		$max_len = 0;
+		foreach ($strings as $string) {
+			if (strlen($string) > $max_len) {
+				$max_len = strlen($string);
+			}
+		}
+		echo $max_len;
 		foreach ($js as $key => $value) {
-			$answer .= " $key |";
+			array_push($keys, $key);
+		}
+		foreach ($keys as $key => $value) {
+			$keys[$key] = str_replace("Начало_боя", "Начало", $value);
+		}
+		foreach ($keys as $key) {
+			if (($key == "Атакует") || ($key == "Защищается") || ($key == "Начало") || ($key == "Победитель")) {
+				$answer .= " $key |";
+			}
 		}
 		$answer .= PHP_EOL . "</pre>" . PHP_EOL;
 		if (strlen($answer) > 4096) {
