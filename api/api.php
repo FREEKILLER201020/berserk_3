@@ -115,7 +115,7 @@ function OnCall($array, $config) {
 		header("Location: " . $array['back']);
 	}
 	pg_close($dbconn);
-	// echo json_encode($return);
+	echo json_encode($return, JSON_UNESCAPED_UNICODE);
 	return json_encode($return, JSON_UNESCAPED_UNICODE);
 }
 
