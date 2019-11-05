@@ -5,6 +5,7 @@ error_reporting(1);
 $a = pathinfo(get_included_files()[0])[dirname];
 $a = explode("/", $a);
 // print_r($a);
+// echo $a[count($a) - 1];
 if ($a[count($a) - 1] == "berserk_3") {
 	require pathinfo(get_included_files()[0])[dirname] . "/functions/string.php";
 	require pathinfo(get_included_files()[0])[dirname] . "/classes/player.php";
