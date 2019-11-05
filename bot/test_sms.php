@@ -39,7 +39,7 @@ foreach ($notifications as $notification) {
 		foreach ($js as $key => $value) {
 			$answer .= " $key |";
 		}
-		$answer .= PHP_EOL . "<pre>" . PHP_EOL;
+		$answer .= PHP_EOL . "</pre>" . PHP_EOL;
 		if (strlen($answer) > 4096) {
 			$answer = "message is longer then 4096 characters";
 		}
