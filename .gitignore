@@ -7,3 +7,7 @@ big_order_data.json
 .config_local.json
 big_order_data.json
 scanned_folders.json
+node_modules/wkhtmltoimage/index.js
+node_modules/wkhtmltoimage/LICENSE
+node_modules/wkhtmltoimage/package.json
+node_modules/wkhtmltoimage/README.md

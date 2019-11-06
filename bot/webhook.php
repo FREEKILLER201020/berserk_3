@@ -326,7 +326,22 @@ First Header  | Second Header
 ------------- | -------------
 Content Cell  | Content Cell
 Content Cell  | Content Cell</pre>";
+	$answer = "<pre>
+   Атакует |   Защищается  |       Начало      |Победитель
+\"Берсерк\"|    Fireborn   |2019-09-20 11:45:00|Fireborn
+  Fireborn |  \"Берсерк\"  |2019-09-19 13:45:00|\"Берсерк\"
+\"Берсерк\"|Отряд Самоубийц|2019-09-18 16:30:00|Отряд Самоубийц
+\"Берсерк\"|    Fireborn   |2019-09-17 15:30:00|\"Берсерк\"
+\"Берсерк\"|      Epic     |2019-09-16 17:00:00|Epic
+</pre>";
 	$bot->sendMessage($message->getChat()->getId(), $answer, "html", null, null, $keyboard);
+});
+$pic = "http://aftamat4ik.ru/wp-content/uploads/2017/03/photo_2016-12-13_23-21-07.jpg";
+
+$bot->command('table2', function ($message) use ($bot) {
+	$pic = "https://app.clanberserk.ru/berserk_3/table.jpg";
+
+	$bot->sendPhoto($message->getChat()->getId(), $pic);
 });
 $bot->command('test', function ($message) use ($bot) {
 	$answer = 'Ура! Я сам что то написал!' . var_export($message, true);
