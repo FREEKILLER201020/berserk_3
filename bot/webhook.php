@@ -342,6 +342,39 @@ $bot->command('table2', function ($message) use ($bot) {
 
 	$bot->sendPhoto($message->getChat()->getId(), $pic);
 });
+$bot->command('table3', function ($message) use ($bot) {
+	$answer = "<pre>1)
+	Атакует: \"Берсерк\"
+	Защищается: Fireborn
+	Начало: 2019-09-20 11:45:00
+	Победитель: Fireborn
+
+2)
+	Атакует: Fireborn
+	Защищается: \"Берсерк\"
+	Начало: 2019-09-19 13:45:00
+	Победитель: \"Берсерк\"
+
+3)
+	Атакует: \"Берсерк\"
+	Защищается: Отряд Самоубийц
+	Начало: 2019-09-18 16:30:00
+	Победитель: Отряд Самоубийц
+
+4)
+	Атакует: \"Берсерк\"
+	Защищается: Fireborn
+	Начало: 2019-09-17 15:30:00
+	Победитель: \"Берсерк\"
+
+5)
+	Атакует: \"Берсерк\"
+	Защищается: Epic
+	Начало: 2019-09-16 17:00:00
+	Победитель: Epic
+</pre>";
+	$bot->sendMessage($message->getChat()->getId(), $answer, "html", null, null, $keyboard);
+});
 $bot->command('test', function ($message) use ($bot) {
 	$answer = 'Ура! Я сам что то написал!' . var_export($message, true);
 	$bot->sendMessage($message->getChat()->getId(), $answer);
