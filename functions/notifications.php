@@ -117,12 +117,24 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 }
 print_r($notifications);
 
-$query = "select distinct on (id) timemark,id,nick,frags,deaths,level,clan,folder from players order by id, timemark desc;\n";
+$query = "SELECT * from users";
 $result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
-$notifications = array();
+// $notifications = array();
 while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 	foreach ($notifications as $notification) {
 		if ($notification->user_id == $line["id"]) {
+			$notification->in_game_id = $line["game_id"];
+		}
+	}
+}
+print_r($notifications);
+
+$query = "select distinct on (id) timemark,id,nick,frags,deaths,level,clan,folder from players order by id, timemark desc;\n";
+$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+// $notifications = array();
+while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+	foreach ($notifications as $notification) {
+		if ($notification->in_game_id == $line["id"]) {
 			$notification->clan_id = $line["clan"];
 		}
 	}
@@ -219,6 +231,7 @@ class NotificationBot {
 	public $id;
 	public $chat_id;
 	public $user_id;
+	public $in_game_id;
 	public $type;
 	public $time;
 	public $clan_id;
