@@ -163,13 +163,8 @@ foreach ($notifications as $notification) {
 					if ($d == $notification->time) {
 						$answer = "Скоро битва!";
 						echo $answer;
-						$bot->sendMessage($notification->chat_id, $answer, "html", null, null, null);
-						$push = new Pushover();
+						$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
 
-						$push->setToken('a5g19h6if4cdvvfrdw8n5najpm68rb');
-						$push->setUser($user->user_key);
-
-						$push->setTitle('Скоро битва!');
 						if ($notification->clan_id == $fight->attacker_id) {
 							$answer = 'Через ' . $time . ' минут начнется бой против ' . $fight->defender . ' за ' . $fight->to;
 
@@ -177,7 +172,7 @@ foreach ($notifications as $notification) {
 							$answer = 'Через ' . $time . ' минут начнется бой против ' . $fight->attacker . ' за ' . $fight->to;
 
 						}
-						$bot->sendMessage($notification->chat_id, $answer, "html", null, null, null);
+						$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
 
 					}
 				}
