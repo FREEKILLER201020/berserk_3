@@ -123,10 +123,10 @@ foreach ($not as $user) {
 				$push->setUser($user->user_key);
 
 				$push->setTitle('Скоро битва!');
-				if ($user->user_clan == $fight->winer_id) {
+				if (($user->user_clan == $fight->winer_id) && ($user->user_clan == $fight->attacker_id)) {
 					$push->setMessage('Ура! Победа! Мы отбили ' . $fight->to . ' у ' . $fight->defender);
 
-				} else if ($user->user_clan != $fight->winer_id) {
+				} else if (($user->user_clan != $fight->winer_id) && ($user->user_clan == $fight->defender_id)) {
 					$push->setMessage('Поражение... Мы отдали ' . $fight->to . ' клану ' . $fight->attacker);
 
 				}
