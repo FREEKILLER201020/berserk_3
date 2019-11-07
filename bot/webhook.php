@@ -281,7 +281,7 @@ $bot->on(function ($Update) use ($bot) {
 	}
 	// нет
 	if ((mb_stripos($mtext, "Нет.") !== false) && (GetState($message, $bot) == "notifications2")) {
-		// $answer = "part2";
+		$answer = "Ок";
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 		// Notif2($message, $bot);
