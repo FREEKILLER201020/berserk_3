@@ -55,9 +55,13 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 	array_push($fights, $tmp);
 }
 
-$tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 16:05:00", "Fireborn", "2019-11-07 16:10:31", 6, 171, 171);
+$tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 16:05:00", "Fireborn", "2019-11-07 16:20:00", 6, 171, 171);
 array_push($fights, $tmp);
-$tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 16:05:00", "Fireborn", "2019-11-07 16:10:00", 6, 171, 6);
+$tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 16:05:00", "Fireborn", "2019-11-07 16:21:10", 6, 171, 6);
+array_push($fights, $tmp);
+$tmp = new FightClassNot("\"Берсерк\"", "Fireborn", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 16:05:00", "Fireborn", "2019-11-07 16:22:29", 6, 171, 171);
+array_push($fights, $tmp);
+$tmp = new FightClassNot("\"Берсерк\"", "Fireborn", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 16:05:00", "Fireborn", "2019-11-07 16:23:59", 6, 171, 6);
 array_push($fights, $tmp);
 print_r($fights);
 // exit();
@@ -125,12 +129,18 @@ foreach ($not as $user) {
 				$push->setUser($user->user_key);
 
 				$push->setTitle('Скоро битва!');
-				if (($user->user_clan == $fight->winer_id) && ($user->user_clan == $fight->attacker_id)) {
-					$push->setMessage('Ура! Победа! Мы отбили ' . $fight->to . ' у ' . $fight->defender);
-
-				} else if (($user->user_clan != $fight->winer_id) && ($user->user_clan == $fight->defender_id)) {
-					$push->setMessage('Поражение... Мы отдали ' . $fight->to . ' клану ' . $fight->attacker);
-
+				if ($user->user_clan == $fight->winer_id) {
+					if ($user->user_clan == $fight->attacker_id) {
+						$push->setMessage($d . 'Ура! Победа! Мы отбили ' . $fight->to . ' у ' . $fight->defender);
+					} else if ($user->user_clan == $fight->defender_id) {
+						$push->setMessage($d . 'Ура! Победа! Мы защитили ' . $fight->to . ' от ' . $fight->attacker);
+					}
+				} else if ($user->user_clan != $fight->winer_id) {
+					if ($user->user_clan == $fight->defender_id) {
+						$push->setMessage($d . 'Поражение... Мы отдали ' . $fight->to . ' клану ' . $fight->attacker);
+					} else if ($user->user_clan == $fight->defender_id) {
+						$push->setMessage($d . 'Поражение... Мы не смогли отбить ' . $fight->to . ' у ' . $fight->defender);
+					}
 				}
 				// $push->setUrl('http://chris.schalenborgh.be/blog/');
 				// $push->setUrlTitle('cool php blog');
