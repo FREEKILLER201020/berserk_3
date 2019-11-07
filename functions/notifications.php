@@ -112,7 +112,7 @@ $query = "SELECT * from bot_notification";
 $result = pg_query($query);
 $notifications = array();
 while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-	$tmp = new Notification_bot($line["id"], $line["chat_id"], $line["user_id"], $line["notification_type"], $line["pre_start_time"]);
+	$tmp = new NotificationBot($line["id"], $line["chat_id"], $line["user_id"], $line["notification_type"], $line["pre_start_time"]);
 	array_push($notifications, $tmp);
 }
 
