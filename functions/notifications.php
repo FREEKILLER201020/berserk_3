@@ -106,7 +106,7 @@ foreach ($not as $user) {
 }
 
 $token = "681634726:AAHafNwa8T3LXlezmIAUH-JjBGrI0qU-lfY";
-$bot = new \TelegramBot\Api\Client($token);
+// $bot = new \TelegramBot\Api\Client($token);
 
 $query = "SELECT * from bot_notification";
 $result = pg_query($query);
