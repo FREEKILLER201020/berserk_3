@@ -55,13 +55,13 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 	array_push($fights, $tmp);
 }
 
-$tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 16:05:00", "Fireborn", "2019-11-07 16:20:00", 6, 171, 171);
+$tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 16:05:00", "Fireborn", "2019-11-07 16:25:00", 6, 171, 171);
 array_push($fights, $tmp);
-$tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 16:05:00", "Fireborn", "2019-11-07 16:21:10", 6, 171, 6);
+$tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 16:05:00", "Fireborn", "2019-11-07 16:26:10", 6, 171, 6);
 array_push($fights, $tmp);
-$tmp = new FightClassNot("\"Берсерк\"", "Fireborn", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 16:05:00", "Fireborn", "2019-11-07 16:22:29", 6, 171, 171);
+$tmp = new FightClassNot("\"Берсерк\"", "Fireborn", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 16:05:00", "Fireborn", "2019-11-07 16:27:29", 171, 6, 171);
 array_push($fights, $tmp);
-$tmp = new FightClassNot("\"Берсерк\"", "Fireborn", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 16:05:00", "Fireborn", "2019-11-07 16:23:59", 6, 171, 6);
+$tmp = new FightClassNot("\"Берсерк\"", "Fireborn", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 16:05:00", "Fireborn", "2019-11-07 16:28:59", 171, 6, 6);
 array_push($fights, $tmp);
 print_r($fights);
 // exit();
@@ -122,13 +122,13 @@ foreach ($not as $user) {
 			$d = round(($timestamp1 - $timestamp2) / 60);
 			echo $d . PHP_EOL;
 
-			if (($d >= -0) && ($d <= 1)) {
+			if (($d >= -0) && ($d < 1)) {
 				$push = new Pushover();
 
 				$push->setToken('a5g19h6if4cdvvfrdw8n5najpm68rb');
 				$push->setUser($user->user_key);
 
-				$push->setTitle('Скоро битва!');
+				$push->setTitle('Результат битвы!');
 				if ($user->user_clan == $fight->winer_id) {
 					if ($user->user_clan == $fight->attacker_id) {
 						$push->setMessage($d . 'Ура! Победа! Мы отбили ' . $fight->to . ' у ' . $fight->defender);
