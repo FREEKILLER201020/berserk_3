@@ -109,15 +109,16 @@ $token = "681634726:AAHafNwa8T3LXlezmIAUH-JjBGrI0qU-lfY";
 // $bot = new \TelegramBot\Api\Client($token);
 
 $query = "SELECT * from bot_notification";
-$result = pg_query($query);
+$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 $notifications = array();
 while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 	$tmp = new NotificationBot($line["id"], $line["chat_id"], $line["user_id"], $line["notification_type"], $line["pre_start_time"]);
 	array_push($notifications, $tmp);
 }
+print_r($notifications);
 
 $query = "select distinct on (id) timemark,id,nick,frags,deaths,level,clan,folder from players order by id, timemark desc;\n";
-$result = pg_query($query);
+$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 $notifications = array();
 while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 	foreach ($notifications as $notification) {
