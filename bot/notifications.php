@@ -150,7 +150,7 @@ print_r($notifications);
 
 foreach ($notifications as $notification) {
 	if ($notification->type == 1) {
-		if ($notification->chat_id == 249857309) {
+		if ($notification->chat_id == 221998912) {
 			foreach ($fights as $fight) {
 				if (($notification->clan_id == $fight->attacker_id) || ($notification->clan_id == $fight->defender_id)) {
 					$d = date('Y-m-d H:i:s');
