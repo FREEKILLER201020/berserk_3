@@ -2,6 +2,7 @@
 require "../classes/fight.php";
 require "../classes/notofication.php";
 include '../classes/pushover.php';
+require_once "vendor/autoload.php";
 
 date_default_timezone_set('Europe/London');
 $time = 30;
