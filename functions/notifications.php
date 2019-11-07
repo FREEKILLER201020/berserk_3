@@ -50,12 +50,12 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 	$from = $line[from];
 	$to = $line[to];
 
-	$tmp = new FightClassNot($attacker, $defender, $from, $to, $line[declared], $line[resolved], $line[winer], $line[ended], $line[attacker], $line[defender]);
+	$tmp = new FightClassNot($attacker, $defender, $from, $to, $line[declared], $line[resolved], $line[winer], $line[ended], $line[attacker], $line[defender], $line[winer]);
 	array_push($fights, $tmp);
 }
 
-$tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 19:45:00", "Fireborn", "", 6, 171);
-array_push($fights, $tmp);
+// $tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 19:45:00", "Fireborn", "", 6, 171);
+// array_push($fights, $tmp);
 print_r($fights);
 // exit();
 

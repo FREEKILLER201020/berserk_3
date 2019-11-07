@@ -10,8 +10,8 @@ $file = file_get_contents(realpath(dirname(__FILE__)) . "/../.config.json");
 $config = json_decode($file, true);
 $query = "host={$config['host']} dbname={$config['dbname']} user={$config['user']} password={$config['password']}";
 $dbconn = pg_pconnect($query) or die('Не удалось соединиться: ' . pg_last_error());
-$query = "select * from attacks where ended is null order by resolved desc;\n";
-// $query = "select * from attacks order by resolved desc;\n";
+// $query = "select * from attacks where ended is null order by resolved desc;\n";
+$query = "select * from attacks order by resolved desc;\n";
 
 $result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 $fights = array();
@@ -51,7 +51,7 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 	$from = $line[from];
 	$to = $line[to];
 
-	$tmp = new FightClassNot($attacker, $defender, $from, $to, $line[declared], $line[resolved], $line[winer], $line[ended], $line[attacker], $line[defender]);
+	$tmp = new FightClassNot($attacker, $defender, $from, $to, $line[declared], $line[resolved], $line[winer], $line[ended], $line[attacker], $line[defender], $line[winer]);
 	array_push($fights, $tmp);
 }
 
@@ -95,6 +95,39 @@ foreach ($not as $user) {
 
 				} else if ($user->user_clan == $fight->defender_id) {
 					$push->setMessage('Через ' . $time . ' минут начнется бой против ' . $fight->attacker . ' за ' . $fight->to);
+
+				}
+				// $push->setUrl('http://chris.schalenborgh.be/blog/');
+				// $push->setUrlTitle('cool php blog');
+				// $push->setDevice('pixel2xl');
+				$push->setPriority(0);
+				// $push->setRetry(60); //Used with Priority = 2; Pushover will resend the notification every 60 seconds until the user accepts.
+				// $push->setExpire(3600); //Used with Priority = 2; Pushover will resend the notification every 60 seconds for 3600 seconds. After that point, it stops sending notifications.
+				// $push->setTimestamp(time());
+				print_r($push);
+				$push->send();
+			}
+		}
+		if (($user->user_clan == $fight->attacker_id) || ($user->user_clan == $fight->defender_id)) {
+			$d = date('Y-m-d H:i:s');
+			echo $d . PHP_EOL;
+			$timestamp1 = strtotime($d) - 60 * 60;
+			$timestamp2 = strtotime($fight->ended);
+			$d = round(($timestamp2 - $timestamp1) / 60);
+			echo $d . PHP_EOL;
+
+			if (($d >= 0) && ($d <= 1)) {
+				$push = new Pushover();
+
+				$push->setToken('a5g19h6if4cdvvfrdw8n5najpm68rb');
+				$push->setUser($user->user_key);
+
+				$push->setTitle('Скоро битва!');
+				if ($user->user_clan == $fight->winer_id) {
+					$push->setMessage('Ура! Победа! Мы отбили ' . $fight->to . ' у ' . $fight->defender);
+
+				} else if ($user->user_clan != $fight->winer_id) {
+					$push->setMessage('Поражение... Мы отдали ' . $fight->to . ' клану ' . $fight->attacker);
 
 				}
 				// $push->setUrl('http://chris.schalenborgh.be/blog/');

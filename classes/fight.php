@@ -35,12 +35,13 @@ class FightClassNot {
 	public $declared; // время, когда был объявлен бой
 	public $resolved; // вермя, когда состаится бой
 	public $ended; // вермя, когда состаится бой
+	public $winer_id
 
 	// public $in_progress; // флаг, активен ли бой
 	public $winer;
 	public $was = 0;
 
-	public function __construct($a, $d, $f, $t, $de, $r, $w, $end, $id1, $id2) {
+	public function __construct($a, $d, $f, $t, $de, $r, $w, $end, $id1, $id2,$id3) {
 		$this->attacker = $a;
 		$this->defender = $d;
 		$this->from = $f;
@@ -51,6 +52,7 @@ class FightClassNot {
 		$this->ended = $end;
 		$this->attacker_id = $id1;
 		$this->defender_id = $id2;
+		$this->winer_id=$id3;
 	}
 }
 
