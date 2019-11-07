@@ -11,7 +11,7 @@ $config = json_decode($file, true);
 $query = "host={$config['host']} dbname={$config['dbname']} user={$config['user']} password={$config['password']}";
 $dbconn = pg_pconnect($query) or die('Не удалось соединиться: ' . pg_last_error());
 $query = "select * from attacks where ended is null order by resolved desc;\n";
-$query = "select * from attacks order by resolved desc;\n";
+// $query = "select * from attacks order by resolved desc;\n";
 
 $result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 $fights = array();
