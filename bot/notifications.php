@@ -55,7 +55,7 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 	array_push($fights, $tmp);
 }
 
-$tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 19:00:00", "Fireborn", "", 6, 171);
+$tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 17:00:00", "Fireborn", "", 6, 171);
 array_push($fights, $tmp);
 print_r($fights);
 // exit();
