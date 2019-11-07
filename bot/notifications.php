@@ -55,8 +55,8 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 	array_push($fights, $tmp);
 }
 
-$tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 16:05:00", "Fireborn", "", 6, 171);
-array_push($fights, $tmp);
+// $tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 16:05:00", "Fireborn", "", 6, 171);
+// array_push($fights, $tmp);
 print_r($fights);
 // exit();
 
@@ -150,34 +150,34 @@ print_r($notifications);
 
 foreach ($notifications as $notification) {
 	if ($notification->type == 1) {
-		if ($notification->chat_id == 249857309) {
-			foreach ($fights as $fight) {
-				if (($notification->clan_id == $fight->attacker_id) || ($notification->clan_id == $fight->defender_id)) {
-					$d = date('Y-m-d H:i:s');
-					echo $d . PHP_EOL;
-					$timestamp1 = strtotime($d) - 60 * 60;
-					$timestamp2 = strtotime($fight->resolved);
-					$d = round(($timestamp2 - $timestamp1) / 60);
-					echo $d . PHP_EOL;
+		// if ($notification->chat_id == 249857309) {
+		foreach ($fights as $fight) {
+			if (($notification->clan_id == $fight->attacker_id) || ($notification->clan_id == $fight->defender_id)) {
+				$d = date('Y-m-d H:i:s');
+				echo $d . PHP_EOL;
+				$timestamp1 = strtotime($d) - 60 * 60;
+				$timestamp2 = strtotime($fight->resolved);
+				$d = round(($timestamp2 - $timestamp1) / 60);
+				echo $d . PHP_EOL;
 
-					if ($d == $notification->time) {
-						$answer = "Скоро битва!";
-						echo $answer;
-						$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
+				if ($d == $notification->time) {
+					$answer = "Скоро битва!";
+					echo $answer;
+					$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
 
-						if ($notification->clan_id == $fight->attacker_id) {
-							$answer = 'Через ' . $time . ' минут начнется бой против ' . $fight->defender . ' за ' . $fight->to;
+					if ($notification->clan_id == $fight->attacker_id) {
+						$answer = 'Через ' . $time . ' минут начнется бой против ' . $fight->defender . ' за ' . $fight->to;
 
-						} else if ($notification->clan_id == $fight->defender_id) {
-							$answer = 'Через ' . $time . ' минут начнется бой против ' . $fight->attacker . ' за ' . $fight->to;
-
-						}
-						$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
+					} else if ($notification->clan_id == $fight->defender_id) {
+						$answer = 'Через ' . $time . ' минут начнется бой против ' . $fight->attacker . ' за ' . $fight->to;
 
 					}
+					$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
+
 				}
 			}
 		}
+		// }
 	}
 }
 pg_free_result($result);
