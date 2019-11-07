@@ -55,14 +55,14 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 	array_push($fights, $tmp);
 }
 
-$tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 16:05:00", "Fireborn", "2019-11-07 16:25:00", 6, 171, 171);
-array_push($fights, $tmp);
-$tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 16:05:00", "Fireborn", "2019-11-07 16:26:10", 6, 171, 6);
-array_push($fights, $tmp);
-$tmp = new FightClassNot("\"Берсерк\"", "Fireborn", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 16:05:00", "Fireborn", "2019-11-07 16:27:29", 171, 6, 171);
-array_push($fights, $tmp);
-$tmp = new FightClassNot("\"Берсерк\"", "Fireborn", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 16:05:00", "Fireborn", "2019-11-07 16:28:59", 171, 6, 6);
-array_push($fights, $tmp);
+// $tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 16:05:00", "Fireborn", "2019-11-07 16:25:00", 6, 171, 171);
+// array_push($fights, $tmp);
+// $tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 16:05:00", "Fireborn", "2019-11-07 16:26:10", 6, 171, 6);
+// array_push($fights, $tmp);
+// $tmp = new FightClassNot("\"Берсерк\"", "Fireborn", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 16:05:00", "Fireborn", "2019-11-07 16:27:29", 171, 6, 171);
+// array_push($fights, $tmp);
+// $tmp = new FightClassNot("\"Берсерк\"", "Fireborn", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 16:05:00", "Fireborn", "2019-11-07 16:28:59", 171, 6, 6);
+// array_push($fights, $tmp);
 print_r($fights);
 // exit();
 
@@ -122,7 +122,7 @@ foreach ($not as $user) {
 			$d = round(($timestamp1 - $timestamp2) / 60);
 			echo $d . PHP_EOL;
 
-			if (($d >= -0) && ($d < 1)) {
+			if (($d >= -0) && ($d <= 1)) {
 				$push = new Pushover();
 
 				$push->setToken('a5g19h6if4cdvvfrdw8n5najpm68rb');
