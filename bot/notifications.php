@@ -55,7 +55,7 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 	array_push($fights, $tmp);
 }
 
-$tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 19:50:00", "Fireborn", "", 6, 171);
+$tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 19:55:00", "Fireborn", "", 6, 171);
 array_push($fights, $tmp);
 print_r($fights);
 // exit();
@@ -150,7 +150,7 @@ print_r($notifications);
 
 foreach ($notifications as $notification) {
 	if ($notification->type == 1) {
-		if ($notification->chat_id == 221998912) {
+		if ($notification->chat_id == 249857309) {
 			foreach ($fights as $fight) {
 				if (($notification->clan_id == $fight->attacker_id) || ($notification->clan_id == $fight->defender_id)) {
 					$d = date('Y-m-d H:i:s');
