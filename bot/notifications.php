@@ -55,7 +55,7 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 	array_push($fights, $tmp);
 }
 
-$tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 16:05:00", "Fireborn", "2019-11-07 16:00:00", 6, 171, 171);
+$tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-07 19:00:00", "2019-11-07 16:05:00", "Fireborn", "2019-11-07 16:06:31", 6, 171, 171);
 array_push($fights, $tmp);
 print_r($fights);
 // exit();
@@ -116,7 +116,7 @@ foreach ($not as $user) {
 			$d = round(($timestamp2 - $timestamp1) / 60);
 			echo $d . PHP_EOL;
 
-			if (($d >= 0) && ($d <= 1)) {
+			if (($d >= -0) && ($d <= 1)) {
 				$push = new Pushover();
 
 				$push->setToken('a5g19h6if4cdvvfrdw8n5najpm68rb');
