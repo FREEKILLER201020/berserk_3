@@ -54,7 +54,13 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 	$tmp = new FightClassNot($attacker, $defender, $from, $to, $line[declared], $line[resolved], $line[winer], $line[ended], $line[attacker], $line[defender], $line[winer]);
 	array_push($fights, $tmp);
 }
-
+// 16=19
+// 20-00 начало битвы (19-30 скоро битва!)
+// 19-10 победа защитили
+// 19-11 поражение не защитили
+// 19-12 победа отбили
+// 19-13 поражение не отбили
+// 20-10 поражение не отбили
 $tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-08 15:00:00", "2019-11-08 16:00:00", "Fireborn", "2019-11-08 16:10:00", 6, 171, 171);
 array_push($fights, $tmp);
 $tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-08 15:00:00", "2019-11-08 16:00:00", "Fireborn", "2019-11-08 16:11:10", 6, 171, 6);
