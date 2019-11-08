@@ -88,7 +88,7 @@ foreach ($not as $user) {
 			echo $d . PHP_EOL;
 			$timestamp1 = strtotime($d) - 60 * 60;
 			$timestamp2 = strtotime($fight->resolved);
-			$d = round(($timestamp1 - $timestamp2) / 60);
+			$d = round(($timestamp2 - $timestamp1) / 60);
 			echo $d . PHP_EOL;
 
 			if ($d == $time) {
