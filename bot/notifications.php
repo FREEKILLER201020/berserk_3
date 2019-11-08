@@ -13,7 +13,7 @@ $dbconn = pg_pconnect($query) or die('Не удалось соединиться
 // $query = "select * from attacks where ended is null order by resolved desc;\n";
 // $query = "select * from attacks order by resolved desc;\n";
 
-$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+// $result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 $fights = array();
 while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 	$query2 = "SELECT distinct on (id) timemark,id,title, points, created, gone from clans where timemark<='$line[resolved]';\n";
