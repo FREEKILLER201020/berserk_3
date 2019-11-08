@@ -11,9 +11,9 @@ $config = json_decode($file, true);
 $query = "host={$config['host']} dbname={$config['dbname']} user={$config['user']} password={$config['password']}";
 $dbconn = pg_pconnect($query) or die('Не удалось соединиться: ' . pg_last_error());
 // $query = "select * from attacks where ended is null order by resolved desc;\n";
-// $query = "select * from attacks order by resolved desc;\n";
+$query = "select * from attacks order by resolved desc;\n";
 
-// $result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 $fights = array();
 while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 	$query2 = "SELECT distinct on (id) timemark,id,title, points, created, gone from clans where timemark<='$line[resolved]';\n";
@@ -55,15 +55,15 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 	array_push($fights, $tmp);
 }
 
-$tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-08 15:00:00", "2019-11-08 16:00:00", "Fireborn", "2019-11-08 16:01:00", 6, 171, 171);
+$tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-08 15:00:00", "2019-11-08 16:00:00", "Fireborn", "2019-11-08 16:10:00", 6, 171, 171);
 array_push($fights, $tmp);
-$tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-08 15:00:00", "2019-11-08 16:00:00", "Fireborn", "2019-11-08 16:02:10", 6, 171, 6);
+$tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-08 15:00:00", "2019-11-08 16:00:00", "Fireborn", "2019-11-08 16:11:10", 6, 171, 6);
 array_push($fights, $tmp);
-$tmp = new FightClassNot("\"Берсерк\"", "Fireborn", "Мир Кефки", "Лихолесье", "2019-11-08 15:00:00", "2019-11-08 16:00:00", "Fireborn", "2019-11-08 16:03:29", 171, 6, 171);
+$tmp = new FightClassNot("\"Берсерк\"", "Fireborn", "Мир Кефки", "Лихолесье", "2019-11-08 15:00:00", "2019-11-08 16:00:00", "Fireborn", "2019-11-08 16:12:29", 171, 6, 171);
 array_push($fights, $tmp);
-$tmp = new FightClassNot("\"Берсерк\"", "Fireborn", "Мир Кефки", "Лихолесье", "2019-11-08 15:00:00", "2019-11-08 16:00:00", "Fireborn", "2019-11-08 16:04:59", 171, 6, 6);
+$tmp = new FightClassNot("\"Берсерк\"", "Fireborn", "Мир Кефки", "Лихолесье", "2019-11-08 15:00:00", "2019-11-08 16:00:00", "Fireborn", "2019-11-08 16:13:59", 171, 6, 6);
 array_push($fights, $tmp);
-$tmp = new FightClassNot("\"Берсерк\"", "Fireborn", "Мир Кефки", "Лихолесье", "2019-11-08 15:00:00", "2019-11-08 16:40:00", "Fireborn", "2019-11-08 16:04:59", 171, 6, 6);
+$tmp = new FightClassNot("\"Берсерк\"", "Fireborn", "Мир Кефки", "Лихолесье", "2019-11-08 15:00:00", "2019-11-08 17:00:00", "Fireborn", "2019-11-08 17:10:59", 171, 6, 6);
 array_push($fights, $tmp);
 print_r($fights);
 // exit();
