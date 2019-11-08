@@ -208,7 +208,7 @@ foreach ($notifications as $notification) {
 			if (($notification->clan_id == $fight->attacker_id) || ($notification->clan_id == $fight->defender_id)) {
 				$d = date('Y-m-d H:i:s');
 				echo $d . PHP_EOL;
-				$timestamp1 = strtotime($d) - 60 * 60;
+				$timestamp1 = strtotime($d);
 				$timestamp2 = strtotime($fight->resolved);
 				$d = round(($timestamp2 - $timestamp1) / 60);
 				echo $d . PHP_EOL;
