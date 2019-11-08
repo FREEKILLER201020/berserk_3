@@ -63,6 +63,8 @@ $tmp = new FightClassNot("\"Берсерк\"", "Fireborn", "Мир Кефки", 
 array_push($fights, $tmp);
 $tmp = new FightClassNot("\"Берсерк\"", "Fireborn", "Мир Кефки", "Лихолесье", "2019-11-08 15:00:00", "2019-11-08 16:00:00", "Fireborn", "2019-11-08 16:04:59", 171, 6, 6);
 array_push($fights, $tmp);
+$tmp = new FightClassNot("\"Берсерк\"", "Fireborn", "Мир Кефки", "Лихолесье", "2019-11-08 15:00:00", "2019-11-08 16:40:00", "Fireborn", "2019-11-08 16:04:59", 171, 6, 6);
+array_push($fights, $tmp);
 print_r($fights);
 // exit();
 
