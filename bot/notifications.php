@@ -105,12 +105,13 @@ foreach ($not as $user) {
 
 				$push->setTitle('Скоро битва!');
 				if ($user->user_clan == $fight->attacker_id) {
-					$push->setMessage('Через ' . $time . ' минут начнется бой против ' . $fight->defender . ' за ' . $fight->to);
+					$push->setMessage('Через ' . $time . ' минут начнется бой против ' . $fight->defender . ' за ' . $fight->to . ' (защищаемся)');
 
 				} else if ($user->user_clan == $fight->defender_id) {
-					$push->setMessage('Через ' . $time . ' минут начнется бой против ' . $fight->attacker . ' за ' . $fight->to);
+					$push->setMessage('Через ' . $time . ' минут начнется бой против ' . $fight->attacker . ' за ' . $fight->to . ' (атакуем)');
 
 				}
+
 				// $push->setUrl('http://chris.schalenborgh.be/blog/');
 				// $push->setUrlTitle('cool php blog');
 				// $push->setDevice('pixel2xl');
@@ -123,14 +124,17 @@ foreach ($not as $user) {
 			}
 		}
 		if (($user->user_clan == $fight->attacker_id) || ($user->user_clan == $fight->defender_id)) {
+			echo "_____________________________" . PHP_EOL;
 			$d = date('Y-m-d H:i:s');
 			echo $d . PHP_EOL;
+			// echo $d . PHP_EOL;
 			$timestamp1 = strtotime($d);
 			$timestamp2 = strtotime($fight->ended);
-			$d = round(($timestamp2 - $timestamp1) / 60);
+			$d = round(($timestamp1 - $timestamp2) / 60);
+			echo $fight->ended . PHP_EOL;
 			echo $d . PHP_EOL;
 
-			if (($d >= -0) && ($d <= 1)) {
+			if (($d > 0) && ($d <= 1)) {
 				$push = new Pushover();
 
 				$push->setToken('a5g19h6if4cdvvfrdw8n5najpm68rb');
@@ -219,10 +223,10 @@ foreach ($notifications as $notification) {
 					$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
 
 					if ($notification->clan_id == $fight->attacker_id) {
-						$answer = 'Через ' . $time . ' минут начнется бой против ' . $fight->defender . ' за ' . $fight->to;
+						$answer = 'Через ' . $time . ' минут начнется бой против ' . $fight->defender . ' за ' . $fight->to . ' (защищаемся)';
 
 					} else if ($notification->clan_id == $fight->defender_id) {
-						$answer = 'Через ' . $time . ' минут начнется бой против ' . $fight->attacker . ' за ' . $fight->to;
+						$answer = 'Через ' . $time . ' минут начнется бой против ' . $fight->attacker . ' за ' . $fight->to . ' (атакуем)';
 
 					}
 					$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
