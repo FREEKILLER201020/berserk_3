@@ -133,19 +133,7 @@ foreach ($not as $user) {
 
 				$push->setTitle('Бой отменен.');
 				$push->setMessage('Бой против ' . $fight->defender . ' за ' . $fight->to . ' (защищаемся) был отменен');
-				if ($user->user_clan == $fight->winer_id) {
-					if ($user->user_clan == $fight->attacker_id) {
-						$push->setMessage($d . 'Ура! Победа! Мы отбили ' . $fight->to . ' у ' . $fight->defender);
-					} else if ($user->user_clan == $fight->defender_id) {
-						$push->setMessage($d . 'Ура! Победа! Мы защитили ' . $fight->to . ' от ' . $fight->attacker);
-					}
-				} else if ($user->user_clan != $fight->winer_id) {
-					if ($user->user_clan == $fight->defender_id) {
-						$push->setMessage($d . 'Поражение... Мы отдали ' . $fight->to . ' клану ' . $fight->attacker);
-					} else if ($user->user_clan == $fight->attacker_id) {
-						$push->setMessage($d . 'Поражение... Мы не смогли отбить ' . $fight->to . ' у ' . $fight->defender);
-					}
-				}
+
 				// $push->setUrl('http://chris.schalenborgh.be/blog/');
 				// $push->setUrlTitle('cool php blog');
 				// $push->setDevice('pixel2xl');
