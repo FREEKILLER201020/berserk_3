@@ -126,23 +126,34 @@ foreach ($not as $user) {
 			$timestamp1 = strtotime($fight->resolved);
 			$timestamp2 = strtotime($fight->ended);
 			if ($timestamp1 > $timestamp2) {
-				$push = new Pushover();
+				$d = date('Y-m-d H:i:s');
+				echo $d . PHP_EOL;
+				// echo $d . PHP_EOL;
+				$timestamp1 = strtotime($d);
+				$timestamp2 = strtotime($fight->ended);
+				$d = round(($timestamp1 - $timestamp2) / 60);
+				echo $fight->ended . PHP_EOL;
+				echo $d . PHP_EOL;
 
-				$push->setToken('a5g19h6if4cdvvfrdw8n5najpm68rb');
-				$push->setUser($user->user_key);
+				if (($d > 0) && ($d <= 1)) {
+					$push = new Pushover();
 
-				$push->setTitle('Бой отменен.');
-				$push->setMessage('Бой против ' . $fight->defender . ' за ' . $fight->to . ' (защищаемся) был отменен');
+					$push->setToken('a5g19h6if4cdvvfrdw8n5najpm68rb');
+					$push->setUser($user->user_key);
 
-				// $push->setUrl('http://chris.schalenborgh.be/blog/');
-				// $push->setUrlTitle('cool php blog');
-				// $push->setDevice('pixel2xl');
-				$push->setPriority(0);
-				// $push->setRetry(60); //Used with Priority = 2; Pushover will resend the notification every 60 seconds until the user accepts.
-				// $push->setExpire(3600); //Used with Priority = 2; Pushover will resend the notification every 60 seconds for 3600 seconds. After that point, it stops sending notifications.
-				// $push->setTimestamp(time());
-				print_r($push);
-				$push->send();
+					$push->setTitle('Бой отменен.');
+					$push->setMessage('Бой против ' . $fight->defender . ' за ' . $fight->to . ' (защищаемся) был отменен');
+
+					// $push->setUrl('http://chris.schalenborgh.be/blog/');
+					// $push->setUrlTitle('cool php blog');
+					// $push->setDevice('pixel2xl');
+					$push->setPriority(0);
+					// $push->setRetry(60); //Used with Priority = 2; Pushover will resend the notification every 60 seconds until the user accepts.
+					// $push->setExpire(3600); //Used with Priority = 2; Pushover will resend the notification every 60 seconds for 3600 seconds. After that point, it stops sending notifications.
+					// $push->setTimestamp(time());
+					print_r($push);
+					$push->send();
+				}
 			} else {
 				echo "_____________________________" . PHP_EOL;
 				$d = date('Y-m-d H:i:s');
