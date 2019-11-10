@@ -87,90 +87,90 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 }
 
 // print_r($not);
-while (1) {
-	# code...
+// while (1) {
+# code...
 
-	foreach ($not as $user) {
-		foreach ($fights as $fight) {
-			// if (($user->user_clan == $fight->attacker_id) || ($user->user_clan == $fight->defender_id)) {
-			// 	$d = date('Y-m-d H:i:s');
-			// 	echo $d . PHP_EOL;
-			// 	$timestamp1 = strtotime($d);
-			// 	$timestamp2 = strtotime($fight->resolved);
-			// 	$d = round(($timestamp2 - $timestamp1) / 60);
-			// 	echo $d . PHP_EOL;
+foreach ($not as $user) {
+	foreach ($fights as $fight) {
+		// if (($user->user_clan == $fight->attacker_id) || ($user->user_clan == $fight->defender_id)) {
+		// 	$d = date('Y-m-d H:i:s');
+		// 	echo $d . PHP_EOL;
+		// 	$timestamp1 = strtotime($d);
+		// 	$timestamp2 = strtotime($fight->resolved);
+		// 	$d = round(($timestamp2 - $timestamp1) / 60);
+		// 	echo $d . PHP_EOL;
 
-			// 	if ($d == $time) {
-			// 		$push = new Pushover();
+		// 	if ($d == $time) {
+		// 		$push = new Pushover();
 
-			// 		$push->setToken('a5g19h6if4cdvvfrdw8n5najpm68rb');
-			// 		$push->setUser($user->user_key);
+		// 		$push->setToken('a5g19h6if4cdvvfrdw8n5najpm68rb');
+		// 		$push->setUser($user->user_key);
 
-			// 		$push->setTitle('Скоро битва!');
-			// 		if ($user->user_clan == $fight->attacker_id) {
-			// 			$push->setMessage('Через ' . $time . ' минут начнется бой против ' . $fight->defender . ' за ' . $fight->to . ' (защищаемся)');
+		// 		$push->setTitle('Скоро битва!');
+		// 		if ($user->user_clan == $fight->attacker_id) {
+		// 			$push->setMessage('Через ' . $time . ' минут начнется бой против ' . $fight->defender . ' за ' . $fight->to . ' (защищаемся)');
 
-			// 		} else if ($user->user_clan == $fight->defender_id) {
-			// 			$push->setMessage('Через ' . $time . ' минут начнется бой против ' . $fight->attacker . ' за ' . $fight->to . ' (атакуем)');
+		// 		} else if ($user->user_clan == $fight->defender_id) {
+		// 			$push->setMessage('Через ' . $time . ' минут начнется бой против ' . $fight->attacker . ' за ' . $fight->to . ' (атакуем)');
 
-			// 		}
-			// 		// $push->setUrl('http://chris.schalenborgh.be/blog/');
-			// 		// $push->setUrlTitle('cool php blog');
-			// 		// $push->setDevice('pixel2xl');
-			// 		$push->setPriority(0);
-			// 		// $push->setRetry(60); //Used with Priority = 2; Pushover will resend the notification every 60 seconds until the user accepts.
-			// 		// $push->setExpire(3600); //Used with Priority = 2; Pushover will resend the notification every 60 seconds for 3600 seconds. After that point, it stops sending notifications.
-			// 		// $push->setTimestamp(time());
-			// 		print_r($push);
-			// 		$push->send();
-			// 	}
-			// }
-			if (($user->user_clan == $fight->attacker_id) || ($user->user_clan == $fight->defender_id)) {
-				echo "_____________________________" . PHP_EOL;
-				$d = date('Y-m-d H:i:s');
-				echo $d . PHP_EOL;
-				// echo $d . PHP_EOL;
-				$timestamp1 = strtotime($d);
-				$timestamp2 = strtotime($fight->ended);
-				$d = round(($timestamp1 - $timestamp2) / 60);
-				echo $fight->ended . PHP_EOL;
-				echo $d . PHP_EOL;
+		// 		}
+		// 		// $push->setUrl('http://chris.schalenborgh.be/blog/');
+		// 		// $push->setUrlTitle('cool php blog');
+		// 		// $push->setDevice('pixel2xl');
+		// 		$push->setPriority(0);
+		// 		// $push->setRetry(60); //Used with Priority = 2; Pushover will resend the notification every 60 seconds until the user accepts.
+		// 		// $push->setExpire(3600); //Used with Priority = 2; Pushover will resend the notification every 60 seconds for 3600 seconds. After that point, it stops sending notifications.
+		// 		// $push->setTimestamp(time());
+		// 		print_r($push);
+		// 		$push->send();
+		// 	}
+		// }
+		if (($user->user_clan == $fight->attacker_id) || ($user->user_clan == $fight->defender_id)) {
+			echo "_____________________________" . PHP_EOL;
+			$d = date('Y-m-d H:i:s');
+			echo $d . PHP_EOL;
+			// echo $d . PHP_EOL;
+			$timestamp1 = strtotime($d);
+			$timestamp2 = strtotime($fight->ended);
+			$d = round(($timestamp1 - $timestamp2) / 60);
+			echo $fight->ended . PHP_EOL;
+			echo $d . PHP_EOL;
 
-				if (($d > 0) && ($d <= 1)) {
-					$push = new Pushover();
+			if (($d > 0) && ($d <= 1)) {
+				$push = new Pushover();
 
-					$push->setToken('a5g19h6if4cdvvfrdw8n5najpm68rb');
-					$push->setUser($user->user_key);
+				$push->setToken('a5g19h6if4cdvvfrdw8n5najpm68rb');
+				$push->setUser($user->user_key);
 
-					$push->setTitle('Результат битвы! time1: ' . $timestamp1 . ' time2: ' . $timestamp2);
-					if ($user->user_clan == $fight->winer_id) {
-						if ($user->user_clan == $fight->attacker_id) {
-							$push->setMessage($d . 'Ура! Победа! Мы отбили ' . $fight->to . ' у ' . $fight->defender);
-						} else if ($user->user_clan == $fight->defender_id) {
-							$push->setMessage($d . 'Ура! Победа! Мы защитили ' . $fight->to . ' от ' . $fight->attacker);
-						}
-					} else if ($user->user_clan != $fight->winer_id) {
-						if ($user->user_clan == $fight->defender_id) {
-							$push->setMessage($d . 'Поражение... Мы отдали ' . $fight->to . ' клану ' . $fight->attacker);
-						} else if ($user->user_clan == $fight->attacker_id) {
-							$push->setMessage($d . 'Поражение... Мы не смогли отбить ' . $fight->to . ' у ' . $fight->defender);
-						}
+				$push->setTitle('Результат битвы! time1: ' . $timestamp1 . ' time2: ' . $timestamp2);
+				if ($user->user_clan == $fight->winer_id) {
+					if ($user->user_clan == $fight->attacker_id) {
+						$push->setMessage($d . 'Ура! Победа! Мы отбили ' . $fight->to . ' у ' . $fight->defender);
+					} else if ($user->user_clan == $fight->defender_id) {
+						$push->setMessage($d . 'Ура! Победа! Мы защитили ' . $fight->to . ' от ' . $fight->attacker);
 					}
-					// $push->setUrl('http://chris.schalenborgh.be/blog/');
-					// $push->setUrlTitle('cool php blog');
-					// $push->setDevice('pixel2xl');
-					$push->setPriority(0);
-					// $push->setRetry(60); //Used with Priority = 2; Pushover will resend the notification every 60 seconds until the user accepts.
-					// $push->setExpire(3600); //Used with Priority = 2; Pushover will resend the notification every 60 seconds for 3600 seconds. After that point, it stops sending notifications.
-					// $push->setTimestamp(time());
-					print_r($push);
-					$push->send();
+				} else if ($user->user_clan != $fight->winer_id) {
+					if ($user->user_clan == $fight->defender_id) {
+						$push->setMessage($d . 'Поражение... Мы отдали ' . $fight->to . ' клану ' . $fight->attacker);
+					} else if ($user->user_clan == $fight->attacker_id) {
+						$push->setMessage($d . 'Поражение... Мы не смогли отбить ' . $fight->to . ' у ' . $fight->defender);
+					}
 				}
+				// $push->setUrl('http://chris.schalenborgh.be/blog/');
+				// $push->setUrlTitle('cool php blog');
+				// $push->setDevice('pixel2xl');
+				$push->setPriority(0);
+				// $push->setRetry(60); //Used with Priority = 2; Pushover will resend the notification every 60 seconds until the user accepts.
+				// $push->setExpire(3600); //Used with Priority = 2; Pushover will resend the notification every 60 seconds for 3600 seconds. After that point, it stops sending notifications.
+				// $push->setTimestamp(time());
+				print_r($push);
+				$push->send();
 			}
 		}
 	}
-	sleep(60);
 }
+// 	sleep(60);
+// }
 
 // $token = "681634726:AAHafNwa8T3LXlezmIAUH-JjBGrI0qU-lfY";
 // $bot = new \TelegramBot\Api\Client($token);
