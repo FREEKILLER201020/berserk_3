@@ -61,17 +61,17 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 // 19-22 победа отбили
 // 19-23 поражение не отбили
 // 20-10 поражение не отбили
-$tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-08 15:00:00", "2019-11-08 16:00:00", "Fireborn", "2019-11-08 16:20:00", 6, 171, 171);
-array_push($fights, $tmp);
-$tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-08 15:00:00", "2019-11-08 16:00:00", "Fireborn", "2019-11-08 16:21:10", 6, 171, 6);
-array_push($fights, $tmp);
-$tmp = new FightClassNot("\"Берсерк\"", "Fireborn", "Мир Кефки", "Лихолесье", "2019-11-08 15:00:00", "2019-11-08 16:00:00", "Fireborn", "2019-11-08 16:22:29", 171, 6, 171);
-array_push($fights, $tmp);
-$tmp = new FightClassNot("\"Берсерк\"", "Fireborn", "Мир Кефки", "Лихолесье", "2019-11-08 15:00:00", "2019-11-08 16:00:00", "Fireborn", "2019-11-08 16:23:59", 171, 6, 6);
-array_push($fights, $tmp);
-$tmp = new FightClassNot("\"Берсерк\"", "Fireborn", "Мир Кефки", "Лихолесье", "2019-11-08 15:00:00", "2019-11-08 17:00:00", "Fireborn", "2019-11-08 17:10:59", 171, 6, 6);
-array_push($fights, $tmp);
-print_r($fights);
+// $tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-08 15:00:00", "2019-11-08 16:00:00", "Fireborn", "2019-11-08 16:20:00", 6, 171, 171);
+// array_push($fights, $tmp);
+// $tmp = new FightClassNot("Fireborn", "\"Берсерк\"", "Мир Кефки", "Лихолесье", "2019-11-08 15:00:00", "2019-11-08 16:00:00", "Fireborn", "2019-11-08 16:21:10", 6, 171, 6);
+// array_push($fights, $tmp);
+// $tmp = new FightClassNot("\"Берсерк\"", "Fireborn", "Мир Кефки", "Лихолесье", "2019-11-08 15:00:00", "2019-11-08 16:00:00", "Fireborn", "2019-11-08 16:22:29", 171, 6, 171);
+// array_push($fights, $tmp);
+// $tmp = new FightClassNot("\"Берсерк\"", "Fireborn", "Мир Кефки", "Лихолесье", "2019-11-08 15:00:00", "2019-11-08 16:00:00", "Fireborn", "2019-11-08 16:23:59", 171, 6, 6);
+// array_push($fights, $tmp);
+// $tmp = new FightClassNot("\"Берсерк\"", "Fireborn", "Мир Кефки", "Лихолесье", "2019-11-08 15:00:00", "2019-11-08 17:00:00", "Fireborn", "2019-11-08 17:10:59", 171, 6, 6);
+// array_push($fights, $tmp);
+// print_r($fights);
 // exit();
 
 $query = "select * from notifications;\n";
@@ -111,7 +111,6 @@ foreach ($not as $user) {
 					$push->setMessage('Через ' . $time . ' минут начнется бой против ' . $fight->attacker . ' за ' . $fight->to . ' (атакуем)');
 
 				}
-
 				// $push->setUrl('http://chris.schalenborgh.be/blog/');
 				// $push->setUrlTitle('cool php blog');
 				// $push->setDevice('pixel2xl');
@@ -150,7 +149,7 @@ foreach ($not as $user) {
 				} else if ($user->user_clan != $fight->winer_id) {
 					if ($user->user_clan == $fight->defender_id) {
 						$push->setMessage($d . 'Поражение... Мы отдали ' . $fight->to . ' клану ' . $fight->attacker);
-					} else if ($user->user_clan == $fight->defender_id) {
+					} else if ($user->user_clan == $fight->attacker_id) {
 						$push->setMessage($d . 'Поражение... Мы не смогли отбить ' . $fight->to . ' у ' . $fight->defender);
 					}
 				}
