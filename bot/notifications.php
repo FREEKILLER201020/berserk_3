@@ -71,7 +71,7 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 // array_push($fights, $tmp);
 // $tmp = new FightClassNot("\"Берсерк\"", "Fireborn", "Мир Кефки", "Лихолесье", "2019-11-08 15:00:00", "2019-11-08 17:00:00", "Fireborn", "2019-11-08 17:10:59", 171, 6, 6);
 // array_push($fights, $tmp);
-// print_r($fights);
+print_r($fights);
 // exit();
 
 $query = "select * from notifications;\n";
