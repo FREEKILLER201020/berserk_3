@@ -2,7 +2,7 @@
 require "../classes/fight.php";
 require "../classes/notofication.php";
 include '../classes/pushover.php';
-require_once "vendor/autoload.php";
+// require_once "vendor/autoload.php";
 
 date_default_timezone_set('Europe/London');
 $time = 30;
@@ -16,7 +16,9 @@ $query = "select * from attacks order by resolved desc;\n";
 $result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 $fights = array();
 while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+	print_r($line);
 	$query2 = "SELECT distinct on (id) timemark,id,title, points, created, gone from clans where timemark<='$line[resolved]';\n";
+	$line[winer_id] = $line[winer];
 	$result2 = pg_query($query2) or die('Ошибка запроса: ' . pg_last_error());
 	while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
 		if ($line[attacker] == $line2[id]) {
@@ -51,7 +53,7 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 	$from = $line[from];
 	$to = $line[to];
 
-	$tmp = new FightClassNot($attacker, $defender, $from, $to, $line[declared], $line[resolved], $line[winer], $line[ended], $line[attacker], $line[defender], $line[winer]);
+	$tmp = new FightClassNot($attacker, $defender, $from, $to, $line[declared], $line[resolved], $line[winer], $line[ended], $line[attacker], $line[defender], $line[winer_id]);
 	array_push($fights, $tmp);
 }
 // 16=19
