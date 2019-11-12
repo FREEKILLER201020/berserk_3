@@ -277,10 +277,47 @@ $bot->on(function ($Update) use ($bot) {
 		}
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
-		// Notif2($message, $bot);
+		Notif3($message, $bot);
 	}
 	// нет
 	if ((mb_stripos($mtext, "Нет.") !== false) && (GetState($message, $bot) == "notifications2")) {
+		$answer = "Ок";
+		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
+		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+		Notif3($message, $bot);
+	}
+
+	// notif3 1) Вы хотите получать информацию об отмене боев вашего клана?
+	// да
+	if ((mb_stripos($mtext, "Да.") !== false) && (GetState($message, $bot) == "notifications3")) {
+		$nick = $message->getFrom()->getUsername();
+		$name = $message->getFrom()->getFirstName();
+		$is = 0;
+		$query = "SELECT * FROM bot_notification where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=3";
+		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
+		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+			$is = 1;
+		}
+		if ($is == 1) {
+			$query = "UPDATE bot_notification set pre_start_time=0 where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=3;\n";
+		} else {
+			$query = "INSERT INTO bot_notification (chat_id,user_id,notification_type,pre_start_time) values ({$message->getFrom()->getId()},{$message->getFrom()->getId()},3,0);\n";
+		}
+		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
+		// $answer = $query;
+		if (mb_stripos($answer, "Не удалось соединиться:") !== false) {
+			$query = "UPDATE users set username='$nick' and name='$name' where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()};\n";
+			$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
+		}
+		if (mb_stripos($answer, "Не удалось соединиться:") == false) {
+			$answer = "Хорошо, запомнил.";
+		}
+		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
+		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+		// Notif2($message, $bot);
+	}
+	// нет
+	if ((mb_stripos($mtext, "Нет.") !== false) && (GetState($message, $bot) == "notifications3")) {
 		$answer = "Ок";
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
@@ -462,7 +499,22 @@ function Notif1($message, $bot) {
 
 function Notif2($message, $bot) {
 	SetState($message, $bot, "notifications2");
-	$answer = 'Вы хотите получать резельтаты боев вашего клана?';
+	$answer = 'Вы хотите получать результаты боев вашего клана?';
+	$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+		[
+			[
+				["text" => "Да."],
+				["text" => "Нет."],
+			],
+		]
+		, true, true);
+
+	$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+}
+
+function Notif3($message, $bot) {
+	SetState($message, $bot, "notifications3");
+	$answer = 'Вы хотите получать уведомления об отмене боев вашего клана?';
 	$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
 		[
 			[
