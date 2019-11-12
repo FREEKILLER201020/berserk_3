@@ -289,7 +289,7 @@ $bot->on(function ($Update) use ($bot) {
 
 	// notif3 1) Вы хотите получать информацию об отмене боев вашего клана?
 	// да
-	if ((mb_stripos($mtext, "Да.") !== false) && (GetState($message, $bot) == "notifications3")) {
+	if ((mb_stripos($mtext, "Да, хочу.") !== false) && (GetState($message, $bot) == "notifications3")) {
 		$nick = $message->getFrom()->getUsername();
 		$name = $message->getFrom()->getFirstName();
 		$is = 0;
@@ -317,7 +317,7 @@ $bot->on(function ($Update) use ($bot) {
 		// Notif2($message, $bot);
 	}
 	// нет
-	if ((mb_stripos($mtext, "Нет.") !== false) && (GetState($message, $bot) == "notifications3")) {
+	if ((mb_stripos($mtext, "Нет, спасибо.") !== false) && (GetState($message, $bot) == "notifications3")) {
 		$answer = "Ок";
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
@@ -518,8 +518,8 @@ function Notif3($message, $bot) {
 	$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
 		[
 			[
-				["text" => "Да."],
-				["text" => "Нет."],
+				["text" => "Да, хочу."],
+				["text" => "Нет, спасибо."],
 			],
 		]
 		, true, true);
