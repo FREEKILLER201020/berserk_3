@@ -32,7 +32,7 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 		}
 	}
 
-	$query2 = "SELECT distinct on (id) timemark, id, name, clan from cities where timemark<='$line[resolved]';\n";
+	$query2 = "SELECT distinct on (id) timemark, id, name, clan from cities where timemark<='$line[resolved]' order by timemark desc;\n";
 	$result2 = pg_query($query2) or die('Ошибка запроса: ' . pg_last_error());
 	while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
 		if ($line[from] == $line2[id]) {
@@ -108,10 +108,10 @@ foreach ($not as $user) {
 
 					$push->setTitle('Скоро битва!');
 					if ($user->user_clan == $fight->attacker_id) {
-						$push->setMessage('Через ' . $time . ' минут начнется бой против ' . $fight->defender . ' за ' . $fight->to . ' (защищаемся)');
+						$push->setMessage('Через ' . $time . ' минут начнется бой против ' . $fight->defender . ' за ' . $fight->to . ' (атакуем)');
 
 					} else if ($user->user_clan == $fight->defender_id) {
-						$push->setMessage('Через ' . $time . ' минут начнется бой против ' . $fight->attacker . ' за ' . $fight->to . ' (атакуем)');
+						$push->setMessage('Через ' . $time . ' минут начнется бой против ' . $fight->attacker . ' за ' . $fight->to . ' (защищаемся)');
 
 					}
 					// $push->setUrl('http://chris.schalenborgh.be/blog/');
@@ -270,10 +270,10 @@ foreach ($notifications as $notification) {
 						$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
 
 						if ($notification->clan_id == $fight->attacker_id) {
-							$answer = 'Через ' . $time . ' минут начнется бой против ' . $fight->defender . ' за ' . $fight->to . ' (защищаемся)';
+							$answer = 'Через ' . $time . ' минут начнется бой против ' . $fight->defender . ' за ' . $fight->to . ' (атакуем)';
 
 						} else if ($notification->clan_id == $fight->defender_id) {
-							$answer = 'Через ' . $time . ' минут начнется бой против ' . $fight->attacker . ' за ' . $fight->to . ' (атакуем)';
+							$answer = 'Через ' . $time . ' минут начнется бой против ' . $fight->attacker . ' за ' . $fight->to . ' (защищаемся)';
 
 						}
 						$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
