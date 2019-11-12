@@ -32,7 +32,7 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 		}
 	}
 
-	$query2 = "SELECT distinct on (id) timemark, id, name, clan from cities where timemark<='$line[resolved]' order by timemark desc;\n";
+	$query2 = "SELECT distinct on (id) timemark, id, name, clan from cities where timemark<='$line[resolved]' order by id,timemark desc;\n";
 	$result2 = pg_query($query2) or die('Ошибка запроса: ' . pg_last_error());
 	while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
 		if ($line[from] == $line2[id]) {
