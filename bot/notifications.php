@@ -146,7 +146,17 @@ foreach ($not as $user) {
 					$push->setUser($user->user_key);
 
 					$push->setTitle('Бой отменен.');
-					$push->setMessage('Бой против ' . $fight->defender . ' за ' . $fight->to . ' (защищаемся) был отменен');
+					if ($user->user_clan == $fight->attacker_id) {
+						// $push->setMessage('Через ' . $time . ' минут начнется бой против ' . $fight->defender . ' за ' . $fight->to . ' (защищаемся)');
+						$push->setMessage('Бой против ' . $fight->defender . ' за ' . $fight->to . ' (атакуем) был отменен');
+
+					} else if ($user->user_clan == $fight->defender_id) {
+						$push->setMessage('Бой против ' . $fight->attacker . ' за ' . $fight->to . ' (защищаемся) был отменен');
+
+						// $push->setMessage('Через ' . $time . ' минут начнется бой против ' . $fight->attacker . ' за ' . $fight->to . ' (атакуем)');
+
+					}
+					// $push->setMessage('Бой против ' . $fight->defender . ' за ' . $fight->to . ' (защищаемся) был отменен');
 
 					// $push->setUrl('http://chris.schalenborgh.be/blog/');
 					// $push->setUrlTitle('cool php blog');
@@ -384,9 +394,19 @@ foreach ($notifications as $notification) {
 
 						$answer = 'Бой отменен.';
 						$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
+						if ($notification->chat_id == $fight->attacker_id) {
+							// $push->setMessage('Через ' . $time . ' минут начнется бой против ' . $fight->defender . ' за ' . $fight->to . ' (защищаемся)');
+							$answer = 'Бой против ' . $fight->defender . ' за ' . $fight->to . ' (атакуем) был отменен';
 
-						$answer = 'Бой против ' . $fight->defender . ' за ' . $fight->to . ' (защищаемся) был отменен';
-						$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
+						} else if ($notification->chat_id == $fight->defender_id) {
+							$answer = 'Бой против ' . $fight->attacker . ' за ' . $fight->to . ' (защищаемся) был отменен';
+
+							// $push->setMessage('Через ' . $time . ' минут начнется бой против ' . $fight->attacker . ' за ' . $fight->to . ' (атакуем)');
+
+						}
+
+						// $answer = 'Бой против ' . $fight->defender . ' за ' . $fight->to . ' (защищаемся) был отменен';
+						// $bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
 
 						// $push->setUrl('http://chris.schalenborgh.be/blog/');
 						// $push->setUrlTitle('cool php blog');
