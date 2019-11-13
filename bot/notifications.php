@@ -337,20 +337,20 @@ foreach ($notifications as $notification) {
 						// $push->setUser($user->user_key);
 
 						// $push->setTitle('Результат битвы!');
-						$answer = "Результат битвы!".PHP_EOL;
+						$answer = "Результат битвы!";
 						echo $answer;
-						// $bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
+						$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
 						if ($notification->clan_id == $fight->winer_id) {
 							if ($notification->clan_id == $fight->attacker_id) {
-								$answer. = 'Ура! Победа! Мы отбили ' . $fight->to . ' у ' . $fight->defender;
+								$answer = 'Ура! Победа! Мы отбили ' . $fight->to . ' у ' . $fight->defender;
 							} else if ($notification->clan_id == $fight->defender_id) {
-								$answer. = 'Ура! Победа! Мы защитили ' . $fight->to . ' от ' . $fight->attacker;
+								$answer = 'Ура! Победа! Мы защитили ' . $fight->to . ' от ' . $fight->attacker;
 							}
 						} else if ($notification->clan_id != $fight->winer_id) {
 							if ($notification->clan_id == $fight->defender_id) {
 								$answer = 'Поражение... Мы отдали ' . $fight->to . ' клану ' . $fight->attacker;
 							} else if ($notification->clan_id == $fight->attacker_id) {
-								$answer. = 'Поражение... Мы не смогли отбить ' . $fight->to . ' у ' . $fight->defender;
+								$answer = 'Поражение... Мы не смогли отбить ' . $fight->to . ' у ' . $fight->defender;
 							}
 						}
 						$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
