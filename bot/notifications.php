@@ -316,8 +316,9 @@ foreach ($notifications as $notification) {
 							$timestamp3 = strtotime($fight->resolved);
 							$dt = 60 * 60 * 24;
 							$d = round(($timestamp3 - $timestamp1) / 60);
-
-							if (($d >= 0) && ($d < $dt)) {
+							$d2 = round(($timestamp3 - $timestamp1 + $dt) / 60);
+							echo PHP_EOL . "NOTIFICATION 4_1" . PHP_EOL . $d . PHP_EOL;
+							if (($d >= 0) && ($d < $d2)) {
 								array_push($good_fights, $fight);
 							}
 						}
