@@ -307,9 +307,9 @@ foreach ($notifications as $notification) {
 			echo PHP_EOL . "NOTIFICATION 4" . PHP_EOL . date('Y-m-d H:i:s') . PHP_EOL;
 			echo PHP_EOL . "NOTIFICATION 4" . PHP_EOL . $d . PHP_EOL;
 
-			// if (($d >= 0) && ($d < 1)) {
 			$good_fights = array();
-			if (1) {
+			if (($d >= 0) && ($d < 1)) {
+				// if (1) {
 				foreach ($fights as $fight) {
 					// echo "here1" . PHP_EOL;
 					if (($notification->clan_id == $fight->attacker_id) || ($notification->clan_id == $fight->defender_id)) {
