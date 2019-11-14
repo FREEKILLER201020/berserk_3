@@ -301,7 +301,7 @@ foreach ($notifications as $notification) {
 
 			$ttime = date('Y-m-d H:i:s', mktime($notification->time, 0, 0, $month, $day, $year));
 			$timestamp1 = strtotime($d);
-			$timestamp2 = strtotime($ttime) - strtotime('-3 hours');
+			$timestamp2 = strtotime($ttime) - strtotime('+3 hours');
 			$d = round(($timestamp1 - $timestamp2) / 60);
 			echo PHP_EOL . "NOTIFICATION 4" . PHP_EOL . $ttime . PHP_EOL;
 			echo PHP_EOL . "NOTIFICATION 4" . PHP_EOL . date('Y-m-d H:i:s') . PHP_EOL;
@@ -312,19 +312,38 @@ foreach ($notifications as $notification) {
 			if (1) {
 				foreach ($fights as $fight) {
 					if (($notification->clan_id == $fight->attacker_id) || ($notification->clan_id == $fight->defender_id)) {
-						$timestamp3 = strtotime($fight->resolved);
-						$dt = 60 * 60 * 24;
-						$d = round(($timestamp3 - $timestamp1) / 60);
+						if ($fight->resolved == "") {
+							$timestamp3 = strtotime($fight->resolved);
+							$dt = 60 * 60 * 24;
+							$d = round(($timestamp3 - $timestamp1) / 60);
 
-						if (($d >= 0) && ($d < $dt)) {
-							array_push($good_fights, $fight);
+							if (($d >= 0) && ($d < $dt)) {
+								array_push($good_fights, $fight);
+							}
 						}
 					}
 				}
-				print_r($good_fights);
-				$answer = "Расписание!";
-				// echo $answer;
-				$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
+				if (count($good_fights > 0)) {
+					$answer = "Расписание!";
+					// echo $answer;
+					$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
+					$answer = "";
+					$t = 1;
+					for ($i = count($good_fights) - 1; $i <= 0; $i++) {
+						$timestamp4 = strtotime($good_fights->resolved) + strtotime('+3 hours');
+						$dt2 = date('H:i', $timestamp4);
+						if ($notification->clan_id == $good_fights->attacker_id) {
+							$answer .= $t . ") " . $dt2 . " Против " . $good_fights->defender . " за " . $good_fights->to . " (атакуем)" . PHP_EOL;
+						} else {
+							$answer .= $t . ") " . $dt2 . " Против " . $good_fights->attacker . " за " . $good_fights->to . " (защищаемся)" . PHP_EOL;
+						}
+					}
+					// print_r($good_fights);
+					// $answer = "Расписание!";
+					// echo $answer;
+					$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
+				}
+
 			}
 		}
 	}
