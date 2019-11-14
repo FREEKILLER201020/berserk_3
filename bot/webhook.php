@@ -345,7 +345,7 @@ $bot->on(function ($Update) use ($bot) {
 		$time = intval($mtext);
 		$nick = $message->getFrom()->getUsername();
 		$name = $message->getFrom()->getFirstName();
-		if (($len > 2) && ($time > 0)) {
+		if (($len >= 2) && ($time > 0)) {
 			$query = "SELECT * FROM bot_notification where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=4";
 			$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 			while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
