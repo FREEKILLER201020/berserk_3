@@ -265,15 +265,15 @@ foreach ($notifications as $notification) {
 					echo $d . PHP_EOL;
 
 					if ($d == $notification->time) {
-						$answer = "Скоро битва!";
+						$answer = "Скоро битва!" . PHP_EOL;
 						echo $answer;
-						$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
+						// $bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
 
 						if ($notification->clan_id == $fight->attacker_id) {
-							$answer = 'Через ' . $time . ' минут начнется бой против ' . $fight->defender . ' за ' . $fight->to . ' (атакуем)';
+							$answer .= 'Через ' . $time . ' минут начнется бой против ' . $fight->defender . ' за ' . $fight->to . ' (атакуем)';
 
 						} else if ($notification->clan_id == $fight->defender_id) {
-							$answer = 'Через ' . $time . ' минут начнется бой против ' . $fight->attacker . ' за ' . $fight->to . ' (защищаемся)';
+							$answer .= 'Через ' . $time . ' минут начнется бой против ' . $fight->attacker . ' за ' . $fight->to . ' (защищаемся)';
 
 						}
 						$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
@@ -329,7 +329,7 @@ foreach ($notifications as $notification) {
 				}
 				// print_r($good_fights);
 				if (count($good_fights) > 0) {
-					$answer = "Расписание!";
+					$answer = "Расписание!" . PHP_EOL;
 					// echo $answer;
 					// $bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
 					// $answer = "";
@@ -407,20 +407,20 @@ foreach ($notifications as $notification) {
 						// $push->setUser($user->user_key);
 
 						// $push->setTitle('Результат битвы!');
-						$answer = "Результат битвы!";
+						$answer = "Результат битвы!" . PHP_EOL;
 						echo $answer;
-						$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
+						// $bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
 						if ($notification->clan_id == $fight->winer_id) {
 							if ($notification->clan_id == $fight->attacker_id) {
-								$answer = 'Ура! Победа! Мы отбили ' . $fight->to . ' у ' . $fight->defender;
+								$answer .= 'Ура! Победа! Мы отбили ' . $fight->to . ' у ' . $fight->defender;
 							} else if ($notification->clan_id == $fight->defender_id) {
-								$answer = 'Ура! Победа! Мы защитили ' . $fight->to . ' от ' . $fight->attacker;
+								$answer .= 'Ура! Победа! Мы защитили ' . $fight->to . ' от ' . $fight->attacker;
 							}
 						} else if ($notification->clan_id != $fight->winer_id) {
 							if ($notification->clan_id == $fight->defender_id) {
-								$answer = 'Поражение... Мы отдали ' . $fight->to . ' клану ' . $fight->attacker;
+								$answer .= 'Поражение... Мы отдали ' . $fight->to . ' клану ' . $fight->attacker;
 							} else if ($notification->clan_id == $fight->attacker_id) {
-								$answer = 'Поражение... Мы не смогли отбить ' . $fight->to . ' у ' . $fight->defender;
+								$answer .= 'Поражение... Мы не смогли отбить ' . $fight->to . ' у ' . $fight->defender;
 							}
 						}
 						$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
@@ -462,14 +462,14 @@ foreach ($notifications as $notification) {
 						// $push->setToken('a5g19h6if4cdvvfrdw8n5najpm68rb');
 						// $push->setUser($user->user_key);
 
-						$answer = 'Бой отменен.';
-						$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
+						$answer = 'Бой отменен.' . PHP_EOL;
+						// $bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
 						if ($notification->chat_id == $fight->attacker_id) {
 							// $push->setMessage('Через ' . $time . ' минут начнется бой против ' . $fight->defender . ' за ' . $fight->to . ' (защищаемся)');
-							$answer = 'Бой против ' . $fight->defender . ' за ' . $fight->to . ' (атакуем) был отменен';
+							$answer .= 'Бой против ' . $fight->defender . ' за ' . $fight->to . ' (атакуем) был отменен';
 
 						} else if ($notification->chat_id == $fight->defender_id) {
-							$answer = 'Бой против ' . $fight->attacker . ' за ' . $fight->to . ' (защищаемся) был отменен';
+							$answer .= 'Бой против ' . $fight->attacker . ' за ' . $fight->to . ' (защищаемся) был отменен';
 
 							// $push->setMessage('Через ' . $time . ' минут начнется бой против ' . $fight->attacker . ' за ' . $fight->to . ' (атакуем)');
 
