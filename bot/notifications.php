@@ -299,13 +299,13 @@ foreach ($notifications as $notification) {
 			$min = $d1_2[1];
 			$sec = $d1_2[2];
 
-			$ttime = date('Y-m-d H:i:s', mktime($notification->time - 3, 58, 0, $month, $day, $year));
+			$ttime = date('Y-m-d H:i:s', mktime($notification->time - 3, 0, 0, $month, $day, $year));
 			$timestamp1 = strtotime($d);
 			$timestamp2 = strtotime($ttime);
 			$d = round(($timestamp1 - $timestamp2) / 60);
 			echo PHP_EOL . "NOTIFICATION 4" . PHP_EOL . $d . PHP_EOL;
 
-			if (($d > 0) && ($d <= 1)) {
+			if (($d >= 0) && ($d < 1)) {
 				$answer = "Расписание!";
 				// echo $answer;
 				$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
