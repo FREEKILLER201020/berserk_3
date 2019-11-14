@@ -307,7 +307,21 @@ foreach ($notifications as $notification) {
 			echo PHP_EOL . "NOTIFICATION 4" . PHP_EOL . date('Y-m-d H:i:s') . PHP_EOL;
 			echo PHP_EOL . "NOTIFICATION 4" . PHP_EOL . $d . PHP_EOL;
 
-			if (($d >= 0) && ($d < 1)) {
+			// if (($d >= 0) && ($d < 1)) {
+			$good_fights = array();
+			if (1) {
+				foreach ($fights as $fight) {
+					if (($notification->clan_id == $fight->attacker_id) || ($notification->clan_id == $fight->defender_id)) {
+						$timestamp3 = strtotime($fight->resolved);
+						$dt = 60 * 60 * 24;
+						$d = round(($timestamp3 - $timestamp1) / 60);
+
+						if (($d >= 0) && ($d < $dt)) {
+							array_push($good_fights, $fight);
+						}
+					}
+				}
+				print_r($good_fights);
 				$answer = "Расписание!";
 				// echo $answer;
 				$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
