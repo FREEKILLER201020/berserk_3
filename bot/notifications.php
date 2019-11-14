@@ -404,6 +404,7 @@ foreach ($notifications as $notification) {
 							// $push->setMessage('Через ' . $time . ' минут начнется бой против ' . $fight->attacker . ' за ' . $fight->to . ' (атакуем)');
 
 						}
+						$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
 
 						// $answer = 'Бой против ' . $fight->defender . ' за ' . $fight->to . ' (защищаемся) был отменен';
 						// $bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
