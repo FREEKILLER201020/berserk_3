@@ -314,14 +314,14 @@ $bot->on(function ($Update) use ($bot) {
 		}
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
-		// Notif2($message, $bot);
+		Notif4($message, $bot);
 	}
 	// нет
 	if ((mb_stripos($mtext, "Нет, спасибо.") !== false) && (GetState($message, $bot) == "notifications3")) {
 		$answer = "Ок";
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
-		// Notif2($message, $bot);
+		Notif4($message, $bot);
 	}
 
 	// notif4 1) Вы хотите получать список на день?
