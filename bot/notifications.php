@@ -284,6 +284,32 @@ foreach ($notifications as $notification) {
 		}
 		// }
 	}
+	if ($notification->type == 4) {
+		if ($notification->chat_id == 249857309) {
+			$d = date('Y-m-d H:i:s');
+			// echo $d . PHP_EOL;
+			$d1 = explode(" ", $d);
+			$d1_1 = explode("-", $d1[0]);
+			$year = $d1_1[0];
+			$month = $d1_1[1];
+			$day = $d1_1[2];
+
+			$d1_2 = explode(":", $d1[1]);
+			$hour = $d1_2[0];
+			$min = $d1_2[1];
+			$sec = $d1_2[2];
+
+			$ttime = date('Y-m-d H:i:s', mktime($notification->time - 3, $min, $sec, $month, $day, $year));
+			$timestamp1 = strtotime($d);
+			$timestamp2 = strtotime($ttime);
+			$d = round(($timestamp1 - $timestamp2) / 60);
+			if (($d > 0) && ($d <= 1)) {
+				$answer = "Расписание!";
+				// echo $answer;
+				$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
+			}
+		}
+	}
 	if ($notification->type == 2) {
 		// if ($notification->chat_id == 249857309) {
 		foreach ($fights as $fight) {
