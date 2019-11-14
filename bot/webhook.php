@@ -368,7 +368,7 @@ $bot->on(function ($Update) use ($bot) {
 			}
 			$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 			$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
-			Notif2($message, $bot);
+			// Notif2($message, $bot);
 		} else {
 			$answer = 'Простите, я вас не понял. Попробовать еще раз?';
 			$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
