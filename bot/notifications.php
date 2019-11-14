@@ -303,7 +303,7 @@ foreach ($notifications as $notification) {
 			$timestamp1 = strtotime($d);
 			$timestamp2 = strtotime($ttime);
 			$d = round(($timestamp1 - $timestamp2) / 60);
-			echo .PHP_EOL."NOTIFICATION 4".$d . PHP_EOL;
+			echo PHP_EOL . "NOTIFICATION 4" . $d . PHP_EOL;
 
 			if (($d > 0) && ($d <= 1)) {
 				$answer = "Расписание!";
