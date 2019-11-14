@@ -299,11 +299,11 @@ foreach ($notifications as $notification) {
 			$min = $d1_2[1];
 			$sec = $d1_2[2];
 
-			$ttime = date('Y-m-d H:i:s', mktime($notification->time - 3, 20, $sec, $month, $day, $year));
+			$ttime = date('Y-m-d H:i:s', mktime($notification->time - 3, 23, $sec, $month, $day, $year));
 			$timestamp1 = strtotime($d);
 			$timestamp2 = strtotime($ttime);
 			$d = round(($timestamp1 - $timestamp2) / 60);
-			echo .PHP_EOL."NOTIFICATION 4"$d . PHP_EOL;
+			echo .PHP_EOL."NOTIFICATION 4".$d . PHP_EOL;
 
 			if (($d > 0) && ($d <= 1)) {
 				$answer = "Расписание!";
