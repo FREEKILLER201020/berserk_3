@@ -311,11 +311,11 @@ foreach ($notifications as $notification) {
 			$good_fights = array();
 			if (1) {
 				foreach ($fights as $fight) {
-					echo "here1" . PHP_EOL;
+					// echo "here1" . PHP_EOL;
 					if (($notification->clan_id == $fight->attacker_id) || ($notification->clan_id == $fight->defender_id)) {
-						echo "here2" . PHP_EOL;
-						if ($fight->resolved == "") {
-							echo "here3" . PHP_EOL;
+						// echo "here2" . PHP_EOL;
+						if ($fight->ended == "") {
+							// echo "here3" . PHP_EOL;
 							$timestamp3 = strtotime($fight->resolved);
 							$dt = 60 * 60 * 24;
 							$d = round(($timestamp3 - $timestamp1) / 60);
