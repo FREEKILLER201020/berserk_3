@@ -201,7 +201,7 @@ $bot->on(function ($Update) use ($bot) {
 	}
 	// нет
 	if ((mb_stripos($mtext, "Нет.") !== false) && (GetState($message, $bot) == "notifications1")) {
-		// $answer = "part2";
+		$answer = "Ок";
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 		Notif2($message, $bot);
@@ -334,12 +334,12 @@ $bot->on(function ($Update) use ($bot) {
 	}
 	// нет
 	if ((mb_stripos($mtext, "Нет, не хочу.") !== false) && (GetState($message, $bot) == "notifications4")) {
-		// $answer = "part2";
+		$answer = "Ок";
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 		// Notif2($message, $bot);
 	}
-	// notif1 2) За какое время до начала боя (в минутах) мне стоит вас уведомлять?
+	// notif4 2) в ктором часу вам присылать список на день?
 	if ((LastUserMessage($cid, $user, 2) == "Да, хочу получать.") && (GetState($message, $bot) == "notifications4")) {
 		$len = strlen($mtext);
 		$time = intval($mtext);
