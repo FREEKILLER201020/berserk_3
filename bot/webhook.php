@@ -195,7 +195,17 @@ $bot->on(function ($Update) use ($bot) {
 	// да
 	if ((mb_stripos($mtext, "Да.") !== false) && (GetState($message, $bot) == "notifications1")) {
 		$answer = 'Хорошо. За какое время до начала боя (в минутах) мне стоит вас уведомлять?';
-		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
+		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+			[
+				[
+					["text" => "60"],
+					["text" => "45"],
+					["text" => "30"],
+					["text" => "15"],
+				],
+			]
+			, true, true);
+
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 		// $bot->sendMessage($message->getChat()->getId(), "Отлично! Напишите, пожалуста, свой игровой ник, что бы получать больше персональной информации ;)");
 	}
@@ -327,8 +337,19 @@ $bot->on(function ($Update) use ($bot) {
 	// notif4 1) Вы хотите получать список на день?
 	// да
 	if ((mb_stripos($mtext, "Да, хочу получать.") !== false) && (GetState($message, $bot) == "notifications4")) {
-		$answer = 'Хорошо. В каком часу вам их присылать? (час в формате двух цифр. Если в часе одна цифра, то впереди должен быть 0)';
-		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
+		$answer = 'Хорошо. В каком часу по Москве вам их присылать 0-23? (час в формате двух цифр. Если в часе одна цифра, то впереди должен быть 0.)';
+		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+			[
+				[
+					["text" => "07"],
+					["text" => "08"],
+					["text" => "09"],
+					["text" => "10"],
+					["text" => "11"],
+				],
+			]
+			, true, true);
+
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 		// $bot->sendMessage($message->getChat()->getId(), "Отлично! Напишите, пожалуста, свой игровой ник, что бы получать больше персональной информации ;)");
 	}
@@ -342,10 +363,11 @@ $bot->on(function ($Update) use ($bot) {
 	// notif4 2) в ктором часу вам присылать список на день?
 	if ((LastUserMessage($cid, $user, 2) == "Да, хочу получать.") && (GetState($message, $bot) == "notifications4")) {
 		$len = strlen($mtext);
+		$time = -1;
 		$time = intval($mtext);
 		$nick = $message->getFrom()->getUsername();
 		$name = $message->getFrom()->getFirstName();
-		if (($len >= 2) && ($time > 0)) {
+		if (($len >= 2) && ($time >= 0) && ($time < 24)) {
 			$query = "SELECT * FROM bot_notification where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=4";
 			$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 			while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {

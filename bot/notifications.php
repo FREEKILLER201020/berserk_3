@@ -299,9 +299,9 @@ foreach ($notifications as $notification) {
 			$min = $d1_2[1];
 			$sec = $d1_2[2];
 
-			$ttime = date('Y-m-d H:i:s', mktime($notification->time - 3, 0, 0, $month, $day, $year));
+			$ttime = date('Y-m-d H:i:s', mktime($notification->time, 0, 0, $month, $day, $year));
 			$timestamp1 = strtotime($d);
-			$timestamp2 = strtotime($ttime);
+			$timestamp2 = strtotime($ttime) - strtotime('-3 hours');
 			$d = round(($timestamp1 - $timestamp2) / 60);
 			echo PHP_EOL . "NOTIFICATION 4" . PHP_EOL . $ttime . PHP_EOL;
 			echo PHP_EOL . "NOTIFICATION 4" . PHP_EOL . date('Y-m-d H:i:s') . PHP_EOL;
