@@ -327,14 +327,14 @@ foreach ($notifications as $notification) {
 						}
 					}
 				}
-				print_r($good_fights);
+				// print_r($good_fights);
 				if (count($good_fights) > 0) {
 					$answer = "Расписание!";
 					// echo $answer;
 					$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
 					$answer = "";
 					$t = 1;
-					for ($i = count($good_fights) - 1; $i >= 0; $i++) {
+					for ($i = count($good_fights) - 1; $i >= 0; $i--) {
 						$timestamp4 = strtotime($good_fights[$i]->resolved) + strtotime('+3 hours');
 						$dt2 = date('H:i', $timestamp4);
 						if ($notification->clan_id == $good_fights[$i]->attacker_id) {
