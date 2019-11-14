@@ -17,7 +17,7 @@ $result = pg_query($query) or die('Ошибка запроса: ' . pg_last_erro
 $fights = array();
 while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 	print_r($line);
-	$query2 = "SELECT distinct on (id) timemark,id,title, points, created, gone from clans where timemark<='$line[resolved]';\n";
+	$query2 = "SELECT distinct on (id) timemark,id,title, points, created, gone from clans where timemark<='$line[resolved] order by id,timemark desc';\n";
 	$line[winer_id] = $line[winer];
 	$result2 = pg_query($query2) or die('Ошибка запроса: ' . pg_last_error());
 	while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
