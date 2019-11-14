@@ -323,7 +323,8 @@ foreach ($notifications as $notification) {
 						}
 					}
 				}
-				if (count($good_fights > 0)) {
+				// print_r($good_fights);
+				if (count($good_fights) > 0) {
 					$answer = "Расписание!";
 					// echo $answer;
 					$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
