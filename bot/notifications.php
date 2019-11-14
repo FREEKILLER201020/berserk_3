@@ -330,12 +330,12 @@ foreach ($notifications as $notification) {
 					$answer = "";
 					$t = 1;
 					for ($i = count($good_fights) - 1; $i <= 0; $i++) {
-						$timestamp4 = strtotime($good_fights->resolved) + strtotime('+3 hours');
+						$timestamp4 = strtotime($good_fights[$i]->resolved) + strtotime('+3 hours');
 						$dt2 = date('H:i', $timestamp4);
-						if ($notification->clan_id == $good_fights->attacker_id) {
-							$answer .= $t . ") " . $dt2 . " Против " . $good_fights->defender . " за " . $good_fights->to . " (атакуем)" . PHP_EOL;
+						if ($notification->clan_id == $good_fights[$i]->attacker_id) {
+							$answer .= $t . ") " . $dt2 . " Против " . $good_fights[$i]->defender . " за " . $good_fights[$i]->to . " (атакуем)" . PHP_EOL;
 						} else {
-							$answer .= $t . ") " . $dt2 . " Против " . $good_fights->attacker . " за " . $good_fights->to . " (защищаемся)" . PHP_EOL;
+							$answer .= $t . ") " . $dt2 . " Против " . $good_fights[$i]->attacker . " за " . $good_fights[$i]->to . " (защищаемся)" . PHP_EOL;
 						}
 					}
 					// print_r($good_fights);
