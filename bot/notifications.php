@@ -299,7 +299,7 @@ foreach ($notifications as $notification) {
 			$min = $d1_2[1];
 			$sec = $d1_2[2];
 
-			$ttime = date('Y-m-d H:i:s', mktime($notification->time - 3, 15, $sec, $month, $day, $year));
+			$ttime = date('Y-m-d H:i:s', mktime($notification->time - 3, 20, $sec, $month, $day, $year));
 			$timestamp1 = strtotime($d);
 			$timestamp2 = strtotime($ttime);
 			$d = round(($timestamp1 - $timestamp2) / 60);
