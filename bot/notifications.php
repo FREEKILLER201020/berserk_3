@@ -323,7 +323,7 @@ foreach ($notifications as $notification) {
 						}
 					}
 				}
-				// print_r($good_fights);
+				print_r($good_fights);
 				if (count($good_fights) > 0) {
 					$answer = "Расписание!";
 					// echo $answer;
