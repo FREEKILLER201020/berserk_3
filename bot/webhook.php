@@ -324,6 +324,67 @@ $bot->on(function ($Update) use ($bot) {
 		// Notif2($message, $bot);
 	}
 
+	// notif4 1) Вы хотите получать список на день?
+	// да
+	if ((mb_stripos($mtext, "Да, хочу получать.") !== false) && (GetState($message, $bot) == "notifications4")) {
+		$answer = 'Хорошо. В каком часу вам их присылать? (час в формате двух цифр. Если в часе одна цифра, то впереди должен быть 0)';
+		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
+		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+		// $bot->sendMessage($message->getChat()->getId(), "Отлично! Напишите, пожалуста, свой игровой ник, что бы получать больше персональной информации ;)");
+	}
+	// нет
+	if ((mb_stripos($mtext, "Нет, не хочу.") !== false) && (GetState($message, $bot) == "notifications4")) {
+		// $answer = "part2";
+		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
+		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+		// Notif2($message, $bot);
+	}
+	// notif1 2) За какое время до начала боя (в минутах) мне стоит вас уведомлять?
+	if ((LastUserMessage($cid, $user, 2) == "Да, хочу получать.") && (GetState($message, $bot) == "notifications4")) {
+		$len = strlen($mtext);
+		$time = intval($mtext);
+		$nick = $message->getFrom()->getUsername();
+		$name = $message->getFrom()->getFirstName();
+		if (($len > 2) && ($time > 0)) {
+			$query = "SELECT * FROM bot_notification where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=4";
+			$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
+			while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+				$is = 1;
+			}
+			if ($is == 1) {
+				$query = "UPDATE bot_notification set pre_start_time=$time where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=4;\n";
+
+			} else {
+				$query = "INSERT INTO bot_notification (chat_id,user_id,notification_type,pre_start_time) values ({$message->getFrom()->getId()},{$message->getFrom()->getId()},4,{$time});\n";
+			}
+			$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
+			// $answer = $query;
+			if (mb_stripos($answer, "Не удалось соединиться:") !== false) {
+				$query = "UPDATE users set username='$nick' and name='$name' where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()};\n";
+				$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
+			}
+			if (mb_stripos($answer, "Не удалось соединиться:") == false) {
+				$answer = "Хорошо, запомнил.";
+			}
+			$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
+			$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+			Notif2($message, $bot);
+		} else {
+			$answer = 'Простите, я вас не понял. Попробовать еще раз?';
+			$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+				[
+					[
+						["text" => "Да, хочу получать."],
+						["text" => "Нет, не хочу."],
+					],
+				]
+				, true, true);
+
+			$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+		}
+
+	}
+
 }, function ($message) use ($name) {
 	return true; // когда тут true - команда проходит
 });
@@ -520,6 +581,21 @@ function Notif3($message, $bot) {
 			[
 				["text" => "Да, хочу."],
 				["text" => "Нет, спасибо."],
+			],
+		]
+		, true, true);
+
+	$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+}
+
+function Notif4($message, $bot) {
+	SetState($message, $bot, "notifications4");
+	$answer = 'Вы хотите получать уведомления о боях на день?';
+	$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
+		[
+			[
+				["text" => "Да, хочу получать."],
+				["text" => "Нет, не хочу."],
 			],
 		]
 		, true, true);
