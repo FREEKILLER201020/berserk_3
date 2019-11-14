@@ -301,7 +301,7 @@ foreach ($notifications as $notification) {
 
 			$ttime = date('Y-m-d H:i:s', mktime($notification->time, 0, 0, $month, $day, $year));
 			$timestamp1 = strtotime($d);
-			$timestamp2 = strtotime($ttime) - strtotime('+3 hours');
+			$timestamp2 = strtotime($ttime) - 3 * 60 * 60;
 			$d = round(($timestamp1 - $timestamp2) / 60);
 			echo PHP_EOL . "NOTIFICATION 4" . PHP_EOL . $ttime . PHP_EOL;
 			echo PHP_EOL . "NOTIFICATION 4" . PHP_EOL . date('Y-m-d H:i:s') . PHP_EOL;
@@ -335,7 +335,7 @@ foreach ($notifications as $notification) {
 					$answer = "";
 					$t = 1;
 					for ($i = count($good_fights) - 1; $i >= 0; $i--) {
-						$timestamp4 = strtotime($good_fights[$i]->resolved) + strtotime('3 hours');
+						$timestamp4 = strtotime($good_fights[$i]->resolved) + 3 * 60 * 60;
 						// $timestamp4 = strtotime($good_fights[$i]->resolved);
 						$dt2 = date('H:i', $timestamp4);
 						if ($notification->clan_id == $good_fights[$i]->attacker_id) {
