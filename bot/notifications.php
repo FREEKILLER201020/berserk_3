@@ -331,8 +331,8 @@ foreach ($notifications as $notification) {
 				if (count($good_fights) > 0) {
 					$answer = "Расписание!";
 					// echo $answer;
-					$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
-					$answer = "";
+					// $bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
+					// $answer = "";
 					$t = 1;
 					for ($i = count($good_fights) - 1; $i >= 0; $i--) {
 						$timestamp4 = strtotime($good_fights[$i]->resolved) + 3 * 60 * 60;
