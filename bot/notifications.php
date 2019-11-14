@@ -337,6 +337,7 @@ foreach ($notifications as $notification) {
 						} else {
 							$answer .= $t . ") " . $dt2 . " Против " . $good_fights[$i]->attacker . " за " . $good_fights[$i]->to . " (защищаемся)" . PHP_EOL;
 						}
+						$t++;
 					}
 					// print_r($good_fights);
 					// $answer = "Расписание!";
