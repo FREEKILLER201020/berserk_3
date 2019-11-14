@@ -305,7 +305,7 @@ function History($array) {
 	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 	$i = 1;
 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-		$query2 = "SELECT distinct on (id) timemark,id,title, points, created, gone from clans where timemark<='$line[resolved]';\n";
+		$query2 = "SELECT distinct on (id) timemark,id,title, points, created, gone from clans where timemark<='$line[resolved] order by id,timemark desc';\n";
 		$result2 = pg_query($query2) or die('Ошибка запроса: ' . pg_last_error());
 		while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
 			if ($line[attacker] == $line2[id]) {
@@ -364,7 +364,7 @@ function Timetable($array) {
 	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 	$i = 1;
 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-		$query2 = "SELECT distinct on (id) timemark,id,title, points, created, gone from clans where timemark<='$line[resolved]';\n";
+		$query2 = "SELECT distinct on (id) timemark,id,title, points, created, gone from clans where timemark<='$line[resolved] order by id,timemark desc';\n";
 		$result2 = pg_query($query2) or die('Ошибка запроса: ' . pg_last_error());
 		while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
 			if ($line[attacker] == $line2[id]) {
