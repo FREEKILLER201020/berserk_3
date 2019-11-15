@@ -816,18 +816,18 @@ class FightClassNot {
 	public $winer;
 	public $was = 0;
 
-	public function __construct($a, $d, $f, $t, $de, $r, $w, $end, $id1, $id2, $id3) {
-		$this->attacker = $a;
-		$this->defender = $d;
-		$this->from = $f;
-		$this->to = $t;
-		$this->declared = $de;
-		$this->resolved = $r;
-		$this->winer = $w;
-		$this->ended = $end;
-		$this->attacker_id = $id1;
-		$this->defender_id = $id2;
-		$this->winer_id = $id3;
-	}
+	// public function __construct($a, $d, $f, $t, $de, $r, $w, $end, $id1, $id2, $id3) {
+	// 	$this->attacker = $a;
+	// 	$this->defender = $d;
+	// 	$this->from = $f;
+	// 	$this->to = $t;
+	// 	$this->declared = $de;
+	// 	$this->resolved = $r;
+	// 	$this->winer = $w;
+	// 	$this->ended = $end;
+	// 	$this->attacker_id = $id1;
+	// 	$this->defender_id = $id2;
+	// 	$this->winer_id = $id3;
+	// }
 }
 ?>
