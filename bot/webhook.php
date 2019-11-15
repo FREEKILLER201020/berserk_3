@@ -790,15 +790,6 @@ function SetState($message, $bot, $state) {
 	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 }
 
-function GetState($message, $bot) {
-	$query = "SELECT distinct on (id) id,chat_state from users where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()} order by id desc";
-	$result = pg_query($query);
-	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-		$state = $line["chat_state"];
-	}
-	return $state;
-};
-
 class FightClassNot {
 	// public $id;
 	public $attacker; // id атакующего клана
@@ -829,5 +820,14 @@ class FightClassNot {
 		$this->defender_id = $id2;
 		$this->winer_id = $id3;
 	}
-}; // class NotificationBot {; // 	public $id;; // 	public $chat_id;; // 	public $user_id;; // 	public $in_game_id;; // 	public $type;; // 	public $time;; // 	public $clan_id;; // 	public function __construct($id, $chat_id, $user_id, $type, $time) {; // 		$this->id = $id;; // 		$this->chat_id = $chat_id;; // 		$this->user_id = $user_id;; // 		$this->type = $type;; // 		$this->time = $time;; // 	}; // }
+}
+
+function GetState($message, $bot) {
+	$query = "SELECT distinct on (id) id,chat_state from users where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()} order by id desc";
+	$result = pg_query($query);
+	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+		$state = $line["chat_state"];
+	}
+	return $state;
+}
 ?>
