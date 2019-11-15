@@ -620,7 +620,7 @@ $bot->command('timetable', function ($message) use ($bot) {
 	}
 	// print_r($good_fights);
 	if (count($good_fights) > 0) {
-		$answer = "Расписание:" . PHP_EOL;
+		$answer = "Расписание на 24 часа:" . PHP_EOL;
 		// echo $answer;
 		// $bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
 		// $answer = "";
