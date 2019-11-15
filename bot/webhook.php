@@ -801,20 +801,20 @@ function GetState($message, $bot) {
 
 class FightClassNot {
 	// public $id;
-	public $attacker; // id атакующего клана
-	public $attacker_id; // id атакующего клана
-	public $defender; // id защищающегося клана
-	public $defender_id; // id защищающегося клана
-	public $from;
-	public $to;
-	public $declared; // время, когда был объявлен бой
-	public $resolved; // вермя, когда состаится бой
-	public $ended; // вермя, когда состаится бой
-	public $winer_id;
+	// public $attacker; // id атакующего клана
+	// public $attacker_id; // id атакующего клана
+	// public $defender; // id защищающегося клана
+	// public $defender_id; // id защищающегося клана
+	// public $from;
+	// public $to;
+	// public $declared; // время, когда был объявлен бой
+	// public $resolved; // вермя, когда состаится бой
+	// public $ended; // вермя, когда состаится бой
+	// public $winer_id;
 
-	// public $in_progress; // флаг, активен ли бой
-	public $winer;
-	public $was = 0;
+	// // public $in_progress; // флаг, активен ли бой
+	// public $winer;
+	// public $was = 0;
 
 	// public function __construct($a, $d, $f, $t, $de, $r, $w, $end, $id1, $id2, $id3) {
 	// 	$this->attacker = $a;
