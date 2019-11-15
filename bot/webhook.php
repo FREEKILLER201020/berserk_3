@@ -776,15 +776,15 @@ $bot->command('history', function ($message) use ($bot) {
 			$dt2 = date('d-M H:i', $timestamp4);
 			if ($clan_id == $good_fights[$i][winer_id]) {
 				if ($clan_id == $good_fights[$i][attacker_id]) {
-					$answer .= $t . ") " . $dt2 . ' Мы отбили ' . $fight->to . ' у ' . $fight->defender;
+					$answer .= $t . ") " . $dt2 . ' Мы отбили ' . $fight[to] . ' у ' . $fight[defender];
 				} else if ($clan_id == $good_fights[$i][defender_id]) {
-					$answer .= $t . ") " . $dt2 . ' Мы защитили ' . $fight->to . ' от ' . $fight->attacker;
+					$answer .= $t . ") " . $dt2 . ' Мы защитили ' . $fight[to] . ' от ' . $fight[attacker];
 				}
 			} else if ($clan_id != $good_fights[$i][winer_id]) {
 				if ($clan_id == $good_fights[$i][defender_id]) {
-					$answer .= $t . ") " . $dt2 . ' Мы отдали ' . $fight->to . ' клану ' . $fight->attacker;
+					$answer .= $t . ") " . $dt2 . ' Мы отдали ' . $fight[to] . ' клану ' . $fight[attacker];
 				} else if ($clan_id == $good_fights[$i][attacker_id]) {
-					$answer .= $t . ") " . $dt2 . ' Мы не смогли отбить ' . $fight->to . ' у ' . $fight->defender;
+					$answer .= $t . ") " . $dt2 . ' Мы не смогли отбить ' . $fight[to] . ' у ' . $fight[defender];
 				}
 			}
 			// if ($clan_id == $good_fights[$i][attacker_id]) {
