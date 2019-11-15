@@ -3,7 +3,7 @@ header('Content-Type: text/html; charset=utf-8');
 // подрубаем API
 require_once "vendor/autoload.php";
 require "../api/api.php";
-require "../classes/fight.php";
+// require "../classes/fight.php";
 
 // $file = file_put_contents(realpath(dirname(__FILE__)) . "/../cards_parser/cards/log.txt", var_dump($_REQUEST));
 
@@ -797,5 +797,37 @@ function GetState($message, $bot) {
 		$state = $line["chat_state"];
 	}
 	return $state;
+};
+
+class FightClassNot {
+	// public $id;
+	public $attacker; // id атакующего клана
+	public $attacker_id; // id атакующего клана
+	public $defender; // id защищающегося клана
+	public $defender_id; // id защищающегося клана
+	public $from;
+	public $to;
+	public $declared; // время, когда был объявлен бой
+	public $resolved; // вермя, когда состаится бой
+	public $ended; // вермя, когда состаится бой
+	public $winer_id;
+
+	// public $in_progress; // флаг, активен ли бой
+	public $winer;
+	public $was = 0;
+
+	public function __construct($a, $d, $f, $t, $de, $r, $w, $end, $id1, $id2, $id3) {
+		$this->attacker = $a;
+		$this->defender = $d;
+		$this->from = $f;
+		$this->to = $t;
+		$this->declared = $de;
+		$this->resolved = $r;
+		$this->winer = $w;
+		$this->ended = $end;
+		$this->attacker_id = $id1;
+		$this->defender_id = $id2;
+		$this->winer_id = $id3;
+	}
 }; // class NotificationBot {; // 	public $id;; // 	public $chat_id;; // 	public $user_id;; // 	public $in_game_id;; // 	public $type;; // 	public $time;; // 	public $clan_id;; // 	public function __construct($id, $chat_id, $user_id, $type, $time) {; // 		$this->id = $id;; // 		$this->chat_id = $chat_id;; // 		$this->user_id = $user_id;; // 		$this->type = $type;; // 		$this->time = $time;; // 	}; // }
 ?>
