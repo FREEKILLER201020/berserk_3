@@ -501,123 +501,123 @@ $bot->command('test', function ($message) use ($bot) {
 	$bot->sendMessage($message->getChat()->getId(), $answer);
 });
 
-$bot->command('timetable', function ($message) use ($bot) {
-	$user_id = $message->getFrom()->getId();
-	$bot->sendMessage($message->getChat()->getId(), $user_id, null, null, null, null);
-	$query = "select * from attacks order by resolved desc;\n";
+// $bot->command('timetable', function ($message) use ($bot) {
+// 	$user_id = $message->getFrom()->getId();
+// 	$bot->sendMessage($message->getChat()->getId(), $user_id, null, null, null, null);
+// 	$query = "select * from attacks order by resolved desc;\n";
 
-	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
-	$fights = array();
-	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-		print_r($line);
-		$query2 = "SELECT distinct on (id) timemark,id,title, points, created, gone from clans where timemark<='$line[resolved]' order by id,timemark desc;\n";
-		$line[winer_id] = $line[winer];
-		$result2 = pg_query($query2) or die('Ошибка запроса: ' . pg_last_error());
-		while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
-			if ($line[attacker] == $line2[id]) {
-				$attacker = $line2[title];
-			}
-			if ($line[defender] == $line2[id]) {
-				$defender = $line2[title];
-			}
-			if ($line[winer] == $line2[id]) {
-				$line[winer] = $line2[title];
-			}
-		}
+// 	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+// 	$fights = array();
+// 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+// 		print_r($line);
+// 		$query2 = "SELECT distinct on (id) timemark,id,title, points, created, gone from clans where timemark<='$line[resolved]' order by id,timemark desc;\n";
+// 		$line[winer_id] = $line[winer];
+// 		$result2 = pg_query($query2) or die('Ошибка запроса: ' . pg_last_error());
+// 		while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
+// 			if ($line[attacker] == $line2[id]) {
+// 				$attacker = $line2[title];
+// 			}
+// 			if ($line[defender] == $line2[id]) {
+// 				$defender = $line2[title];
+// 			}
+// 			if ($line[winer] == $line2[id]) {
+// 				$line[winer] = $line2[title];
+// 			}
+// 		}
 
-		$query2 = "SELECT distinct on (id) timemark, id, name, clan from cities where timemark<='$line[resolved]' order by id,timemark desc;\n";
-		$result2 = pg_query($query2) or die('Ошибка запроса: ' . pg_last_error());
-		while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
-			if ($line[from] == $line2[id]) {
-				$line[from] = $line2[name];
-			}
-			if ($line[to] == $line2[id]) {
-				$line[to] = $line2[name];
-			}
-		}
-		if ($line[from] == -1) {
-			$line[from] = "Варвары";
-		}
-		if ($line[to] == -1) {
-			$line[to] = "Варвары";
-		}
-		// $attacker = $line[attacker];
-		// $defender = $line[defender];
-		$from = $line[from];
-		$to = $line[to];
+// 		$query2 = "SELECT distinct on (id) timemark, id, name, clan from cities where timemark<='$line[resolved]' order by id,timemark desc;\n";
+// 		$result2 = pg_query($query2) or die('Ошибка запроса: ' . pg_last_error());
+// 		while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
+// 			if ($line[from] == $line2[id]) {
+// 				$line[from] = $line2[name];
+// 			}
+// 			if ($line[to] == $line2[id]) {
+// 				$line[to] = $line2[name];
+// 			}
+// 		}
+// 		if ($line[from] == -1) {
+// 			$line[from] = "Варвары";
+// 		}
+// 		if ($line[to] == -1) {
+// 			$line[to] = "Варвары";
+// 		}
+// 		// $attacker = $line[attacker];
+// 		// $defender = $line[defender];
+// 		$from = $line[from];
+// 		$to = $line[to];
 
-		$tmp = new FightClassNot($attacker, $defender, $from, $to, $line[declared], $line[resolved], $line[winer], $line[ended], $line[attacker], $line[defender], $line[winer_id]);
-		array_push($fights, $tmp);
-	}
-	$query = "SELECT * from users";
-	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
-// $notifications = array();
-	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-		// foreach ($notifications as $notification) {
-		// 	if ($notification->user_id == $line["id"]) {
-		// 		$notification->in_game_id = $line["game_id"];
-		// 	}
-		// }
-		if ($user_id == $line[id]) {
-			$game_id = $line[game_id];
-		}
-	}
-	$bot->sendMessage($message->getChat()->getId(), $game_id, null, null, null, null);
+// 		$tmp = new FightClassNot($attacker, $defender, $from, $to, $line[declared], $line[resolved], $line[winer], $line[ended], $line[attacker], $line[defender], $line[winer_id]);
+// 		array_push($fights, $tmp);
+// 	}
+// 	$query = "SELECT * from users";
+// 	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+// // $notifications = array();
+// 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+// 		// foreach ($notifications as $notification) {
+// 		// 	if ($notification->user_id == $line["id"]) {
+// 		// 		$notification->in_game_id = $line["game_id"];
+// 		// 	}
+// 		// }
+// 		if ($user_id == $line[id]) {
+// 			$game_id = $line[game_id];
+// 		}
+// 	}
+// 	$bot->sendMessage($message->getChat()->getId(), $game_id, null, null, null, null);
 
-	$query = "select distinct on (id) timemark,id,nick,frags,deaths,level,clan,folder from players order by id, timemark desc;\n";
-	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
-// $notifications = array();
-	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-		if ($game_id == $line[id]) {
-			$clan_id = $line[clan];
-		}
-	}
-	$bot->sendMessage($message->getChat()->getId(), $clan_id, null, null, null, null);
+// 	$query = "select distinct on (id) timemark,id,nick,frags,deaths,level,clan,folder from players order by id, timemark desc;\n";
+// 	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+// // $notifications = array();
+// 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+// 		if ($game_id == $line[id]) {
+// 			$clan_id = $line[clan];
+// 		}
+// 	}
+// 	$bot->sendMessage($message->getChat()->getId(), $clan_id, null, null, null, null);
 
-	$good_fights = array();
-	$d = date('Y-m-d H:i:s');
-	$timestamp1 = strtotime($d);
-	foreach ($fights as $fight) {
-		// echo "here1" . PHP_EOL;
-		if (($clan_id == $fight->attacker_id) || ($clan_id == $fight->defender_id)) {
-			// echo "here2" . PHP_EOL;
-			if ($fight->ended == "") {
-				// echo "here3" . PHP_EOL;
-				$timestamp3 = strtotime($fight->resolved);
-				$dt = 60 * 60 * 24;
-				$d = round(($timestamp3 - $timestamp1) / 60);
-				$d2 = round(($timestamp3 - $timestamp1 + $dt) / 60);
-				echo PHP_EOL . "NOTIFICATION 4_1" . PHP_EOL . $d . PHP_EOL;
-				if (($d >= 0) && ($d < $d2)) {
-					array_push($good_fights, $fight);
-				}
-			}
-		}
-	}
-	// print_r($good_fights);
-	if (count($good_fights) > 0) {
-		$answer = "Расписание!" . PHP_EOL;
-		// echo $answer;
-		// $bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
-		// $answer = "";
-		$t = 1;
-		for ($i = count($good_fights) - 1; $i >= 0; $i--) {
-			$timestamp4 = strtotime($good_fights[$i]->resolved) + 3 * 60 * 60;
-			// $timestamp4 = strtotime($good_fights[$i]->resolved);
-			$dt2 = date('H:i', $timestamp4);
-			if ($clan_id == $good_fights[$i]->attacker_id) {
-				$answer .= $t . ") " . $dt2 . " Против " . $good_fights[$i]->defender . " за " . $good_fights[$i]->to . " (атакуем)" . PHP_EOL;
-			} else {
-				$answer .= $t . ") " . $dt2 . " Против " . $good_fights[$i]->attacker . " за " . $good_fights[$i]->to . " (защищаемся)" . PHP_EOL;
-			}
-			$t++;
-		}
-		// print_r($good_fights);
-		// $answer = "Расписание!";
-		// echo $answer;
-		$bot->sendMessage($message->getChat()->getId(), $answer, null, null, null, null);
-	}
-});
+// 	$good_fights = array();
+// 	$d = date('Y-m-d H:i:s');
+// 	$timestamp1 = strtotime($d);
+// 	foreach ($fights as $fight) {
+// 		// echo "here1" . PHP_EOL;
+// 		if (($clan_id == $fight->attacker_id) || ($clan_id == $fight->defender_id)) {
+// 			// echo "here2" . PHP_EOL;
+// 			if ($fight->ended == "") {
+// 				// echo "here3" . PHP_EOL;
+// 				$timestamp3 = strtotime($fight->resolved);
+// 				$dt = 60 * 60 * 24;
+// 				$d = round(($timestamp3 - $timestamp1) / 60);
+// 				$d2 = round(($timestamp3 - $timestamp1 + $dt) / 60);
+// 				echo PHP_EOL . "NOTIFICATION 4_1" . PHP_EOL . $d . PHP_EOL;
+// 				if (($d >= 0) && ($d < $d2)) {
+// 					array_push($good_fights, $fight);
+// 				}
+// 			}
+// 		}
+// 	}
+// 	// print_r($good_fights);
+// 	if (count($good_fights) > 0) {
+// 		$answer = "Расписание!" . PHP_EOL;
+// 		// echo $answer;
+// 		// $bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
+// 		// $answer = "";
+// 		$t = 1;
+// 		for ($i = count($good_fights) - 1; $i >= 0; $i--) {
+// 			$timestamp4 = strtotime($good_fights[$i]->resolved) + 3 * 60 * 60;
+// 			// $timestamp4 = strtotime($good_fights[$i]->resolved);
+// 			$dt2 = date('H:i', $timestamp4);
+// 			if ($clan_id == $good_fights[$i]->attacker_id) {
+// 				$answer .= $t . ") " . $dt2 . " Против " . $good_fights[$i]->defender . " за " . $good_fights[$i]->to . " (атакуем)" . PHP_EOL;
+// 			} else {
+// 				$answer .= $t . ") " . $dt2 . " Против " . $good_fights[$i]->attacker . " за " . $good_fights[$i]->to . " (защищаемся)" . PHP_EOL;
+// 			}
+// 			$t++;
+// 		}
+// 		// print_r($good_fights);
+// 		// $answer = "Расписание!";
+// 		// echo $answer;
+// 		$bot->sendMessage($message->getChat()->getId(), $answer, null, null, null, null);
+// 	}
+// });
 
 $bot->command('db', function ($message) use ($bot) {
 	$array = array();
