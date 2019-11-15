@@ -628,7 +628,7 @@ $bot->command('timetable', function ($message) use ($bot) {
 		for ($i = count($good_fights) - 1; $i >= 0; $i--) {
 			$timestamp4 = strtotime($good_fights[$i][resolved]) + 3 * 60 * 60;
 			// $timestamp4 = strtotime($good_fights[$i]->resolved);
-			$dt2 = date('m-d H:i', $timestamp4);
+			$dt2 = date('d-M H:i', $timestamp4);
 			if ($clan_id == $good_fights[$i][attacker_id]) {
 				$answer .= $t . ") " . $dt2 . " Против " . $good_fights[$i][defender] . " за " . $good_fights[$i][to] . " (атакуем)" . PHP_EOL;
 			} else {
