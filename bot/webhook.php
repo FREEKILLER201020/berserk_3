@@ -750,11 +750,11 @@ $bot->command('history', function ($message) use ($bot) {
 			if ($fight[ended] != "") {
 				// echo "here3" . PHP_EOL;
 				$timestamp3 = strtotime($fight[resolved]);
-				$dt = -60 * 60 * 24;
-				$d = round(($timestamp3 - $timestamp1) / 60);
-				$d2 = round(($timestamp3 - $timestamp1 + $dt) / 60);
+				$dt = 60 * 60 * 24;
+				$d = round(($timestamp1 - $timestamp3) / 60);
+				$d2 = round(($timestamp1 - $timestamp3 - $dt) / 60);
 				echo PHP_EOL . "NOTIFICATION 4_1" . PHP_EOL . $d . PHP_EOL;
-				if (($d >= 0) && ($d < $d2)) {
+				if (($d <= 0) && ($d > $d2)) {
 					array_push($good_fights, $fight);
 				}
 			}
