@@ -790,38 +790,6 @@ function SetState($message, $bot, $state) {
 	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 }
 
-// class FightClassNot {
-// 	// public $id;
-// 	public $attacker; // id атакующего клана
-// 	public $attacker_id; // id атакующего клана
-// 	public $defender; // id защищающегося клана
-// 	public $defender_id; // id защищающегося клана
-// 	public $from;
-// 	public $to;
-// 	public $declared; // время, когда был объявлен бой
-// 	public $resolved; // вермя, когда состаится бой
-// 	public $ended; // вермя, когда состаится бой
-// 	public $winer_id;
-
-// 	// public $in_progress; // флаг, активен ли бой
-// 	public $winer;
-// 	public $was = 0;
-
-// 	public function __construct($a, $d, $f, $t, $de, $r, $w, $end, $id1, $id2, $id3) {
-// 		$this->attacker = $a;
-// 		$this->defender = $d;
-// 		$this->from = $f;
-// 		$this->to = $t;
-// 		$this->declared = $de;
-// 		$this->resolved = $r;
-// 		$this->winer = $w;
-// 		$this->ended = $end;
-// 		$this->attacker_id = $id1;
-// 		$this->defender_id = $id2;
-// 		$this->winer_id = $id3;
-// 	}
-// }
-
 function GetState($message, $bot) {
 	$query = "SELECT distinct on (id) id,chat_state from users where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()} order by id desc";
 	$result = pg_query($query);
@@ -829,5 +797,37 @@ function GetState($message, $bot) {
 		$state = $line["chat_state"];
 	}
 	return $state;
+}
+
+class FightClassNot {
+	// public $id;
+	public $attacker; // id атакующего клана
+	public $attacker_id; // id атакующего клана
+	public $defender; // id защищающегося клана
+	public $defender_id; // id защищающегося клана
+	public $from;
+	public $to;
+	public $declared; // время, когда был объявлен бой
+	public $resolved; // вермя, когда состаится бой
+	public $ended; // вермя, когда состаится бой
+	public $winer_id;
+
+	// public $in_progress; // флаг, активен ли бой
+	public $winer;
+	public $was = 0;
+
+	public function __construct($a, $d, $f, $t, $de, $r, $w, $end, $id1, $id2, $id3) {
+		$this->attacker = $a;
+		$this->defender = $d;
+		$this->from = $f;
+		$this->to = $t;
+		$this->declared = $de;
+		$this->resolved = $r;
+		$this->winer = $w;
+		$this->ended = $end;
+		$this->attacker_id = $id1;
+		$this->defender_id = $id2;
+		$this->winer_id = $id3;
+	}
 }
 ?>
