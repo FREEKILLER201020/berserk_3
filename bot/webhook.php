@@ -797,25 +797,5 @@ function GetState($message, $bot) {
 		$state = $line["chat_state"];
 	}
 	return $state;
-}
-
-class NotificationBot {
-
-	public $id;
-	public $chat_id;
-	public $user_id;
-	public $in_game_id;
-	public $type;
-	public $time;
-	public $clan_id;
-
-	public function __construct($id, $chat_id, $user_id, $type, $time) {
-		$this->id = $id;
-		$this->chat_id = $chat_id;
-		$this->user_id = $user_id;
-		$this->type = $type;
-		$this->time = $time;
-
-	}
-}
+}; // class NotificationBot {; // 	public $id;; // 	public $chat_id;; // 	public $user_id;; // 	public $in_game_id;; // 	public $type;; // 	public $time;; // 	public $clan_id;; // 	public function __construct($id, $chat_id, $user_id, $type, $time) {; // 		$this->id = $id;; // 		$this->chat_id = $chat_id;; // 		$this->user_id = $user_id;; // 		$this->type = $type;; // 		$this->time = $time;; // 	}; // }
 ?>
