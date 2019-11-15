@@ -645,7 +645,7 @@ $bot->command('timetable', function ($message) use ($bot) {
 
 $bot->command('history', function ($message) use ($bot) {
 	$user_id = $message->getFrom()->getId();
-	// $bot->sendMessage($message->getChat()->getId(), $user_id, null, null, null, null);
+	$bot->sendMessage($message->getChat()->getId(), $user_id, null, null, null, null);
 	$query = "select * from attacks order by resolved desc;\n";
 
 	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
@@ -728,7 +728,7 @@ $bot->command('history', function ($message) use ($bot) {
 			$game_id = $line[game_id];
 		}
 	}
-	// $bot->sendMessage($message->getChat()->getId(), $game_id, null, null, null, null);
+	$bot->sendMessage($message->getChat()->getId(), $game_id, null, null, null, null);
 
 	$query = "select distinct on (id) timemark,id,nick,frags,deaths,level,clan,folder from players order by id, timemark desc;\n";
 	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
@@ -738,7 +738,7 @@ $bot->command('history', function ($message) use ($bot) {
 			$clan_id = $line[clan];
 		}
 	}
-	// $bot->sendMessage($message->getChat()->getId(), $clan_id, null, null, null, null);
+	$bot->sendMessage($message->getChat()->getId(), $clan_id, null, null, null, null);
 
 	$good_fights = array();
 	$d = date('Y-m-d H:i:s');
