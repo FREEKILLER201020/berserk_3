@@ -774,11 +774,24 @@ $bot->command('history', function ($message) use ($bot) {
 			$timestamp4 = strtotime($good_fights[$i][resolved]) + 3 * 60 * 60;
 			// $timestamp4 = strtotime($good_fights[$i]->resolved);
 			$dt2 = date('d-M H:i', $timestamp4);
-			if ($clan_id == $good_fights[$i][attacker_id]) {
-				$answer .= $t . ") " . $dt2 . " Против " . $good_fights[$i][defender] . " за " . $good_fights[$i][to] . " (атакуем)" . PHP_EOL;
-			} else {
-				$answer .= $t . ") " . $dt2 . " Против " . $good_fights[$i][attacker] . " за " . $good_fights[$i][to] . " (защищаемся)" . PHP_EOL;
+			if ($clan_id == $good_fights[$i][winer_id]) {
+				if ($clan_id == $good_fights[$i][attacker_id]) {
+					$answer .= $t . ") " . $dt2 . ' Мы отбили ' . $fight->to . ' у ' . $fight->defender;
+				} else if ($clan_id == $good_fights[$i][defender_id]) {
+					$answer .= $t . ") " . $dt2 . ' Мы защитили ' . $fight->to . ' от ' . $fight->attacker;
+				}
+			} else if ($clan_id != $good_fights[$i][winer_id]) {
+				if ($clan_id == $good_fights[$i][defender_id]) {
+					$answer .= $t . ") " . $dt2 . ' Мы отдали ' . $fight->to . ' клану ' . $fight->attacker;
+				} else if ($clan_id == $good_fights[$i][attacker_id]) {
+					$answer .= $t . ") " . $dt2 . ' Мы не смогли отбить ' . $fight->to . ' у ' . $fight->defender;
+				}
 			}
+			// if ($clan_id == $good_fights[$i][attacker_id]) {
+			// 	$answer .= $t . ") " . $dt2 . " Против " . $good_fights[$i][defender] . " за " . $good_fights[$i][to] . " (атакуем)" . PHP_EOL;
+			// } else {
+			// 	$answer .= $t . ") " . $dt2 . " Против " . $good_fights[$i][attacker] . " за " . $good_fights[$i][to] . " (защищаемся)" . PHP_EOL;
+			// }
 			$t++;
 		}
 		// print_r($good_fights);
