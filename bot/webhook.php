@@ -747,7 +747,7 @@ $bot->command('history', function ($message) use ($bot) {
 		// echo "here1" . PHP_EOL;
 		if (($clan_id == $fight[attacker_id]) || ($clan_id == $fight[defender_id])) {
 			// echo "here2" . PHP_EOL;
-			if ($fight[ended] !== "") {
+			if ($fight[ended] != "") {
 				// echo "here3" . PHP_EOL;
 				$timestamp3 = strtotime($fight[resolved]);
 				$dt = -60 * 60 * 24;
