@@ -569,6 +569,8 @@ $bot->command('timetable', function ($message) use ($bot) {
 			$clan_id = $line[clan];
 		}
 	}
+	$bot->sendMessage($message->getChat()->getId(), $clan_id, null, null, null, null);
+
 	$good_fights = array();
 	$d = date('Y-m-d H:i:s');
 	$timestamp1 = strtotime($d);
