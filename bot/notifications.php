@@ -285,73 +285,73 @@ foreach ($notifications as $notification) {
 		// }
 	}
 	if ($notification->type == 4) {
-		if ($notification->chat_id == 249857309) {
-			$d = date('Y-m-d H:i:s');
-			// echo $d . PHP_EOL;
-			$d1 = explode(" ", $d);
-			$d1_1 = explode("-", $d1[0]);
-			$year = $d1_1[0];
-			$month = $d1_1[1];
-			$day = $d1_1[2];
+		// if ($notification->chat_id == 249857309) {
+		$d = date('Y-m-d H:i:s');
+		// echo $d . PHP_EOL;
+		$d1 = explode(" ", $d);
+		$d1_1 = explode("-", $d1[0]);
+		$year = $d1_1[0];
+		$month = $d1_1[1];
+		$day = $d1_1[2];
 
-			$d1_2 = explode(":", $d1[1]);
-			$hour = $d1_2[0];
-			$min = $d1_2[1];
-			$sec = $d1_2[2];
+		$d1_2 = explode(":", $d1[1]);
+		$hour = $d1_2[0];
+		$min = $d1_2[1];
+		$sec = $d1_2[2];
 
-			$ttime = date('Y-m-d H:i:s', mktime($notification->time, 0, 0, $month, $day, $year));
-			$timestamp1 = strtotime($d);
-			$timestamp2 = strtotime($ttime) - 3 * 60 * 60;
-			$d = round(($timestamp1 - $timestamp2) / 60);
-			echo PHP_EOL . "NOTIFICATION 4" . PHP_EOL . $ttime . PHP_EOL;
-			echo PHP_EOL . "NOTIFICATION 4" . PHP_EOL . date('Y-m-d H:i:s') . PHP_EOL;
-			echo PHP_EOL . "NOTIFICATION 4" . PHP_EOL . $d . PHP_EOL;
+		$ttime = date('Y-m-d H:i:s', mktime($notification->time, 0, 0, $month, $day, $year));
+		$timestamp1 = strtotime($d);
+		$timestamp2 = strtotime($ttime) - 3 * 60 * 60;
+		$d = round(($timestamp1 - $timestamp2) / 60);
+		echo PHP_EOL . "NOTIFICATION 4" . PHP_EOL . $ttime . PHP_EOL;
+		echo PHP_EOL . "NOTIFICATION 4" . PHP_EOL . date('Y-m-d H:i:s') . PHP_EOL;
+		echo PHP_EOL . "NOTIFICATION 4" . PHP_EOL . $d . PHP_EOL;
 
-			$good_fights = array();
-			if (($d >= 0) && ($d < 1)) {
-				// if (1) {
-				foreach ($fights as $fight) {
-					// echo "here1" . PHP_EOL;
-					if (($notification->clan_id == $fight->attacker_id) || ($notification->clan_id == $fight->defender_id)) {
-						// echo "here2" . PHP_EOL;
-						if ($fight->ended == "") {
-							// echo "here3" . PHP_EOL;
-							$timestamp3 = strtotime($fight->resolved);
-							$dt = 60 * 60 * 24;
-							$d = round(($timestamp3 - $timestamp1) / 60);
-							$d2 = round(($timestamp3 - $timestamp1 + $dt) / 60);
-							echo PHP_EOL . "NOTIFICATION 4_1" . PHP_EOL . $d . PHP_EOL;
-							if (($d >= 0) && ($d < $d2)) {
-								array_push($good_fights, $fight);
-							}
+		$good_fights = array();
+		if (($d >= 0) && ($d < 1)) {
+			// if (1) {
+			foreach ($fights as $fight) {
+				// echo "here1" . PHP_EOL;
+				if (($notification->clan_id == $fight->attacker_id) || ($notification->clan_id == $fight->defender_id)) {
+					// echo "here2" . PHP_EOL;
+					if ($fight->ended == "") {
+						// echo "here3" . PHP_EOL;
+						$timestamp3 = strtotime($fight->resolved);
+						$dt = 60 * 60 * 24;
+						$d = round(($timestamp3 - $timestamp1) / 60);
+						$d2 = round(($timestamp3 - $timestamp1 + $dt) / 60);
+						echo PHP_EOL . "NOTIFICATION 4_1" . PHP_EOL . $d . PHP_EOL;
+						if (($d >= 0) && ($d < $d2)) {
+							array_push($good_fights, $fight);
 						}
 					}
+				}
+			}
+			// print_r($good_fights);
+			if (count($good_fights) > 0) {
+				$answer = "Расписание на 24 часа:" . PHP_EOL;
+				// echo $answer;
+				// $bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
+				// $answer = "";
+				$t = 1;
+				for ($i = count($good_fights) - 1; $i >= 0; $i--) {
+					$timestamp4 = strtotime($good_fights[$i]->resolved) + 3 * 60 * 60;
+					// $timestamp4 = strtotime($good_fights[$i]->resolved);
+					$dt2 = date('d-M H:i', $timestamp4);
+					if ($notification->clan_id == $good_fights[$i]->attacker_id) {
+						$answer .= $t . ") " . $dt2 . " Против " . $good_fights[$i]->defender . " за " . $good_fights[$i]->to . " (атакуем)" . PHP_EOL;
+					} else {
+						$answer .= $t . ") " . $dt2 . " Против " . $good_fights[$i]->attacker . " за " . $good_fights[$i]->to . " (защищаемся)" . PHP_EOL;
+					}
+					$t++;
 				}
 				// print_r($good_fights);
-				if (count($good_fights) > 0) {
-					$answer = "Расписание на 24 часа:" . PHP_EOL;
-					// echo $answer;
-					// $bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
-					// $answer = "";
-					$t = 1;
-					for ($i = count($good_fights) - 1; $i >= 0; $i--) {
-						$timestamp4 = strtotime($good_fights[$i]->resolved) + 3 * 60 * 60;
-						// $timestamp4 = strtotime($good_fights[$i]->resolved);
-						$dt2 = date('d-M H:i', $timestamp4);
-						if ($notification->clan_id == $good_fights[$i]->attacker_id) {
-							$answer .= $t . ") " . $dt2 . " Против " . $good_fights[$i]->defender . " за " . $good_fights[$i]->to . " (атакуем)" . PHP_EOL;
-						} else {
-							$answer .= $t . ") " . $dt2 . " Против " . $good_fights[$i]->attacker . " за " . $good_fights[$i]->to . " (защищаемся)" . PHP_EOL;
-						}
-						$t++;
-					}
-					// print_r($good_fights);
-					// $answer = "Расписание!";
-					// echo $answer;
-					$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
-				}
-
+				// $answer = "Расписание!";
+				// echo $answer;
+				$bot->sendMessage($notification->chat_id, $answer, null, null, null, null);
 			}
+
+			// }
 		}
 	}
 	if ($notification->type == 2) {
