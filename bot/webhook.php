@@ -269,7 +269,7 @@ $bot->on(function ($Update) use ($bot) {
 	}
 	// notif2 1) Вы хотите получать напоминания по результатам боев вашего клана?
 	// да
-	if ((mb_stripos($mtext, "Да.") !== false) && (GetState($message, $bot) == "notifications2")) {
+	if ((mb_stripos($mtext, "Да, давайте.") !== false) && (GetState($message, $bot) == "notifications2")) {
 		$nick = $message->getFrom()->getUsername();
 		$name = $message->getFrom()->getFirstName();
 		$is = 0;
@@ -298,7 +298,7 @@ $bot->on(function ($Update) use ($bot) {
 		Notif3($message, $bot);
 	}
 	// нет
-	if ((mb_stripos($mtext, "Нет.") !== false) && (GetState($message, $bot) == "notifications2")) {
+	if ((mb_stripos($mtext, "Нет, не надо.") !== false) && (GetState($message, $bot) == "notifications2")) {
 		$answer = "Ок";
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
@@ -928,8 +928,8 @@ function Notif2($message, $bot) {
 	$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
 		[
 			[
-				["text" => "Да."],
-				["text" => "Нет."],
+				["text" => "Да, давайте."],
+				["text" => "Нет, не надо."],
 			],
 		]
 		, true, true);
