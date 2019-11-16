@@ -528,7 +528,7 @@ $bot->command('timetable', function ($message) use ($bot) {
 	}
 	// $bot->sendMessage($message->getChat()->getId(), $game_id, null, null, null, null);
 	if (($game_id == "") || ($clan_id == "")) {
-		$answer = "Простите, кажется я вас еще плохо знаю. Пожалуйста, запустите сперва команду /start" . PHP_EOL . "Проверить, что я о вас знаю можно командой /I";
+		$answer = "Простите, кажется я вас еще плохо знаю. Пожалуйста, запустите сперва команду /start" . PHP_EOL . "Проверить, что я о вас знаю можно командой /info";
 		// }
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
@@ -687,7 +687,7 @@ $bot->command('history', function ($message) use ($bot) {
 	}
 	// $bot->sendMessage($message->getChat()->getId(), $user_id, null, null, null, null);
 	if (($game_id == "") || ($clan_id == "")) {
-		$answer = "Простите, кажется я вас еще плохо знаю. Пожалуйста, запустите сперва команду /start" . PHP_EOL . "Проверить, что я о вас знаю можно командой /I";
+		$answer = "Простите, кажется я вас еще плохо знаю. Пожалуйста, запустите сперва команду /start" . PHP_EOL . "Проверить, что я о вас знаю можно командой /info";
 		// }
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
@@ -917,7 +917,7 @@ function Notif1($message, $bot) {
 		}
 	}
 	if (($game_id == "") || ($clan_id == "")) {
-		$answer = "Простите, кажется я вас еще плохо знаю. Пожалуйста, запустите сперва команду /start" . PHP_EOL . "Проверить, что я о вас знаю можно командой /I";
+		$answer = "Простите, кажется я вас еще плохо знаю. Пожалуйста, запустите сперва команду /start" . PHP_EOL . "Проверить, что я о вас знаю можно командой /info";
 		// }
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
