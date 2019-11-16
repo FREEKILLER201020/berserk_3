@@ -441,76 +441,74 @@ $bot->command('notifications', function ($message) use ($bot) {
 // команда для помощи
 $bot->command('help', function ($message) use ($bot) {
 	$answer = 'Команды:
-/help - вывод справки';
-	$keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
-		[
-			[
-				['text' => 'link', 'url' => 'https://core.telegram.org'],
-			],
-		]
-	);
-
-	$bot->sendMessage($message->getChat()->getId(), $answer, null, false, null, $keyboard);
+/help - вывод справки
+/statr - Первичное знакомство с Ботом
+/notification - Настройка уведомлений (напоминания о боях, результаты боев, отмена боев, расписание на день)
+/timetable - посмотреть расписание на 24 часа
+/history - история битв за 24 часа
+/I - посмотреть, что о вас знает Бот (персональная статистика)';
+	$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
+	$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 });
-$bot->command('table', function ($message) use ($bot) {
-	$answer = "<pre>
-First Header  | Second Header
-------------- | -------------
-Content Cell  | Content Cell
-Content Cell  | Content Cell</pre>";
-	$answer = "<pre> Атакует |   Защищается  |       Начало      |Победитель
-\"Берсерк\"|    Fireborn   |2019-09-20 11:45:00|Fireborn
-Fireborn |   \"Берсерк\"   |2019-09-19 13:45:00|\"Берсерк\"
-\"Берсерк\"|Отряд Самоубийц|2019-09-18 16:30:00|Отряд Самоубийц
-\"Берсерк\"|    Fireborn   |2019-09-17 15:30:00|\"Берсерк\"
-\"Берсерк\"|      Epic     |2019-09-16 17:00:00|Epic
-</pre>";
-	$bot->sendMessage($message->getChat()->getId(), $answer, "html", null, null, $keyboard);
-});
-$pic = "http://aftamat4ik.ru/wp-content/uploads/2017/03/photo_2016-12-13_23-21-07.jpg";
+// $bot->command('table', function ($message) use ($bot) {
+// 	$answer = "<pre>
+// First Header  | Second Header
+// ------------- | -------------
+// Content Cell  | Content Cell
+// Content Cell  | Content Cell</pre>";
+// 	$answer = "<pre> Атакует |   Защищается  |       Начало      |Победитель
+// \"Берсерк\"|    Fireborn   |2019-09-20 11:45:00|Fireborn
+// Fireborn |   \"Берсерк\"   |2019-09-19 13:45:00|\"Берсерк\"
+// \"Берсерк\"|Отряд Самоубийц|2019-09-18 16:30:00|Отряд Самоубийц
+// \"Берсерк\"|    Fireborn   |2019-09-17 15:30:00|\"Берсерк\"
+// \"Берсерк\"|      Epic     |2019-09-16 17:00:00|Epic
+// </pre>";
+// 	$bot->sendMessage($message->getChat()->getId(), $answer, "html", null, null, $keyboard);
+// });
+// $pic = "http://aftamat4ik.ru/wp-content/uploads/2017/03/photo_2016-12-13_23-21-07.jpg";
 
-$bot->command('table2', function ($message) use ($bot) {
-	$pic = "https://app.clanberserk.ru/berserk_3/table.jpg";
+// $bot->command('table2', function ($message) use ($bot) {
+// 	$pic = "https://app.clanberserk.ru/berserk_3/table.jpg";
 
-	$bot->sendPhoto($message->getChat()->getId(), $pic);
-});
-$bot->command('table3', function ($message) use ($bot) {
-	$answer = "<pre>1)
-	Атакует: \"Берсерк\"
-	Защищается: Fireborn
-	Начало: 2019-09-20 11:45:00
-	Победитель: Fireborn
+// 	$bot->sendPhoto($message->getChat()->getId(), $pic);
+// });
+// $bot->command('table3', function ($message) use ($bot) {
+// 	$answer = "<pre>1)
+// 	Атакует: \"Берсерк\"
+// 	Защищается: Fireborn
+// 	Начало: 2019-09-20 11:45:00
+// 	Победитель: Fireborn
 
-2)
-	Атакует: Fireborn
-	Защищается: \"Берсерк\"
-	Начало: 2019-09-19 13:45:00
-	Победитель: \"Берсерк\"
+// 2)
+// 	Атакует: Fireborn
+// 	Защищается: \"Берсерк\"
+// 	Начало: 2019-09-19 13:45:00
+// 	Победитель: \"Берсерк\"
 
-3)
-	Атакует: \"Берсерк\"
-	Защищается: Отряд Самоубийц
-	Начало: 2019-09-18 16:30:00
-	Победитель: Отряд Самоубийц
+// 3)
+// 	Атакует: \"Берсерк\"
+// 	Защищается: Отряд Самоубийц
+// 	Начало: 2019-09-18 16:30:00
+// 	Победитель: Отряд Самоубийц
 
-4)
-	Атакует: \"Берсерк\"
-	Защищается: Fireborn
-	Начало: 2019-09-17 15:30:00
-	Победитель: \"Берсерк\"
+// 4)
+// 	Атакует: \"Берсерк\"
+// 	Защищается: Fireborn
+// 	Начало: 2019-09-17 15:30:00
+// 	Победитель: \"Берсерк\"
 
-5)
-	Атакует: \"Берсерк\"
-	Защищается: Epic
-	Начало: 2019-09-16 17:00:00
-	Победитель: Epic
-</pre>";
-	$bot->sendMessage($message->getChat()->getId(), $answer, "html", null, null, $keyboard);
-});
-$bot->command('test', function ($message) use ($bot) {
-	$answer = 'Ура! Я сам что то написал!' . var_export($message, true);
-	$bot->sendMessage($message->getChat()->getId(), $answer);
-});
+// 5)
+// 	Атакует: \"Берсерк\"
+// 	Защищается: Epic
+// 	Начало: 2019-09-16 17:00:00
+// 	Победитель: Epic
+// </pre>";
+// 	$bot->sendMessage($message->getChat()->getId(), $answer, "html", null, null, $keyboard);
+// });
+// $bot->command('test', function ($message) use ($bot) {
+// 	$answer = 'Ура! Я сам что то написал!' . var_export($message, true);
+// 	$bot->sendMessage($message->getChat()->getId(), $answer);
+// });
 
 $bot->command('timetable', function ($message) use ($bot) {
 	$user_id = $message->getFrom()->getId();
@@ -812,67 +810,67 @@ $bot->command('history', function ($message) use ($bot) {
 	}
 });
 
-$bot->command('db', function ($message) use ($bot) {
-	$array = array();
-	$array['type'] = "history";
-	$array['id'] = "52";
-	$array['clan'] = "171";
+// $bot->command('db', function ($message) use ($bot) {
+// 	$array = array();
+// 	$array['type'] = "history";
+// 	$array['id'] = "52";
+// 	$array['clan'] = "171";
 
-// print_r($dbconn);
-	// print_r(OnCall($array, null));
-	$answer = OnCall($array, null);
-	$json = json_decode($answer, true);
-	$answer = "<pre>" . PHP_EOL;
-	$js = $json[0];
-	$keys = array();
-	foreach ($js as $key => $value) {
-		array_push($keys, $key);
-	}
-	foreach ($keys as $key => $value) {
-		$keys[$key] = str_replace("Начало_боя", "Начало", $value);
-	}
-	foreach ($keys as $key) {
-		if (($key == "Атакует") || ($key == "Защищается") || ($key == "Начало") || ($key == "Победитель")) {
-			$answer .= "$key|";
-		}
-	}
-	$answer = substr($answer, 0, strlen($answer) - 2);
-	$answer .= PHP_EOL . "</pre>" . PHP_EOL;
-	if (strlen($answer) > 4096) {
-		$answer = "message is longer then 4096 characters";
-	}
-	$bot->sendMessage($message->getChat()->getId(), $answer, "html", null, null, null);
-});
+// // print_r($dbconn);
+// 	// print_r(OnCall($array, null));
+// 	$answer = OnCall($array, null);
+// 	$json = json_decode($answer, true);
+// 	$answer = "<pre>" . PHP_EOL;
+// 	$js = $json[0];
+// 	$keys = array();
+// 	foreach ($js as $key => $value) {
+// 		array_push($keys, $key);
+// 	}
+// 	foreach ($keys as $key => $value) {
+// 		$keys[$key] = str_replace("Начало_боя", "Начало", $value);
+// 	}
+// 	foreach ($keys as $key) {
+// 		if (($key == "Атакует") || ($key == "Защищается") || ($key == "Начало") || ($key == "Победитель")) {
+// 			$answer .= "$key|";
+// 		}
+// 	}
+// 	$answer = substr($answer, 0, strlen($answer) - 2);
+// 	$answer .= PHP_EOL . "</pre>" . PHP_EOL;
+// 	if (strlen($answer) > 4096) {
+// 		$answer = "message is longer then 4096 characters";
+// 	}
+// 	$bot->sendMessage($message->getChat()->getId(), $answer, "html", null, null, null);
+// });
 
-$bot->command('I', function ($message) use ($bot) {
-	$query = "SELECT distinct on (id) id,game_id from users where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()} order by id desc";
-	$result = pg_query($query);
-	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-		$game_id = $line["game_id"];
-	}
-	$query = "SELECT distinct on (id) id,nick,clan,frags,deaths,level from players where id=$game_id order by id,timemark desc";
-	$result = pg_query($query);
-	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-		$frags = $line["frags"];
-		$deaths = $line["deaths"];
-		$level = $line["level"];
-		$clan_id = $line["clan"];
-		$nick = $line["nick"];
-		// $id = $line["id"];
-	}
-	$query = "SELECT distinct on (id) id,title from clans where id=$clan_id order by id,timemark desc";
-	$result = pg_query($query);
-	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-		$clan_name = $line["title"];
-	}
-	$answer = 'Вот что мне известно:
-	Никнейм: ' . $nick . '
-	Фраги: ' . $frags . '
-	Смерти: ' . $deaths . '
-	Уровень: ' . $level . '
-	Клан: ' . $clan_name;
-	$bot->sendMessage($message->getChat()->getId(), $answer);
-});
+// $bot->command('I', function ($message) use ($bot) {
+// 	$query = "SELECT distinct on (id) id,game_id from users where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()} order by id desc";
+// 	$result = pg_query($query);
+// 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+// 		$game_id = $line["game_id"];
+// 	}
+// 	$query = "SELECT distinct on (id) id,nick,clan,frags,deaths,level from players where id=$game_id order by id,timemark desc";
+// 	$result = pg_query($query);
+// 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+// 		$frags = $line["frags"];
+// 		$deaths = $line["deaths"];
+// 		$level = $line["level"];
+// 		$clan_id = $line["clan"];
+// 		$nick = $line["nick"];
+// 		// $id = $line["id"];
+// 	}
+// 	$query = "SELECT distinct on (id) id,title from clans where id=$clan_id order by id,timemark desc";
+// 	$result = pg_query($query);
+// 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+// 		$clan_name = $line["title"];
+// 	}
+// 	$answer = 'Вот что мне известно:
+// 	Никнейм: ' . $nick . '
+// 	Фраги: ' . $frags . '
+// 	Смерти: ' . $deaths . '
+// 	Уровень: ' . $level . '
+// 	Клан: ' . $clan_name;
+// 	$bot->sendMessage($message->getChat()->getId(), $answer);
+// });
 
 $bot->run();
 pg_close($dbconn);
@@ -903,7 +901,7 @@ function Notif1($message, $bot) {
 		}
 	}
 	if (($game_id == "") || ($clan_id == "")) {
-		$answer = "Простите, кажется я вас еще плохо знаю. Пожалуйста, запустите сперва команду /start";
+		$answer = "Простите, кажется я вас еще плохо знаю. Пожалуйста, запустите сперва команду /start" . PHP_EOL . "Проверить, что я о вас знаю можно командой /I";
 		// }
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
@@ -982,7 +980,7 @@ function Start($message, $bot) {
 		$answer = 'Простите, кажется это групповой чат. На данный момент я не могу гарантировать коректную работу в групповых чатах. Простите :(';
 		$bot->sendMessage($message->getChat()->getId(), $answer);
 	}
-	$answer = 'Добро пожаловать ' . $name . '!' . $message->getChat()->getType();
+	$answer = 'Добро пожаловать ' . $name . '!';
 	$bot->sendMessage($message->getChat()->getId(), $answer);
 	$answer = 'Вы состоите в каком-нибудь клане?';
 	$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
