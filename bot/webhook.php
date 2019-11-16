@@ -180,6 +180,7 @@ $bot->on(function ($Update) use ($bot) {
 			$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 			$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 			SetState($message, $bot, "");
+			Notif1($message, $bot);
 		} else {
 			$answer = 'Мне не удалось вас найти... Хотите попробовать еще раз?';
 			$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup(
