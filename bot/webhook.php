@@ -526,6 +526,14 @@ $bot->command('timetable', function ($message) use ($bot) {
 			$game_id = $line[game_id];
 		}
 	}
+	$query = "select distinct on (id) timemark,id,nick,frags,deaths,level,clan,folder from players order by id, timemark desc;\n";
+	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+// $notifications = array();
+	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+		if ($game_id == $line[id]) {
+			$clan_id = $line[clan];
+		}
+	}
 	// $bot->sendMessage($message->getChat()->getId(), $game_id, null, null, null, null);
 	if (($game_id == "") || ($clan_id == "")) {
 		$answer = "Простите, кажется я вас еще плохо знаю. Пожалуйста, запустите сперва команду /start" . PHP_EOL . "Проверить, что я о вас знаю можно командой /info";
@@ -533,14 +541,6 @@ $bot->command('timetable', function ($message) use ($bot) {
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 	} else {
-		$query = "select distinct on (id) timemark,id,nick,frags,deaths,level,clan,folder from players order by id, timemark desc;\n";
-		$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
-// $notifications = array();
-		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-			if ($game_id == $line[id]) {
-				$clan_id = $line[clan];
-			}
-		}
 
 		// $bot->sendMessage($message->getChat()->getId(), $user_id, null, null, null, null);
 		$query = "select * from attacks order by resolved desc;\n";
@@ -646,9 +646,9 @@ $bot->command('timetable', function ($message) use ($bot) {
 				// $timestamp4 = strtotime($good_fights[$i]->resolved);
 				$dt2 = date('d-M H:i', $timestamp4);
 				if ($clan_id == $good_fights[$i][attacker_id]) {
-					$answer .= $t . ") " . $dt2 . " Против " . $good_fights[$i][defender] . " за " . $good_fights[$i][to] . " (атакуем)" . PHP_EOL;
+					$answer .= $t . ") " . $dt2 . " МСК Против " . $good_fights[$i][defender] . " за " . $good_fights[$i][to] . " (атакуем)" . PHP_EOL;
 				} else {
-					$answer .= $t . ") " . $dt2 . " Против " . $good_fights[$i][attacker] . " за " . $good_fights[$i][to] . " (защищаемся)" . PHP_EOL;
+					$answer .= $t . ") " . $dt2 . " МСК Против " . $good_fights[$i][attacker] . " за " . $good_fights[$i][to] . " (защищаемся)" . PHP_EOL;
 				}
 				$t++;
 			}
@@ -800,15 +800,15 @@ $bot->command('history', function ($message) use ($bot) {
 				$dt2 = date('d-M H:i', $timestamp4);
 				if ($clan_id == $good_fights[$i][winer_id]) {
 					if ($clan_id == $good_fights[$i][attacker_id]) {
-						$answer .= $t . ") " . $dt2 . ' Мы отбили ' . $fight[to] . ' у ' . $fight[defender];
+						$answer .= $t . ") " . $dt2 . ' МСК Мы отбили ' . $fight[to] . ' у ' . $fight[defender];
 					} else if ($clan_id == $good_fights[$i][defender_id]) {
-						$answer .= $t . ") " . $dt2 . ' Мы защитили ' . $fight[to] . ' от ' . $fight[attacker];
+						$answer .= $t . ") " . $dt2 . ' МСК Мы защитили ' . $fight[to] . ' от ' . $fight[attacker];
 					}
 				} else if ($clan_id != $good_fights[$i][winer_id]) {
 					if ($clan_id == $good_fights[$i][defender_id]) {
-						$answer .= $t . ") " . $dt2 . ' Мы отдали ' . $fight[to] . ' клану ' . $fight[attacker];
+						$answer .= $t . ") " . $dt2 . ' МСК Мы отдали ' . $fight[to] . ' клану ' . $fight[attacker];
 					} else if ($clan_id == $good_fights[$i][attacker_id]) {
-						$answer .= $t . ") " . $dt2 . ' Мы не смогли отбить ' . $fight[to] . ' у ' . $fight[defender];
+						$answer .= $t . ") " . $dt2 . ' МСК Мы не смогли отбить ' . $fight[to] . ' у ' . $fight[defender];
 					}
 				}
 				// if ($clan_id == $good_fights[$i][attacker_id]) {
