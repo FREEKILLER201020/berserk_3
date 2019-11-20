@@ -513,56 +513,56 @@ $bot->command('help', function ($message) use ($bot) {
 
 $bot->command('members', function ($message) use ($bot) {
 	$user_id = $message->getFrom()->getId();
-	if ($user_id == 249857309) {
+// 	if ($user_id == 249857309) {
 
-		$query = "SELECT * from users";
-		$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
-// $notifications = array();
-		$users = array();
-		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-			// foreach ($notifications as $notification) {
-			// 	if ($notification->user_id == $line["id"]) {
-			// 		$notification->in_game_id = $line["game_id"];
-			// 	}
-			// }
-			$tmp = array();
-			$tmp[nick] = $line[username];
-			$tmp[name] = $line[name];
-			$tmp[game_id] = $line[game_id];
-			$tmp[game_nick] = "";
-			$tmp[clan_id] = "";
-			$tmp[clan] = "";
-			array_push($users, $tmp);
-		}
-		$query = "select distinct on (id) timemark,id,nick,frags,deaths,level,clan,folder from players order by id, timemark desc;\n";
-		$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
-// $notifications = array();
-		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-			foreach ($users as $user) {
-				if ($user[game_id] == $line[id]) {
-					$user[clan_id] = $line[clan];
-				}
-			}
+// 		$query = "SELECT * from users";
+	// 		$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+	// // $notifications = array();
+	// 		$users = array();
+	// 		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+	// 			// foreach ($notifications as $notification) {
+	// 			// 	if ($notification->user_id == $line["id"]) {
+	// 			// 		$notification->in_game_id = $line["game_id"];
+	// 			// 	}
+	// 			// }
+	// 			$tmp = array();
+	// 			$tmp[nick] = $line[username];
+	// 			$tmp[name] = $line[name];
+	// 			$tmp[game_id] = $line[game_id];
+	// 			$tmp[game_nick] = "";
+	// 			$tmp[clan_id] = "";
+	// 			$tmp[clan] = "";
+	// 			array_push($users, $tmp);
+	// 		}
+	// 		$query = "select distinct on (id) timemark,id,nick,frags,deaths,level,clan,folder from players order by id, timemark desc;\n";
+	// 		$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+	// // $notifications = array();
+	// 		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+	// 			foreach ($users as $user) {
+	// 				if ($user[game_id] == $line[id]) {
+	// 					$user[clan_id] = $line[clan];
+	// 				}
+	// 			}
 
-		}
-		$query = "SELECT distinct on (id) timemark,id,title, points, created, gone from clans where timemark<='$line[resolved]' order by id,timemark desc;\n";
-		$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
-// $notifications = array();
-		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-			foreach ($users as $user) {
-				if ($user[clan_id] == $line[id]) {
-					$user[clan] = $line[title];
-				}
-			}
+// 		}
+	// 		$query = "SELECT distinct on (id) timemark,id,title, points, created, gone from clans where timemark<='$line[resolved]' order by id,timemark desc;\n";
+	// 		$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+	// // $notifications = array();
+	// 		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+	// 			foreach ($users as $user) {
+	// 				if ($user[clan_id] == $line[id]) {
+	// 					$user[clan] = $line[title];
+	// 				}
+	// 			}
 
-		}
-		$answer = "Список пользователей:" . PHP_EOL;
-		for ($i = 0; $i < count($users); $i++) {
-			$t = $i + 1;
-			$answer .= $t . ") Telegram nick: " . $users[$i][nick] . " Name: " . $users[$i][name] . " Game nick: " . $users[$i][game_nick] . " Clan: " . $users[$i][clan];
-		}
-		$bot->sendMessage($message->getChat()->getId(), $answer, null, null, null, null);
-	}
+// 		}
+	// 		$answer = "Список пользователей:" . PHP_EOL;
+	// 		for ($i = 0; $i < count($users); $i++) {
+	// 			$t = $i + 1;
+	// 			$answer .= $t . ") Telegram nick: " . $users[$i][nick] . " Name: " . $users[$i][name] . " Game nick: " . $users[$i][game_nick] . " Clan: " . $users[$i][clan];
+	// 		}
+	// 		$bot->sendMessage($message->getChat()->getId(), $answer, null, null, null, null);
+	// 	}
 	$answer = "Список пользователей:" . PHP_EOL;
 	// for ($i = 0; $i < count($users); $i++) {
 	// 	$t = $i + 1;
