@@ -538,10 +538,11 @@ $bot->command('users', function ($message) use ($bot) {
 		$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 		// $notifications = array();
 		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-			foreach ($users as $user) {
-				if ($user[game_id] == $line[id]) {
-					$user[clan_id] = $line[clan];
-					$user[game_nick] = $line[nick];
+			// foreach ($users as $user) {
+			for ($i = 0; $i < count($users); $i++) {
+				if ($user[$i][game_id] == $line[id]) {
+					$user[$i][clan_id] = $line[clan];
+					$user[$i][game_nick] = $line[nick];
 				}
 			}
 
@@ -550,9 +551,9 @@ $bot->command('users', function ($message) use ($bot) {
 		$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 		// $notifications = array();
 		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-			foreach ($users as $user) {
-				if ($user[clan_id] == $line[id]) {
-					$user[clan] = $line[title];
+			for ($i = 0; $i < count($users); $i++) {
+				if ($user[$i][clan_id] == $line[id]) {
+					$user[$i][clan] = $line[title];
 				}
 			}
 
@@ -560,7 +561,7 @@ $bot->command('users', function ($message) use ($bot) {
 		$answer = "Список пользователей:" . PHP_EOL;
 		for ($i = 0; $i < count($users); $i++) {
 			$t = $i + 1;
-			$answer .= $t . ") Telegram nick: " . $users[$i][nick] . " Name: " . $users[$i][name] . " Game nick: " . $users[$i][game_nick] . " Clan: " . $users[$i][clan] . PHP_EOL;
+			$answer .= $t . ") Telegram nick: " . $users[$i][nick] . PHP_EOL . " Name: " . $users[$i][name] . PHP_EOL . " Game nick: " . $users[$i][game_nick] . PHP_EOL . " Clan: " . $users[$i][clan] . PHP_EOL . PHP_EOL;
 		}
 		$bot->sendMessage($message->getChat()->getId(), $answer, null, null, null, null);
 	}
