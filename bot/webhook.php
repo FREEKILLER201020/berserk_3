@@ -563,6 +563,12 @@ $bot->command('users', function ($message) use ($bot) {
 		}
 		$bot->sendMessage($message->getChat()->getId(), $answer, null, null, null, null);
 	}
+	$answer = "Список пользователей:" . PHP_EOL;
+	// for ($i = 0; $i < count($users); $i++) {
+	// 	$t = $i + 1;
+	// 	$answer .= $t . ") Telegram nick: " . $users[$i][nick] . " Name: " . $users[$i][name] . " Game nick: " . $users[$i][game_nick] . " Clan: " . $users[$i][clan].PHP_EOL;
+	// }
+	$bot->sendMessage($message->getChat()->getId(), $answer, null, null, null, null);
 
 });
 
