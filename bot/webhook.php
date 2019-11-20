@@ -511,7 +511,7 @@ $bot->command('help', function ($message) use ($bot) {
 // 	$bot->sendMessage($message->getChat()->getId(), $answer);
 // });
 
-$bot->command('users', function ($message) use ($bot) {
+$bot->command('members', function ($message) use ($bot) {
 	$user_id = $message->getFrom()->getId();
 	if ($user_id == 249857309) {
 
