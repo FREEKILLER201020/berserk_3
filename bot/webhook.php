@@ -540,9 +540,9 @@ $bot->command('users', function ($message) use ($bot) {
 		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 			// foreach ($users as $user) {
 			for ($i = 0; $i < count($users); $i++) {
-				if ($user[$i][game_id] == $line[id]) {
-					$user[$i][clan_id] = $line[clan];
-					$user[$i][game_nick] = $line[nick];
+				if ($users[$i][game_id] == $line[id]) {
+					$users[$i][clan_id] = $line[clan];
+					$users[$i][game_nick] = $line[nick];
 				}
 			}
 
@@ -552,8 +552,8 @@ $bot->command('users', function ($message) use ($bot) {
 		// $notifications = array();
 		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 			for ($i = 0; $i < count($users); $i++) {
-				if ($user[$i][clan_id] == $line[id]) {
-					$user[$i][clan] = $line[title];
+				if ($users[$i][clan_id] == $line[id]) {
+					$users[$i][clan] = $line[title];
 				}
 			}
 
