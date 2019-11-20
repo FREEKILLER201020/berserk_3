@@ -513,7 +513,7 @@ $bot->command('help', function ($message) use ($bot) {
 
 $bot->command('users', function ($message) use ($bot) {
 	$user_id = $message->getFrom()->getId();
-	if ($user_id == 249857309) {
+	if (($user_id == 249857309) || ($user_id == 221998912)) {
 
 		$query = "SELECT * from users";
 		$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
