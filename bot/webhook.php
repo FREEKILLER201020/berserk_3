@@ -541,6 +541,7 @@ $bot->command('users', function ($message) use ($bot) {
 			foreach ($users as $user) {
 				if ($user[game_id] == $line[id]) {
 					$user[clan_id] = $line[clan];
+					$user[game_nick] = $line[nick];
 				}
 			}
 
@@ -559,16 +560,16 @@ $bot->command('users', function ($message) use ($bot) {
 		$answer = "Список пользователей:" . PHP_EOL;
 		for ($i = 0; $i < count($users); $i++) {
 			$t = $i + 1;
-			$answer .= $t . ") Telegram nick: " . $users[$i][nick] . " Name: " . $users[$i][name] . " Game nick: " . $users[$i][game_nick] . " Clan: " . $users[$i][clan];
+			$answer .= $t . ") Telegram nick: " . $users[$i][nick] . " Name: " . $users[$i][name] . " Game nick: " . $users[$i][game_nick] . " Clan: " . $users[$i][clan] . PHP_EOL;
 		}
 		$bot->sendMessage($message->getChat()->getId(), $answer, null, null, null, null);
 	}
-	$answer = "Список пользователей:" . PHP_EOL;
+	// $answer = "Список пользователей:" . PHP_EOL;
 	// for ($i = 0; $i < count($users); $i++) {
 	// 	$t = $i + 1;
 	// 	$answer .= $t . ") Telegram nick: " . $users[$i][nick] . " Name: " . $users[$i][name] . " Game nick: " . $users[$i][game_nick] . " Clan: " . $users[$i][clan].PHP_EOL;
 	// }
-	$bot->sendMessage($message->getChat()->getId(), $answer, null, null, null, null);
+	// $bot->sendMessage($message->getChat()->getId(), $answer, null, null, null, null);
 
 });
 
