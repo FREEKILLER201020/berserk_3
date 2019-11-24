@@ -419,7 +419,7 @@ function PlayersUpdates($array) {
 			$tmp[log] = "Игрок <b>$line[nick] ($line[id])</b> сменил ник на <b>$line[new_nick]</b>";
 		} else if ($line[old_nick] == "") {
 			if ($line[old_clan] == "Нет клана") {
-				$tmp[log] = "Игрок <b>$line[nick] ($line[id])</b> присоеденился к клану <b>$line[new_clan]</b>";
+				$tmp[log] = "Игрок <b>$line[nick] ($line[id])</b> присоединился к клану <b>$line[new_clan]</b>";
 			}
 			if ($line[new_clan] == "Нет клана") {
 				$tmp[log] = "Игрок <b>$line[nick] ($line[id])</b> покинул клан <b>$line[old_clan]</b>";
