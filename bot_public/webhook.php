@@ -216,7 +216,7 @@ $bot->on(function ($Update) use ($bot) {
 	}
 	// нет
 	if ((mb_stripos($mtext, "Нет.") !== false) && (GetState($message, $bot) == "notifications1")) {
-		$query = "DELETE FROM bot_notification_public where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()},and notification_type=1;\n";
+		$query = "DELETE FROM bot_notification_public where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=1;\n";
 
 		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 		$answer = "Ок";
@@ -302,7 +302,7 @@ $bot->on(function ($Update) use ($bot) {
 	}
 	// нет
 	if ((mb_stripos($mtext, "Нет, не надо.") !== false) && (GetState($message, $bot) == "notifications2")) {
-		$query = "DELETE FROM bot_notification_public where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()},and notification_type=2;\n";
+		$query = "DELETE FROM bot_notification_public where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=2;\n";
 
 		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 		$answer = "Ок";
@@ -344,7 +344,7 @@ $bot->on(function ($Update) use ($bot) {
 	}
 	// нет
 	if ((mb_stripos($mtext, "Нет, спасибо.") !== false) && (GetState($message, $bot) == "notifications3")) {
-		$query = "DELETE FROM bot_notification_public where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()},and notification_type=3;\n";
+		$query = "DELETE FROM bot_notification_public where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=3;\n";
 
 		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 		$answer = "Ок";
@@ -375,7 +375,7 @@ $bot->on(function ($Update) use ($bot) {
 	}
 	// нет
 	if ((mb_stripos($mtext, "Нет, не хочу.") !== false) && (GetState($message, $bot) == "notifications4")) {
-		$query = "DELETE FROM bot_notification_public where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()},and notification_type=4;\n";
+		$query = "DELETE FROM bot_notification_public where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=4;\n";
 
 		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 		$answer = "Ок";
