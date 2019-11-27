@@ -146,7 +146,7 @@ $bot->on(function ($Update) use ($bot) {
 	// start 2) Вы хотели бы получать персональные уведомления?
 	// да
 	if ((mb_stripos($mtext, "Да хочу!") !== false) && (GetState($message, $bot) == "start")) {
-		$answer = 'Пожалуйста, напишите свой игровой никнейм. Я попробую вас найти.';
+		$answer = 'Пожалуйста, напишите свой игровой никнейм (с учетом регистра). Я попробую вас найти.';
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 	}
