@@ -1015,6 +1015,8 @@ for ($i = $start_p; $i < $end_p; $i++) {
 		}
 	}
 
+	// TODO: Новый игрок
+
 	// echo PHP_EOL;
 	// echo $query_log;
 	// echo "players: " . count($players_server) . PHP_EOL;
