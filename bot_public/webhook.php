@@ -402,6 +402,11 @@ $bot->on(function ($Update) use ($bot) {
 			}
 			$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 			$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+			if (mb_stripos($answer, "Не удалось соединиться:") == false) {
+				$answer = "Настройка завершена! Приятного использования :)";
+			}
+			$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
+			$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 			SetState($message, $bot, "");
 			// Notif2($message, $bot);
 		} else {
