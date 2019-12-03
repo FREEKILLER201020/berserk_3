@@ -7,6 +7,7 @@ require "../api/api.php";
 
 // $file = file_put_contents(realpath(dirname(__FILE__)) . "/../cards_parser/cards/log.txt", var_dump($_REQUEST));
 
+$db_name = "";
 $file = file_get_contents(realpath(dirname(__FILE__)) . "/../.config.json");
 $config = json_decode($file, true);
 // print_r($config);
@@ -14,7 +15,6 @@ $query = "host={$config['host']} dbname={$config['dbname']} user={$config['user'
 // $dbconn = pg_pconnect($query) or die('Не удалось соединиться: ' . pg_last_error());
 $dbconn = pg_connect($query) or die('Не удалось соединиться: ' . pg_last_error());
 // $result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
-
 $token = "681634726:AAHafNwa8T3LXlezmIAUH-JjBGrI0qU-lfY";
 $bot = new \TelegramBot\Api\Client($token);
 // $bot->callbackQuery(function ($message) use ($bot) {
@@ -109,7 +109,7 @@ $bot->on(function ($Update) use ($bot) {
 	$mtext = $message->getText();
 	$cid = $message->getChat()->getId();
 	$user = $message->getFrom()->getId();
-	$query = "INSERT INTO messages_history (timemark, message, chat_id, user_id) values (current_timestamp,'$mtext',$cid,$user);\n";
+	$query = "INSERT INTO messages_history" . $db_name . " (timemark, message, chat_id, user_id) values (current_timestamp,'$mtext',$cid,$user);\n";
 	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 
 	// $bot->sendMessage($message->getChat()->getId(), LastUserMessage($cid, $user));
@@ -146,7 +146,7 @@ $bot->on(function ($Update) use ($bot) {
 	// start 2) Вы хотели бы получать персональные уведомления?
 	// да
 	if ((mb_stripos($mtext, "Да хочу!") !== false) && (GetState($message, $bot) == "start")) {
-		$answer = 'Пожалуйста, напишите свой игровой никнейм. Я попробую вас найти.';
+		$answer = 'Пожалуйста, напишите свой игровой никнейм (с учетом регистра). Я попробую вас найти.';
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 	}
@@ -171,7 +171,7 @@ $bot->on(function ($Update) use ($bot) {
 		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 			$clan_name = $line["title"];
 		}
-		$query = "UPDATE users set game_id=$id where id={$message->getFrom()->getId()};\n";
+		$query = "UPDATE users" . $db_name . " set game_id=$id where id={$message->getFrom()->getId()};\n";
 		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 
 		if (isset($id)) {
@@ -216,6 +216,9 @@ $bot->on(function ($Update) use ($bot) {
 	}
 	// нет
 	if ((mb_stripos($mtext, "Нет.") !== false) && (GetState($message, $bot) == "notifications1")) {
+		$query = "DELETE FROM bot_notification" . $db_name . " where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=1;\n";
+
+		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 		$answer = "Ок";
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
@@ -228,21 +231,21 @@ $bot->on(function ($Update) use ($bot) {
 		$nick = $message->getFrom()->getUsername();
 		$name = $message->getFrom()->getFirstName();
 		if ($time > 0) {
-			$query = "SELECT * FROM bot_notification where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=1";
+			$query = "SELECT * FROM bot_notification" . $db_name . " where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=1";
 			$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 			while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 				$is = 1;
 			}
 			if ($is == 1) {
-				$query = "UPDATE bot_notification set pre_start_time=$time where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=1;\n";
+				$query = "UPDATE bot_notification" . $db_name . " set pre_start_time=$time where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=1;\n";
 
 			} else {
-				$query = "INSERT INTO bot_notification (chat_id,user_id,notification_type,pre_start_time) values ({$message->getFrom()->getId()},{$message->getFrom()->getId()},1,{$time});\n";
+				$query = "INSERT INTO bot_notification" . $db_name . " (chat_id,user_id,notification_type,pre_start_time) values ({$message->getFrom()->getId()},{$message->getFrom()->getId()},1,{$time});\n";
 			}
 			$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 			// $answer = $query;
 			if (mb_stripos($answer, "Не удалось соединиться:") !== false) {
-				$query = "UPDATE users set username='$nick' and name='$name' where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()};\n";
+				$query = "UPDATE users" . $db_name . " set username='$nick' and name='$name' where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()};\n";
 				$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 			}
 			if (mb_stripos($answer, "Не удалось соединиться:") == false) {
@@ -273,20 +276,20 @@ $bot->on(function ($Update) use ($bot) {
 		$nick = $message->getFrom()->getUsername();
 		$name = $message->getFrom()->getFirstName();
 		$is = 0;
-		$query = "SELECT * FROM bot_notification where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=2";
+		$query = "SELECT * FROM bot_notification" . $db_name . " where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=2";
 		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 			$is = 1;
 		}
 		if ($is == 1) {
-			$query = "UPDATE bot_notification set pre_start_time=0 where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=2;\n";
+			$query = "UPDATE bot_notification" . $db_name . " set pre_start_time=0 where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=2;\n";
 		} else {
-			$query = "INSERT INTO bot_notification (chat_id,user_id,notification_type,pre_start_time) values ({$message->getFrom()->getId()},{$message->getFrom()->getId()},2,0);\n";
+			$query = "INSERT INTO bot_notification" . $db_name . " (chat_id,user_id,notification_type,pre_start_time) values ({$message->getFrom()->getId()},{$message->getFrom()->getId()},2,0);\n";
 		}
 		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 		// $answer = $query;
 		if (mb_stripos($answer, "Не удалось соединиться:") !== false) {
-			$query = "UPDATE users set username='$nick' and name='$name' where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()};\n";
+			$query = "UPDATE users" . $db_name . " set username='$nick' and name='$name' where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()};\n";
 			$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 		}
 		if (mb_stripos($answer, "Не удалось соединиться:") == false) {
@@ -299,6 +302,9 @@ $bot->on(function ($Update) use ($bot) {
 	}
 	// нет
 	if ((mb_stripos($mtext, "Нет, не надо.") !== false) && (GetState($message, $bot) == "notifications2")) {
+		$query = "DELETE FROM bot_notification" . $db_name . " where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=2;\n";
+
+		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 		$answer = "Ок";
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
@@ -312,20 +318,20 @@ $bot->on(function ($Update) use ($bot) {
 		$nick = $message->getFrom()->getUsername();
 		$name = $message->getFrom()->getFirstName();
 		$is = 0;
-		$query = "SELECT * FROM bot_notification where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=3";
+		$query = "SELECT * FROM bot_notification" . $db_name . " where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=3";
 		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 			$is = 1;
 		}
 		if ($is == 1) {
-			$query = "UPDATE bot_notification set pre_start_time=0 where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=3;\n";
+			$query = "UPDATE bot_notification" . $db_name . " set pre_start_time=0 where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=3;\n";
 		} else {
-			$query = "INSERT INTO bot_notification (chat_id,user_id,notification_type,pre_start_time) values ({$message->getFrom()->getId()},{$message->getFrom()->getId()},3,0);\n";
+			$query = "INSERT INTO bot_notification" . $db_name . " (chat_id,user_id,notification_type,pre_start_time) values ({$message->getFrom()->getId()},{$message->getFrom()->getId()},3,0);\n";
 		}
 		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 		// $answer = $query;
 		if (mb_stripos($answer, "Не удалось соединиться:") !== false) {
-			$query = "UPDATE users set username='$nick' and name='$name' where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()};\n";
+			$query = "UPDATE users" . $db_name . " set username='$nick' and name='$name' where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()};\n";
 			$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 		}
 		if (mb_stripos($answer, "Не удалось соединиться:") == false) {
@@ -338,6 +344,9 @@ $bot->on(function ($Update) use ($bot) {
 	}
 	// нет
 	if ((mb_stripos($mtext, "Нет, спасибо.") !== false) && (GetState($message, $bot) == "notifications3")) {
+		$query = "DELETE FROM bot_notification" . $db_name . " where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=3;\n";
+
+		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 		$answer = "Ок";
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
@@ -366,6 +375,9 @@ $bot->on(function ($Update) use ($bot) {
 	}
 	// нет
 	if ((mb_stripos($mtext, "Нет, не хочу.") !== false) && (GetState($message, $bot) == "notifications4")) {
+		$query = "DELETE FROM bot_notification" . $db_name . " where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=4;\n";
+
+		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 		$answer = "Ок";
 		$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 		$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
@@ -380,25 +392,30 @@ $bot->on(function ($Update) use ($bot) {
 		$nick = $message->getFrom()->getUsername();
 		$name = $message->getFrom()->getFirstName();
 		if (($len >= 2) && ($time >= 0) && ($time < 24)) {
-			$query = "SELECT * FROM bot_notification where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=4";
+			$query = "SELECT * FROM bot_notification" . $db_name . " where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=4";
 			$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 			while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 				$is = 1;
 			}
 			if ($is == 1) {
-				$query = "UPDATE bot_notification set pre_start_time=$time where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=4;\n";
+				$query = "UPDATE bot_notification" . $db_name . " set pre_start_time=$time where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=4;\n";
 
 			} else {
-				$query = "INSERT INTO bot_notification (chat_id,user_id,notification_type,pre_start_time) values ({$message->getFrom()->getId()},{$message->getFrom()->getId()},4,{$time});\n";
+				$query = "INSERT INTO bot_notification" . $db_name . " (chat_id,user_id,notification_type,pre_start_time) values ({$message->getFrom()->getId()},{$message->getFrom()->getId()},4,{$time});\n";
 			}
 			$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 			// $answer = $query;
 			if (mb_stripos($answer, "Не удалось соединиться:") !== false) {
-				$query = "UPDATE users set username='$nick' and name='$name' where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()};\n";
+				$query = "UPDATE users" . $db_name . " set username='$nick' and name='$name' where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()};\n";
 				$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 			}
 			if (mb_stripos($answer, "Не удалось соединиться:") == false) {
 				$answer = "Хорошо, запомнил.";
+			}
+			$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
+			$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+			if (mb_stripos($answer, "Не удалось соединиться:") == false) {
+				$answer = "Настройка завершена! Приятного использования :)";
 			}
 			$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 			$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
@@ -451,71 +468,12 @@ $bot->command('help', function ($message) use ($bot) {
 	$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
 	$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
 });
-// $bot->command('table', function ($message) use ($bot) {
-// 	$answer = "<pre>
-// First Header  | Second Header
-// ------------- | -------------
-// Content Cell  | Content Cell
-// Content Cell  | Content Cell</pre>";
-// 	$answer = "<pre> Атакует |   Защищается  |       Начало      |Победитель
-// \"Берсерк\"|    Fireborn   |2019-09-20 11:45:00|Fireborn
-// Fireborn |   \"Берсерк\"   |2019-09-19 13:45:00|\"Берсерк\"
-// \"Берсерк\"|Отряд Самоубийц|2019-09-18 16:30:00|Отряд Самоубийц
-// \"Берсерк\"|    Fireborn   |2019-09-17 15:30:00|\"Берсерк\"
-// \"Берсерк\"|      Epic     |2019-09-16 17:00:00|Epic
-// </pre>";
-// 	$bot->sendMessage($message->getChat()->getId(), $answer, "html", null, null, $keyboard);
-// });
-// $pic = "http://aftamat4ik.ru/wp-content/uploads/2017/03/photo_2016-12-13_23-21-07.jpg";
-
-// $bot->command('table2', function ($message) use ($bot) {
-// 	$pic = "https://app.clanberserk.ru/berserk_3/table.jpg";
-
-// 	$bot->sendPhoto($message->getChat()->getId(), $pic);
-// });
-// $bot->command('table3', function ($message) use ($bot) {
-// 	$answer = "<pre>1)
-// 	Атакует: \"Берсерк\"
-// 	Защищается: Fireborn
-// 	Начало: 2019-09-20 11:45:00
-// 	Победитель: Fireborn
-
-// 2)
-// 	Атакует: Fireborn
-// 	Защищается: \"Берсерк\"
-// 	Начало: 2019-09-19 13:45:00
-// 	Победитель: \"Берсерк\"
-
-// 3)
-// 	Атакует: \"Берсерк\"
-// 	Защищается: Отряд Самоубийц
-// 	Начало: 2019-09-18 16:30:00
-// 	Победитель: Отряд Самоубийц
-
-// 4)
-// 	Атакует: \"Берсерк\"
-// 	Защищается: Fireborn
-// 	Начало: 2019-09-17 15:30:00
-// 	Победитель: \"Берсерк\"
-
-// 5)
-// 	Атакует: \"Берсерк\"
-// 	Защищается: Epic
-// 	Начало: 2019-09-16 17:00:00
-// 	Победитель: Epic
-// </pre>";
-// 	$bot->sendMessage($message->getChat()->getId(), $answer, "html", null, null, $keyboard);
-// });
-// $bot->command('test', function ($message) use ($bot) {
-// 	$answer = 'Ура! Я сам что то написал!' . var_export($message, true);
-// 	$bot->sendMessage($message->getChat()->getId(), $answer);
-// });
 
 $bot->command('users', function ($message) use ($bot) {
 	$user_id = $message->getFrom()->getId();
 	if (($user_id == 249857309) || ($user_id == 221998912)) {
 
-		$query = "SELECT * from users";
+		$query = "SELECT * from users" . $db_name . "";
 		$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 		// $notifications = array();
 		$users = array();
@@ -576,7 +534,7 @@ $bot->command('users', function ($message) use ($bot) {
 
 $bot->command('timetable', function ($message) use ($bot) {
 	$user_id = $message->getFrom()->getId();
-	$query = "SELECT * from users";
+	$query = "SELECT * from users" . $db_name . "";
 	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 // $notifications = array();
 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
@@ -725,7 +683,7 @@ $bot->command('timetable', function ($message) use ($bot) {
 
 $bot->command('history', function ($message) use ($bot) {
 	$user_id = $message->getFrom()->getId();
-	$query = "SELECT * from users";
+	$query = "SELECT * from users" . $db_name . "";
 	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 // $notifications = array();
 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
@@ -922,7 +880,7 @@ $bot->command('history', function ($message) use ($bot) {
 // });
 
 $bot->command('info', function ($message) use ($bot) {
-	$query = "SELECT distinct on (id) id,game_id from users where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()} order by id desc";
+	$query = "SELECT distinct on (id) id,game_id from users" . $db_name . " where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()} order by id desc";
 	$result = pg_query($query);
 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 		$game_id = $line["game_id"];
@@ -956,7 +914,7 @@ pg_close($dbconn);
 
 function Notif1($message, $bot) {
 	$user_id = $message->getFrom()->getId();
-	$query = "SELECT * from users";
+	$query = "SELECT * from users" . $db_name . "";
 	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 // $notifications = array();
 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
@@ -1048,10 +1006,10 @@ function Notif4($message, $bot) {
 function Start($message, $bot) {
 	$nick = $message->getFrom()->getUsername();
 	$name = $message->getFrom()->getFirstName();
-	$query = "INSERT INTO users (id, username,name,chat_id) values ({$message->getFrom()->getId()},'$nick','$name',{$message->getChat()->getId()});\n";
+	$query = "INSERT INTO users" . $db_name . " (id, username,name,chat_id) values ({$message->getFrom()->getId()},'$nick','$name',{$message->getChat()->getId()});\n";
 	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 	if (mb_stripos($answer, "Не удалось соединиться:") !== false) {
-		$query = "UPDATE users set username='$nick' and name='$name' where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()};\n";
+		$query = "UPDATE users" . $db_name . " set username='$nick' and name='$name' where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()};\n";
 		$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 	}
 	SetState($message, $bot, "start");
@@ -1075,7 +1033,7 @@ function Start($message, $bot) {
 }
 
 function LastUserMessage($chat_id, $user_id, $back) {
-	$query = "select id,message from messages_history where user_id=$user_id and chat_id=$chat_id order by id,timemark desc limit $back";
+	$query = "select id,message from messages_history" . $db_name . " where user_id=$user_id and chat_id=$chat_id order by id,timemark desc limit $back";
 	$result = pg_query($query);
 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 		$res = $line["message"];
@@ -1087,12 +1045,12 @@ function SetState($message, $bot, $state) {
 	// $nick = $message->getFrom()->getUsername();
 	// $name = $message->getFrom()->getFirstName();
 
-	$query = "UPDATE users set chat_state='$state' where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()};\n";
+	$query = "UPDATE users" . $db_name . " set chat_state='$state' where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()};\n";
 	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 }
 
 function GetState($message, $bot) {
-	$query = "SELECT distinct on (id) id,chat_state from users where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()} order by id desc";
+	$query = "SELECT distinct on (id) id,chat_state from users" . $db_name . " where id={$message->getFrom()->getId()} and chat_id={$message->getChat()->getId()} order by id desc";
 	$result = pg_query($query);
 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 		$state = $line["chat_state"];
