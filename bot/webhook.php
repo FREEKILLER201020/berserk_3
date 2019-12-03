@@ -441,12 +441,18 @@ $bot->on(function ($Update) use ($bot) {
 	return true; // когда тут true - команда проходит
 });
 
-// Reply-Кнопки
-$bot->command("buttons", function ($message) use ($bot) {
-	$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardMarkup([[["text" => "Власть советам!"], ["text" => "Сиськи!"]]], true, true);
-	$keyboard->setOneTimeKeyboard(true);
-
-	$bot->sendMessage($message->getChat()->getId(), "тест", false, null, null, $keyboard);
+$bot->command('notifications_off', function ($message) use ($bot) {
+	$answer = 'Хорошо. Отключаю все уведомления. Что бы включить их снова, запустите команду /notifications';
+	$keyboard = new \TelegramBot\Api\Types\ReplyKeyboardHide();
+	$bot->sendMessage($message->getChat()->getId(), $answer, false, null, null, $keyboard);
+	$query = "DELETE FROM bot_notification" . $db_name . " where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=1;\n";
+	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
+	$query = "DELETE FROM bot_notification" . $db_name . " where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=2;\n";
+	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
+	$query = "DELETE FROM bot_notification" . $db_name . " where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=3;\n";
+	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
+	$query = "DELETE FROM bot_notification" . $db_name . " where chat_id={$message->getFrom()->getId()} and user_id={$message->getFrom()->getId()} and notification_type=4;\n";
+	$result = pg_query($query) or $answer = 'Не удалось соединиться: ' . pg_last_error();
 });
 
 // команда для start
