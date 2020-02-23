@@ -226,7 +226,7 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 }
 print_r($notifications);
 
-$query = "SELECT * from users";
+$query = "SELECT * from users_public";
 $result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 // $notifications = array();
 while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
