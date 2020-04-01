@@ -13,7 +13,7 @@ $dbconn = pg_pconnect($query) or die('Не удалось соединиться
 // $query = "select * from attacks where ended is null order by resolved desc;\n";
 $d = date('Y-m-d H:i:s');
 echo $d . PHP_EOL;
-$ftime = strtotime($d) + strtotime("-2 months");
+$ftime = strtotime($d) - strtotime("+8 weeks");
 $ftime = date('Y-m-d H:i:s', $ftime);
 $query = "select * from attacks where declared >= '$d' order by resolved desc;\n";
 echo $query;
