@@ -13,7 +13,7 @@ $dbconn = pg_pconnect($query) or die('Не удалось соединиться
 // $query = "select * from attacks where ended is null order by resolved desc;\n";
 $d = date('Y-m-d H:i:s');
 echo $d . PHP_EOL;
-$ftime = strtotime($d) - 60 * 60 * 24 * 30 * 2;
+$ftime = strtotime($d) - 60 * 60 * 24 * 5;
 $ftime = date('Y-m-d H:i:s', $ftime);
 $query = "select * from attacks where declared >= '$d' order by resolved desc;\n";
 echo $query;
