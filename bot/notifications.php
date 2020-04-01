@@ -16,6 +16,7 @@ echo $d . PHP_EOL;
 $ftime = strtotime($d) + strtotime("-2 months");
 $ftime = date('Y-m-d H:i:s', $ftime);
 $query = "select * from attacks where declared >= '$ftime' order by resolved desc;\n";
+echo $query;
 
 $result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 $fights = array();
