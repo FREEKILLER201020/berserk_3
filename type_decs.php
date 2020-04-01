@@ -1,5 +1,5 @@
 <?php
-// date_default_timezone_set('Europe/London');
+// date_default_timezone_set('GMT0');
 // echo date('l-jS-\of-F-Y-h:i:s-A');
 require "functions/matrix.php";
 require "classes/cards.php";

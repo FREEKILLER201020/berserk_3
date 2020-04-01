@@ -5,7 +5,7 @@ include '../classes/pushover.php';
 // require_once "vendor/autoload.php";
 error_reporting(1);
 
-date_default_timezone_set('Europe/London');
+date_default_timezone_set('GMT0');
 $time = 30;
 $file = file_get_contents(realpath(dirname(__FILE__)) . "/../.config.json");
 $config = json_decode($file, true);
