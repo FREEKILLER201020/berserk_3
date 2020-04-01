@@ -405,7 +405,7 @@ foreach ($notifications as $notification) {
 					$timestamp1 = strtotime($d);
 					$timestamp2 = strtotime($fight->ended);
 					$d = round(($timestamp1 - $timestamp2) / 60);
-					$d = 1;
+					// $d = 1;
 					echo $fight->ended . PHP_EOL;
 					echo $d . PHP_EOL;
 
