@@ -185,7 +185,7 @@ foreach ($not as $user) {
 				$d = round(($timestamp1 - $timestamp2) / 60);
 				echo $fight->ended . PHP_EOL;
 				echo $d . PHP_EOL;
-				$d = 1;
+				// $d = 1;
 
 				if (($d > 0) && ($d <= 1)) {
 					$push = new Pushover();
