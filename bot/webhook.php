@@ -811,7 +811,7 @@ $bot->command('history', function ($message) use ($bot) {
 						echo PHP_EOL . "NOTIFICATION 4_1" . PHP_EOL . $d . PHP_EOL;
 						if (($d <= 0) && ($d > $d2)) {
 							$bot->sendMessage($message->getChat()->getId(), $fight[ended], null, null, null, null);
-							$bot->sendMessage($message->getChat()->getId(), $fight[winer], null, null, null, null);
+							$bot->sendMessage($message->getChat()->getId(), $fight[to], null, null, null, null);
 							array_push($good_fights, $fight);
 						}
 					}
