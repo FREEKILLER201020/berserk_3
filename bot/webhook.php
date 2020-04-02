@@ -702,7 +702,7 @@ $bot->command('history', function ($message) use ($bot) {
 			$game_id = $line[game_id];
 		}
 	}
-	// $bot->sendMessage($message->getChat()->getId(), $game_id, null, null, null, null);
+	$bot->sendMessage($message->getChat()->getId(), $game_id, null, null, null, null);
 
 	$query = "select distinct on (id) timemark,id,nick,frags,deaths,level,clan,folder from players order by id, timemark desc;\n";
 	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
@@ -712,7 +712,7 @@ $bot->command('history', function ($message) use ($bot) {
 			$clan_id = $line[clan];
 		}
 	}
-	// $bot->sendMessage($message->getChat()->getId(), $user_id, null, null, null, null);
+	$bot->sendMessage($message->getChat()->getId(), $clan_id, null, null, null, null);
 	if (($game_id == "") || ($clan_id == "")) {
 		$answer = "Простите, кажется я вас еще плохо знаю. Пожалуйста, запустите сперва команду /start" . PHP_EOL . "Проверить, что я о вас знаю можно командой /info";
 		// }
