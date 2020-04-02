@@ -810,6 +810,7 @@ $bot->command('history', function ($message) use ($bot) {
 						$d2 = round(($timestamp1 - $timestamp3 - $dt) / 60);
 						echo PHP_EOL . "NOTIFICATION 4_1" . PHP_EOL . $d . PHP_EOL;
 						if (($d <= 0) && ($d > $d2)) {
+							$bot->sendMessage($message->getChat()->getId(), $fight[ended], null, null, null, null);
 							array_push($good_fights, $fight);
 						}
 					}
