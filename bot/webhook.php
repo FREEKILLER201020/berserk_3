@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: text/html; charset=utf-8');
-date_default_timezone_set('GMT0');
+// date_default_timezone_set('GMT0');
 // подрубаем API
 require_once "vendor/autoload.php";
 require "../api/api.php";
