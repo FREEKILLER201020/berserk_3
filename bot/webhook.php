@@ -800,6 +800,7 @@ $bot->command('history', function ($message) use ($bot) {
 				// echo "here2" . PHP_EOL;
 				if ($fight[ended] != "") {
 					// echo "here3" . PHP_EOL;
+					$bot->sendMessage($message->getChat()->getId(), $fight[ended], null, null, null, null);
 					$timestamp3 = strtotime($fight[resolved]);
 					$timestamp4 = strtotime($fight[ended]);
 					if ($timestamp4 >= $timestamp3) {
