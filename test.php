@@ -221,7 +221,7 @@ if ($load != 1) {
 	// quicksort($folders,0,0);
 
 }
-// print_r($folders);
+print_r($folders);
 // arraycheck($folders);
 // SAVE NEW DATA
 if ($save == 1) {
