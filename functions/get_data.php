@@ -1,7 +1,7 @@
 <?php
 
-function GetClans($array) {
-	$file = file_get_contents($array["clans_url"] . ".json");
+function GetClans($array, $filet) {
+	$file = file_get_contents($filet);
 	$json = json_decode($file, true);
 	return $json;
 }

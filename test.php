@@ -102,9 +102,7 @@ if ($new_scan == 1) {
 	$month = date('F');
 	$day = date('d');
 	$time = date('l-jS-\of-F-Y-h:i:s-A');
-	$clans = GetClans($config);
 	// $date = new DateTime();
-	print_r($clans);
 	$folder = $folder_root . "/new";
 	$path = $folder . "/$year";
 	exec("mkdir $path");
@@ -125,6 +123,8 @@ if ($new_scan == 1) {
 	exec($query);
 	$query = " wget -O \"$path/fights_$time.json\" http://berserktcg.ru/api/export/attacks.json --no-check-certificate";
 	exec($query);
+	$clans = GetClans($config, "$path/clans_$time.json");
+	print_r($clans);
 	foreach ($clans as $clan) {
 		$query = " wget -O \"$path/clan[{$clan['id']}]_$time.json\" http://berserktcg.ru/api/export/clan/" . $clan['id'] . ".json --no-check-certificate";
 		exec($query);
