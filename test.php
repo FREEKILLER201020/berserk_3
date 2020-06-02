@@ -331,7 +331,7 @@ if ($count > -1) {
 	$end_p = $start_p + $count;
 }
 if ($debug == 1) {
-	// echo PHP_EOL . "Scan from $start_p to $end_p" . PHP_EOL;
+	echo PHP_EOL . "Scan from $start_p to $end_p" . PHP_EOL;
 }
 $eras_log = array();
 $eras_stage = 0;
