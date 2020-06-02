@@ -118,15 +118,15 @@ if ($new_scan == 1) {
 	$path .= "/$time";
 	exec("mkdir $path");
 	echo $path . PHP_EOL;
-	$query = " wget -O \"$path/cities_$time.json\" http://berserktcg.ru/api/export/cities.json";
+	$query = " wget -O \"$path/cities_$time.json\" http://berserktcg.ru/api/export/cities.json --no-check-certificate";
 	echo $query . PHP_EOL;
 	exec($query);
-	$query = " wget -O \"$path/clans_$time.json\" http://berserktcg.ru/api/export/clans.json";
+	$query = " wget -O \"$path/clans_$time.json\" http://berserktcg.ru/api/export/clans.json --no-check-certificate";
 	exec($query);
-	$query = " wget -O \"$path/fights_$time.json\" http://berserktcg.ru/api/export/attacks.json";
+	$query = " wget -O \"$path/fights_$time.json\" http://berserktcg.ru/api/export/attacks.json --no-check-certificate";
 	exec($query);
 	foreach ($clans as $clan) {
-		$query = " wget -O \"$path/clan[{$clan['id']}]_$time.json\" http://berserktcg.ru/api/export/clan/" . $clan['id'] . ".json";
+		$query = " wget -O \"$path/clan[{$clan['id']}]_$time.json\" http://berserktcg.ru/api/export/clan/" . $clan['id'] . ".json --no-check-certificate";
 		exec($query);
 	}
 	// exit();
@@ -1013,9 +1013,32 @@ for ($i = $start_p; $i < $end_p; $i++) {
 				$player2->was = 1;
 			}
 		}
-	}
 
-	// TODO: Новый игрок
+	}
+	foreach ($players_after_update as $player2) {
+		if ($player2->was != 1) {
+			$clan1 = "Нет клана";
+			$clan2 = "Нет клана";
+			foreach ($clans_after_update as $clan) {
+				// if ($clan->id == $player1->clan_id) {
+				// 	$clan1 = $clan->title . "(" . $clan->id . ")";
+				// }
+				if ($clan->id == $player2->clan_id) {
+					$clan2 = $clan->title . "(" . $clan->id . ")";
+				}
+			}
+			$d = date('Y-m-d H:i:s', $folders[$i]['time'] - 3 * 60 * 60);
+			$query = "insert into players_updates (timemark,id,nick,old_clan,new_clan) values ('{$d}',$player2->id,'$player2->nick','$clan1','$clan2');\n";
+			$query_log .= $query;
+			// echo $query . PHP_EOL;
+			if ($debug == 1) {
+				$log["log"] .= "{" . $query . "}";
+				echo $query . PHP_EOL;
+			}
+			// $result = $connection->query($query);
+			$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+		}
+	}
 
 	// echo PHP_EOL;
 	// echo $query_log;
