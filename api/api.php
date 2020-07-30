@@ -976,7 +976,12 @@ function Index($array) {
 	// $result = $connection->query($query);
 	// print_r($clans);
 	// exit();
-	$query = "select distinct on (id) timemark,id,nick, frags, deaths,level,clan from players where timemark<='" . $array['datee'] . "' order by id,timemark DESC ";
+	$today = $array["datee"];
+	// echo $today;
+	$d = explode("/", $today);
+	// print_r($d);
+	$today = $d[2] . "-" . $d[0] . "-" . $d[1];
+	$query = "select distinct on (id) timemark,id,nick, frags, deaths,level,clan from players where timemark<='" . $today . "' order by id,timemark DESC ";
 	// } else {
 	// 	$query = "select distinct on (id) timemark,id,nick, frags, deaths,level,clan from players where clan=" . $array['clan'] . " and timemark<='" . $array['datee'] . "' order by id,timemark DESC ";
 	// }
