@@ -413,7 +413,14 @@ for ($i = $start_p; $i < $end_p; $i++) {
 			} else {
 				$file = file_get_contents(realpath(dirname(__FILE__)) . "/{$folders[$i]['folder']}/clan[{$row['id']}]_{$folders[$i]['file_dir']}.json");
 				$json_players = json_decode($file, true);
-				if ($json_players[players] == NULL) {
+				if ($json_players == NULL) {
+					$noerr = 0;
+					$log["clan[{$row['id']}]"] = "error";
+					// echo $folders[$i]['file_dir'] . PHP_EOL;
+					// print_r($log);
+					// print_r($json_players);
+				}
+				if ($json_players['players'] == NULL) {
 					$noerr = 0;
 					$log["clan[{$row['id']}]"] = "error";
 					// echo $folders[$i]['file_dir'] . PHP_EOL;
@@ -424,14 +431,14 @@ for ($i = $start_p; $i < $end_p; $i++) {
 					array_push($cities, $city);
 				}
 				$log["clan[{$row['id']}]"] = "ok";
-				if (!isset($json_players[players])) {
+				if (!isset($json_players['players'])) {
 					$noerr = 0;
 					$log["clan[{$row['id']}]"] = "error";
 					// echo $folders[$i]['file_dir'] . PHP_EOL;
 					// print_r($log);
 					// print_r($json_players);
 				}
-				if (!isset($json_players[cities])) {
+				if (!isset($json_players['cities'])) {
 					$noerr = 0;
 					$log["clan[{$row['id']}]"] = "error";
 					// echo $folders[$i]['file_dir'] . PHP_EOL;
@@ -505,7 +512,7 @@ for ($i = $start_p; $i < $end_p; $i++) {
 			// mysqli_close($connection);
 			// $connection=Connect($config);
 			$query = "select * from players_all();\n";
-			$result = pg_query($query);
+			$result = pg_query($query) or die('Не удалось соединиться: ' . pg_last_error());
 			$players_server = array();
 			$players_befor_update = array();
 			while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
@@ -896,109 +903,26 @@ for ($i = $start_p; $i < $end_p; $i++) {
 				$crit++;
 			}
 		}
-	}
 
-	$query = "select * from clans_list_all();\n";
-	// $result = $connection->query($query);
-	$result = pg_query($query);
-	$clans_after_update = array();
-	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-		$tmp = new ClanClassTest($line["id"], $line["title"], $line["points"], 0, $line["gone"], $line["created"]);
-		array_push($clans_after_update, $tmp);
-	}
-
-	// print_r($clans_befor_update);
-	// print_r($clans_after_update);
-	foreach ($clans_befor_update as $clan1) {
-		foreach ($clans_after_update as $clan2) {
-			if ($clan1->id == $clan2->id) {
-				// print_r($clan1);
-				// print_r($clan2);
-				if ($clan1->gone != $clan2->gone) {
-					$d = date('Y-m-d H:i:s', $folders[$i]['time'] - 3 * 60 * 60);
-					$query = "insert into clans_updates (timemark,id,title,created,gone) values ('{$d}',$clan1->id,'$clan1->title','$clan2->created','$clan2->gone');\n";
-					$query_log .= $query;
-					// echo $query . PHP_EOL;
-					if ($debug == 1) {
-						$log["log"] .= "{" . $query . "}";
-						echo $query . PHP_EOL;
-					}
-					// $result = $connection->query($query);
-					$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
-				}
-				if ($clan1->title != $clan2->title) {
-					$d = date('Y-m-d H:i:s', $folders[$i]['time'] - 3 * 60 * 60);
-					$query = "insert into clans_updates (timemark,id,created,title,new_title) values ('{$d}',$clan1->id,'$clan2->created','$clan1->title','$clan2->title');\n";
-					$query_log .= $query;
-					// echo $query . PHP_EOL;
-					if ($debug == 1) {
-						$log["log"] .= "{" . $query . "}";
-						echo $query . PHP_EOL;
-					}
-					// $result = $connection->query($query);
-					$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
-				}
-				$clan1->was = 1;
-				$clan2->was = 1;
-			}
+		$query = "select * from clans_list_all();\n";
+		// $result = $connection->query($query);
+		$result = pg_query($query);
+		$clans_after_update = array();
+		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+			$tmp = new ClanClassTest($line["id"], $line["title"], $line["points"], 0, $line["gone"], $line["created"]);
+			array_push($clans_after_update, $tmp);
 		}
-	}
 
-	foreach ($clans_after_update as $clan2) {
-		if ($clan2->was == 0) {
-			$d = date('Y-m-d H:i:s', $folders[$i]['time'] - 3 * 60 * 60);
-			$query = "insert into clans_updates (timemark,id,title,created) values ('{$d}',$clan2->id,'$clan2->title','$clan2->created');\n";
-			$query_log .= $query;
-			// echo $query . PHP_EOL;
-			if ($debug == 1) {
-				$log["log"] .= "{" . $query . "}";
-				echo $query . PHP_EOL;
-			}
-			// $result = $connection->query($query);
-			$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
-		}
-	}
-
-	$query = "select * from players_all();\n";
-	$result = pg_query($query);
-	$players_after_update = array();
-	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-
-		$tmp = new PlayerClass($line["timemark"], $line["id"], Restring($line["nick"]), $line["frags"], $line["deaths"], $line["level"], $line["clan"], "");
-		array_push($players_after_update, $tmp);
-	}
-
-	foreach ($players_befor_update as $player1) {
-		foreach ($players_after_update as $player2) {
-			if ($player1->id == $player2->id) {
-				if ($player1->nick != $player2->nick) {
-					$d = date('Y-m-d H:i:s', $folders[$i]['time'] - 3 * 60 * 60);
-					$query = "insert into players_updates (timemark,id,nick,new_nick) values ('{$d}',$player1->id,'$player1->nick','$player2->nick');\n";
-					$query_log .= $query;
-					// echo $query . PHP_EOL;
-					if ($debug == 1) {
-						$log["log"] .= "{" . $query . "}";
-						echo $query . PHP_EOL;
-					}
-					// $result = $connection->query($query);
-					$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
-				}
-				if ($player1->clan_id != $player2->clan_id) {
-					if (($player1->was == 0) && ($player2->was == 0)) {
-						// print_r($player1);
-						// print_r($player2);
-						$clan1 = "Нет клана";
-						$clan2 = "Нет клана";
-						foreach ($clans_after_update as $clan) {
-							if ($clan->id == $player1->clan_id) {
-								$clan1 = $clan->title . "(" . $clan->id . ")";
-							}
-							if ($clan->id == $player2->clan_id) {
-								$clan2 = $clan->title . "(" . $clan->id . ")";
-							}
-						}
+		// print_r($clans_befor_update);
+		// print_r($clans_after_update);
+		foreach ($clans_befor_update as $clan1) {
+			foreach ($clans_after_update as $clan2) {
+				if ($clan1->id == $clan2->id) {
+					// print_r($clan1);
+					// print_r($clan2);
+					if ($clan1->gone != $clan2->gone) {
 						$d = date('Y-m-d H:i:s', $folders[$i]['time'] - 3 * 60 * 60);
-						$query = "insert into players_updates (timemark,id,nick,old_clan,new_clan) values ('{$d}',$player1->id,'$player1->nick','$clan1','$clan2');\n";
+						$query = "insert into clans_updates (timemark,id,title,created,gone) values ('{$d}',$clan1->id,'$clan1->title','$clan2->created','$clan2->gone');\n";
 						$query_log .= $query;
 						// echo $query . PHP_EOL;
 						if ($debug == 1) {
@@ -1008,38 +932,122 @@ for ($i = $start_p; $i < $end_p; $i++) {
 						// $result = $connection->query($query);
 						$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 					}
+					if ($clan1->title != $clan2->title) {
+						$d = date('Y-m-d H:i:s', $folders[$i]['time'] - 3 * 60 * 60);
+						$query = "insert into clans_updates (timemark,id,created,title,new_title) values ('{$d}',$clan1->id,'$clan2->created','$clan1->title','$clan2->title');\n";
+						$query_log .= $query;
+						// echo $query . PHP_EOL;
+						if ($debug == 1) {
+							$log["log"] .= "{" . $query . "}";
+							echo $query . PHP_EOL;
+						}
+						// $result = $connection->query($query);
+						$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+					}
+					$clan1->was = 1;
+					$clan2->was = 1;
 				}
-				$player1->was = 1;
-				$player2->was = 1;
 			}
 		}
 
-	}
-	foreach ($players_after_update as $player2) {
-		if ($player2->was != 1) {
-			$clan1 = "Нет клана";
-			$clan2 = "Нет клана";
-			foreach ($clans_after_update as $clan) {
-				// if ($clan->id == $player1->clan_id) {
-				// 	$clan1 = $clan->title . "(" . $clan->id . ")";
-				// }
-				if ($clan->id == $player2->clan_id) {
-					$clan2 = $clan->title . "(" . $clan->id . ")";
+		foreach ($clans_after_update as $clan2) {
+			if ($clan2->was == 0) {
+				$d = date('Y-m-d H:i:s', $folders[$i]['time'] - 3 * 60 * 60);
+				$query = "insert into clans_updates (timemark,id,title,created) values ('{$d}',$clan2->id,'$clan2->title','$clan2->created');\n";
+				$query_log .= $query;
+				// echo $query . PHP_EOL;
+				if ($debug == 1) {
+					$log["log"] .= "{" . $query . "}";
+					echo $query . PHP_EOL;
+				}
+				// $result = $connection->query($query);
+				$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+			}
+		}
+
+		$query = "select * from players_all();\n";
+		$result = pg_query($query);
+		$players_after_update = array();
+		while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+
+			$tmp = new PlayerClass($line["timemark"], $line["id"], Restring($line["nick"]), $line["frags"], $line["deaths"], $line["level"], $line["clan"], "");
+			array_push($players_after_update, $tmp);
+		}
+
+		// if (count($players_befor_update) > 0 && (count($players_after_update) > 0)) {
+		foreach ($players_befor_update as $player1) {
+			foreach ($players_after_update as $player2) {
+				if ($player1->id == $player2->id) {
+					if ($player1->nick != $player2->nick) {
+						$d = date('Y-m-d H:i:s', $folders[$i]['time'] - 3 * 60 * 60);
+						$query = "insert into players_updates (timemark,id,nick,new_nick) values ('{$d}',$player1->id,'$player1->nick','$player2->nick');\n";
+						$query_log .= $query;
+						// echo $query . PHP_EOL;
+						if ($debug == 1) {
+							$log["log"] .= "{" . $query . "}";
+							echo $query . PHP_EOL;
+						}
+						// $result = $connection->query($query);
+						$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+					}
+					if ($player1->clan_id != $player2->clan_id) {
+						if (($player1->was == 0) && ($player2->was == 0)) {
+							// print_r($player1);
+							// print_r($player2);
+							$clan1 = "Нет клана";
+							$clan2 = "Нет клана";
+							foreach ($clans_after_update as $clan) {
+								if ($clan->id == $player1->clan_id) {
+									$clan1 = $clan->title . "(" . $clan->id . ")";
+								}
+								if ($clan->id == $player2->clan_id) {
+									$clan2 = $clan->title . "(" . $clan->id . ")";
+								}
+							}
+							$d = date('Y-m-d H:i:s', $folders[$i]['time'] - 3 * 60 * 60);
+							$query = "insert into players_updates (timemark,id,nick,old_clan,new_clan) values ('{$d}',$player1->id,'$player1->nick','$clan1','$clan2');\n";
+							$query_log .= $query;
+							// echo $query . PHP_EOL;
+							if ($debug == 1) {
+								$log["log"] .= "{" . $query . "}";
+								echo $query . PHP_EOL;
+							}
+							// $result = $connection->query($query);
+							$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+						}
+					}
+					$player1->was = 1;
+					$player2->was = 1;
 				}
 			}
-			$d = date('Y-m-d H:i:s', $folders[$i]['time'] - 3 * 60 * 60);
-			$query = "insert into players_updates (timemark,id,nick,old_clan,new_clan) values ('{$d}',$player2->id,'$player2->nick','$clan1','$clan2');\n";
-			$query_log .= $query;
-			// echo $query . PHP_EOL;
-			if ($debug == 1) {
-				$log["log"] .= "{" . $query . "}";
-				echo $query . PHP_EOL;
+
+		}
+		foreach ($players_after_update as $player2) {
+			if ($player2->was != 1) {
+				$clan1 = "Нет клана";
+				$clan2 = "Нет клана";
+				foreach ($clans_after_update as $clan) {
+					// if ($clan->id == $player1->clan_id) {
+					// 	$clan1 = $clan->title . "(" . $clan->id . ")";
+					// }
+					if ($clan->id == $player2->clan_id) {
+						$clan2 = $clan->title . "(" . $clan->id . ")";
+					}
+				}
+				$d = date('Y-m-d H:i:s', $folders[$i]['time'] - 3 * 60 * 60);
+				$query = "insert into players_updates (timemark,id,nick,old_clan,new_clan) values ('{$d}',$player2->id,'$player2->nick','$clan1','$clan2');\n";
+				$query_log .= $query;
+				// echo $query . PHP_EOL;
+				if ($debug == 1) {
+					$log["log"] .= "{" . $query . "}";
+					echo $query . PHP_EOL;
+				}
+				// $result = $connection->query($query);
+				$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 			}
-			// $result = $connection->query($query);
-			$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 		}
 	}
-
+	// }
 	// echo PHP_EOL;
 	// echo $query_log;
 	// echo "players: " . count($players_server) . PHP_EOL;
@@ -1049,11 +1057,15 @@ for ($i = $start_p; $i < $end_p; $i++) {
 	// echo "time: " . (microtime(true) * 10000 - $s_start) . PHP_EOL;
 
 	$file_link = $folders[$i]['folder'] . "/query_" . $folders[$i]['file_dir'] . ".sql";
+	$plr_log = var_export($players_befor_update, true);
+	$plr_log .= var_export($players_after_update, true);
+	$plr = $folders[$i]['folder'] . "/log_" . $folders[$i]['file_dir'] . ".txt";
 	// if (filesize($file_link)!=0) {
 	//     shell_exec('rm '.$file_link);
 	// }
 	// $text=json_encode($log, JSON_UNESCAPED_UNICODE);
 	file_put_contents($file_link, $query_log);
+	file_put_contents($plr, $plr_log);
 	$query = "mv " . $folders[$i]['folder'] . " " . str_replace($folders[$i]['file_dir'], "", str_replace("new", "scaned", $folders[$i]['folder']));
 	// echo $query . PHP_EOL;
 	if ($move == 1) {
@@ -1071,6 +1083,9 @@ for ($i = $start_p; $i < $end_p; $i++) {
 	// $result = $connection->query($query);
 	$file_link_scan = "scanned_folders.json";
 	file_put_contents($file_link_scan, json_encode($scanned_folders, JSON_UNESCAPED_UNICODE));
+	if ($debug == 1) {
+		print_r($log);
+	}
 }
 // for ($i = $start_p; $i < $end_p; $i++) {
 $query = "rm -r " . $folder_root . "/new/*";
