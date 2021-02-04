@@ -20,6 +20,7 @@ function Head() {
 
     <link rel="stylesheet" href="css/snack.css">
   	<link rel="stylesheet" href="css/three-dots.css">
+  	<link href="js/jquery-ui.css" rel="stylesheet">
 
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap;subset=cyrillic" rel="stylesheet">
@@ -52,22 +53,48 @@ function Head() {
                     </div>
                 </div>
                 <div id="navbar" class="navbar-collapse collapse justify-content-center settings">
-                    <text class=""> Дата: </text><input type="text" class=" " name="date" id="date" size="12" value="" />
-                    <text class=""> Эра: </text>
-                    <select class=" " id="era" name="era">
-                        <option value="-1"> --- </option>
-                    </select>
-                    <text class=""> Клан: </text>
-                    <select class=" " id="clans" name="Clans">
-                    </select>
-                    <text class=""> Сортировка: </text>
-                    <select class=" " id="order" name="Order">
-                    </select>
-                    <select class=" " id="order_way" name="Order_way">
-                        <option selected value="desc"> По убыванию </option>
-                        <option value="asc"> По возростанию </option>
-                    </select>
-                    <input class=" " type="hidden" id="debug" name="debug" value="1"><text class=""></text>
+	';
+}
+
+function Dates($h) {
+	if ($h == 1) {
+		echo '
+		<text class=""> Дата: </text><input type="text" class=" " name="date" id="date" size="12" value="" />
+	';
+	} else {
+		echo '
+		<text class=""> Дата: </text><input type="hidden" class=" " name="date" id="date" size="12" value="" />
+	';
+	}
+}
+
+function Eras() {
+	echo '
+		<text class=""> Эра: </text>
+		<select class=" " id="era" name="era">
+		<option value="-1"> --- </option>
+		</select>
+		<text class=""> Клан: </text>
+		<select class=" " id="clans" name="Clans">
+		</select>
+	';
+}
+
+function Sorter() {
+	echo '
+		<text class=""> Сортировка: </text>
+		<select class=" " id="order" name="Order">
+		</select>
+		<select class=" " id="order_way" name="Order_way">
+		<option selected value="desc"> По убыванию </option>
+		<option value="asc"> По возростанию </option>
+		</select>
+	';
+}
+
+function EndHead() {
+	echo '
+		<input class=" " type="hidden" id="debug" name="debug" value="1"><text class=""></text>
                 </div>
             </div>
         </div>
