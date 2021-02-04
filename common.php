@@ -99,7 +99,7 @@ function EndHead() {
             </div>
         </div>
     </nav>
-    <div id="dot" class="snippet hidden" data-title=".dot-flashing">
+    <div id="dot" class="snippet" data-title=".dot-flashing">
     	<div class="stage">
         	<div class="dot-flashing"></div>
     	</div>
