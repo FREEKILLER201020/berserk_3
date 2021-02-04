@@ -1348,6 +1348,7 @@ function indexEra($array) {
 			}
 		}
 	}
+	print_r($new_players);
 	if ($array['order_way'] == "asc") {
 		$new_players = array_reverse($new_players);
 	}
