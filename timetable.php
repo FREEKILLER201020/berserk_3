@@ -3,7 +3,7 @@
 require "common.php";
 ?>
 <?php Head();
-Dates(1);
+Dates(0);
 Eras();
 EndHead();?>
 <div id="showData"></div>

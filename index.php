@@ -3,7 +3,7 @@
 require "common.php";
 ?>
 <?php Head();
-Dates(0);
+Dates(1);
 Eras();
 Sorter();
 EndHead();?>

@@ -63,7 +63,7 @@ function Dates($h) {
 	';
 	} else {
 		echo '
-		<text class=""> Дата: </text><input type="hidden" class=" " name="date" id="date" size="12" value="" />
+		<text class="hidden"> Дата: </text><input type="hidden" class=" " name="date" id="date" size="12" value="" />
 	';
 	}
 }
