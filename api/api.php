@@ -1348,7 +1348,50 @@ function indexEra($array) {
 			}
 		}
 	}
-	print_r($new_players);
+	if ($array['order'] == "fragse") {
+		for ($i = 0; $i < count($new_players); $i++) {
+			for ($j = 0; $j < count($new_players); $j++) {
+				if ($new_players[$i]->frags_era > $new_players[$j]->frags_era) {
+					$tmp = $new_players[$i];
+					$new_players[$i] = $new_players[$j];
+					$new_players[$j] = $tmp;
+				}
+			}
+		}
+	}
+	if ($array['order'] == "deathse") {
+		for ($i = 0; $i < count($new_players); $i++) {
+			for ($j = 0; $j < count($new_players); $j++) {
+				if ($new_players[$i]->deaths_era > $new_players[$j]->deaths_era) {
+					$tmp = $new_players[$i];
+					$new_players[$i] = $new_players[$j];
+					$new_players[$j] = $tmp;
+				}
+			}
+		}
+	}
+	if ($array['order'] == "actions") {
+		for ($i = 0; $i < count($new_players); $i++) {
+			for ($j = 0; $j < count($new_players); $j++) {
+				if ($new_players[$i]->games > $new_players[$j]->games) {
+					$tmp = $new_players[$i];
+					$new_players[$i] = $new_players[$j];
+					$new_players[$j] = $tmp;
+				}
+			}
+		}
+	}
+	if ($array['order'] == "points") {
+		for ($i = 0; $i < count($new_players); $i++) {
+			for ($j = 0; $j < count($new_players); $j++) {
+				if ($new_players[$i]->points > $new_players[$j]->points) {
+					$tmp = $new_players[$i];
+					$new_players[$i] = $new_players[$j];
+					$new_players[$j] = $tmp;
+				}
+			}
+		}
+	}
 	if ($array['order_way'] == "asc") {
 		$new_players = array_reverse($new_players);
 	}
