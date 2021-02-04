@@ -37,8 +37,8 @@ require "common.php";
 </style>
  -->
 <div id="showData"></div>
-<script src="js/jquery-3.5.1.slim.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
+<script src="../js/jquery-3.5.1.slim.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
 <script src="../js/index.js"></script>
 <script src="../js/script.js"></script>
 <script src="../js/functions.js"></script>
