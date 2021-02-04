@@ -37,12 +37,12 @@ require "common.php";
 </style>
  -->
 <div id="showData"></div>
-<script src="../js/jquery-3.5.1.slim.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
+<script src="js/jquery-3.5.1.slim.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
 <script src="../js/index.js"></script>
 <script src="../js/script.js"></script>
 <script src="../js/functions.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
 $(document).ready(function() {
     $('#order').on("change", order);
