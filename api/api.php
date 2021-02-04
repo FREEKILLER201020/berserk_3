@@ -2,37 +2,37 @@
 // require "class.php";
 error_reporting(1);
 // print_r(pathinfo(get_included_files()[0]));
-$a = pathinfo(get_included_files()[0])[dirname];
+$a = pathinfo(get_included_files()[0])['dirname'];
 $a = explode("/", $a);
 // print_r($a);
 // echo $a[count($a) - 1];
 if ($a[count($a) - 1] == "berserk_3") {
-	require pathinfo(get_included_files()[0])[dirname] . "/functions/string.php";
-	require pathinfo(get_included_files()[0])[dirname] . "/classes/player.php";
-	require pathinfo(get_included_files()[0])[dirname] . "/classes/clan.php";
-	require pathinfo(get_included_files()[0])[dirname] . "/classes/era.php";
-	require pathinfo(get_included_files()[0])[dirname] . "/classes/fight.php";
-	require pathinfo(get_included_files()[0])[dirname] . "/classes/city.php";
-	require pathinfo(get_included_files()[0])[dirname] . "/classes/deck.php";
-	require pathinfo(get_included_files()[0])[dirname] . "/classes/cards.php";
-	$file = file_get_contents(realpath(pathinfo(get_included_files()[0])[dirname] . "/.config.json"));
+	require pathinfo(get_included_files()[0])['dirname'] . "/functions/string.php";
+	require pathinfo(get_included_files()[0])['dirname'] . "/classes/player.php";
+	require pathinfo(get_included_files()[0])['dirname'] . "/classes/clan.php";
+	require pathinfo(get_included_files()[0])['dirname'] . "/classes/era.php";
+	require pathinfo(get_included_files()[0])['dirname'] . "/classes/fight.php";
+	require pathinfo(get_included_files()[0])['dirname'] . "/classes/city.php";
+	require pathinfo(get_included_files()[0])['dirname'] . "/classes/deck.php";
+	require pathinfo(get_included_files()[0])['dirname'] . "/classes/cards.php";
+	$file = file_get_contents(realpath(pathinfo(get_included_files()[0])['dirname'] . "/.config.json"));
 } else {
 // exit();
 
-	require pathinfo(get_included_files()[0])[dirname] . "/../functions/string.php";
-	require pathinfo(get_included_files()[0])[dirname] . "/../classes/player.php";
-	require pathinfo(get_included_files()[0])[dirname] . "/../classes/clan.php";
-	require pathinfo(get_included_files()[0])[dirname] . "/../classes/era.php";
-	require pathinfo(get_included_files()[0])[dirname] . "/../classes/fight.php";
-	require pathinfo(get_included_files()[0])[dirname] . "/../classes/city.php";
-	require pathinfo(get_included_files()[0])[dirname] . "/../classes/deck.php";
-	require pathinfo(get_included_files()[0])[dirname] . "/../classes/cards.php";
-	$file = file_get_contents(realpath(pathinfo(get_included_files()[0])[dirname] . "/../.config.json"));
+	require pathinfo(get_included_files()[0])['dirname'] . "/../functions/string.php";
+	require pathinfo(get_included_files()[0])['dirname'] . "/../classes/player.php";
+	require pathinfo(get_included_files()[0])['dirname'] . "/../classes/clan.php";
+	require pathinfo(get_included_files()[0])['dirname'] . "/../classes/era.php";
+	require pathinfo(get_included_files()[0])['dirname'] . "/../classes/fight.php";
+	require pathinfo(get_included_files()[0])['dirname'] . "/../classes/city.php";
+	require pathinfo(get_included_files()[0])['dirname'] . "/../classes/deck.php";
+	require pathinfo(get_included_files()[0])['dirname'] . "/../classes/cards.php";
+	$file = file_get_contents(realpath(pathinfo(get_included_files()[0])['dirname'] . "/../.config.json"));
 }
 
-// print_r($_POST);
+// print_r($_REQUEST);
 session_start();
-// $file = file_get_contents(realpath(pathinfo(get_included_files()[0])[dirname] . "/.config.json"));
+// $file = file_get_contents(realpath(pathinfo(get_included_files()[0])['dirname'] . "/.config.json"));
 
 $config = json_decode($file, true);
 // print_r($config);
@@ -115,8 +115,13 @@ function OnCall($array, $config) {
 		header("Location: " . $array['back']);
 	}
 	pg_close($dbconn);
-	echo json_encode($return, JSON_UNESCAPED_UNICODE);
-	return json_encode($return, JSON_UNESCAPED_UNICODE);
+	if (intval($array['server_render']) == 1) {
+		echo $return;
+		return $return;
+	} else {
+		echo json_encode($return, JSON_UNESCAPED_UNICODE);
+		return json_encode($return, JSON_UNESCAPED_UNICODE);
+	}
 }
 
 function EraResClans($array) {
@@ -255,7 +260,7 @@ function EraResClans($array) {
 
 	$query = "SELECT distinct on (id) timemark, id, name, clan  from cities where clan <> -2 and timemark<='" . $tmp[ended] . "' and timemark>='" . $tmp[started] . "' order by id, timemark desc;";
 	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
-	echo $query . PHP_EOL;
+	// echo $query . PHP_EOL;
 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 		if (isset($results[$line[clan]])) {
 			// print_r($line);
@@ -287,6 +292,40 @@ function EraResClans($array) {
 	return $return;
 
 }
+
+class NameHistory {
+	public $name;
+	public $timemark;
+	public $time;
+
+	public function __construct($name, $timemark) {
+		$this->name = $name;
+		$this->timemark = $timemark;
+		$this->time = strtotime($timemark);
+	}
+}
+
+class HistoryClass {
+	public $id;
+	public $names = array();
+
+	public function __construct($id, $name) {
+		$this->id = $id;
+		array_push($this->names, $name);
+	}
+	public function AddName($name1) {
+		$was = 0;
+		foreach ($this->names as $name) {
+			if ($name->name == $name1->name) {
+				$was = 1;
+			}
+		}
+		if ($was == 0) {
+			array_push($this->names, $name1);
+		}
+	}
+}
+
 function History($array) {
 	$query = "select * from eras where id=$array[id];\n";
 
@@ -298,37 +337,66 @@ function History($array) {
 		$tmp[ended] = $line[ended] . " 23:59:59";
 	}
 	if ($array[clan] == -1) {
-		$query = "select * from attacks where ended is not null and declared>='$tmp[started]' and declared <='$tmp[ended]'  order by resolved desc;\n";
+		$query = "select * from attacks where ended is not null and resolved>='$tmp[started]' and resolved <='$tmp[ended]'  order by resolved desc;\n";
 	} else {
-		$query = "select * from attacks where ended is not null and (attacker=$array[clan] or defender=$array[clan]) and declared>='$tmp[started]' and declared <='$tmp[ended]' order by resolved desc;\n";
+		$query = "select * from attacks where ended is not null and (attacker=$array[clan] or defender=$array[clan]) and resolved>='$tmp[started]' and resolved <='$tmp[ended]' order by resolved desc;\n";
 	}
 	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 	$i = 1;
+
+	$clans = array();
+	$query2 = "SELECT  timemark,id,title, points, created, gone from clans where timemark<='$tmp[ended]' and timemark>='$tmp[started]' order by timemark asc;\n";
+	$result2 = pg_query($query2) or die('Ошибка запроса: ' . pg_last_error());
+	while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
+		if (isset($clans[$line2[id]])) {
+			$clans[$line2[id]]->AddName(new NameHistory($line2[title], $line2[timemark]));
+			// array_push($clans[$line2[id]]->names, new NameHistory($line2[title], $line2[timemark]));
+		} else {
+			$clans[$line2[id]] = new HistoryClass($line2[id], new NameHistory($line2[title], $line2[timemark]));
+		}
+	}
+
+	$cities = array();
+	$query2 = "SELECT  timemark, id, name, clan from cities where timemark<='$tmp[ended]' and timemark>='$tmp[started]' order by timemark asc;\n";
+	$result2 = pg_query($query2) or die('Ошибка запроса: ' . pg_last_error());
+	while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
+		if (isset($cities[$line2[id]])) {
+			$cities[$line2[id]]->AddName(new NameHistory($line2[name], $line2[timemark]));
+			// array_push($cities[$line2[id]]->names, new NameHistory($line2[name], $line2[timemark]));
+		} else {
+			$cities[$line2[id]] = new HistoryClass($line2[id], new NameHistory($line2[name], $line2[timemark]));
+		}
+	}
+
 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-		$query2 = "SELECT distinct on (id) timemark,id,title, points, created, gone from clans where timemark<='$line[resolved]' order by id,timemark desc;\n";
-		$result2 = pg_query($query2) or die('Ошибка запроса: ' . pg_last_error());
-		while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
-			if ($line[attacker] == $line2[id]) {
-				$line[attacker] = $line2[title];
+
+		foreach ($clans[$line[attacker]]->names as $name) {
+			if ($name->time <= strtotime($line[resolved])) {
+				$line[attacker] = $name->name;
 			}
-			if ($line[defender] == $line2[id]) {
-				$line[defender] = $line2[title];
+		}
+		foreach ($clans[$line[defender]]->names as $name) {
+			if ($name->time <= strtotime($line[resolved])) {
+				$line[defender] = $name->name;
 			}
-			if ($line[winer] == $line2[id]) {
-				$line[winer] = $line2[title];
+		}
+		foreach ($clans[$line[winer]]->names as $name) {
+			if ($name->time <= strtotime($line[resolved])) {
+				$line[winer] = $name->name;
 			}
 		}
 
-		$query2 = "SELECT distinct on (id) timemark, id, name, clan from cities where timemark<='$line[resolved]' order by id,timemark desc;\n";
-		$result2 = pg_query($query2) or die('Ошибка запроса: ' . pg_last_error());
-		while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
-			if ($line[from] == $line2[id]) {
-				$line[from] = $line2[name];
-			}
-			if ($line[to] == $line2[id]) {
-				$line[to] = $line2[name];
+		foreach ($cities[$line[from]]->names as $name) {
+			if ($name->time <= strtotime($line[resolved])) {
+				$line[from] = $name->name;
 			}
 		}
+		foreach ($cities[$line[to]]->names as $name) {
+			if ($name->time <= strtotime($line[resolved])) {
+				$line[to] = $name->name;
+			}
+		}
+
 		if ($line[from] == -1) {
 			$line[from] = "Варвары";
 		}
@@ -344,7 +412,10 @@ function History($array) {
 		array_push($timetable, $tmp);
 		$i++;
 	}
-	return $timetable;
+	if (intval($array["server_render"]) == 1) {
+		$return = Render($timetable, $pagination, $offset);
+	}
+	return $return;
 }
 function Timetable($array) {
 	$query = "select * from eras where id=$array[id];\n";
@@ -357,37 +428,67 @@ function Timetable($array) {
 		$tmp[ended] = $line[ended] . " 23:59:59";
 	}
 	if ($array[clan] == -1) {
-		$query = "select * from attacks where ended is null and declared>='$tmp[started]' and declared <='$tmp[ended]'  order by resolved asc;\n";
+		$query = "select * from attacks where ended is null and resolved>='$tmp[started]' and resolved <='$tmp[ended]'  order by resolved asc;\n";
 	} else {
-		$query = "select * from attacks where ended is null and (attacker=$array[clan] or defender=$array[clan]) and declared>='$tmp[started]' and declared <='$tmp[ended]' order by resolved asc;\n";
+		$query = "select * from attacks where ended is null and (attacker=$array[clan] or defender=$array[clan]) and resolved>='$tmp[started]' and resolved <='$tmp[ended]' order by resolved asc;\n";
 	}
+	// echo $query;
 	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 	$i = 1;
+
+	$clans = array();
+	$query2 = "SELECT  timemark,id,title, points, created, gone from clans where timemark<='$tmp[ended]' and timemark>='$tmp[started]' order by timemark asc;\n";
+	$result2 = pg_query($query2) or die('Ошибка запроса: ' . pg_last_error());
+	while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
+		if (isset($clans[$line2[id]])) {
+			$clans[$line2[id]]->AddName(new NameHistory($line2[title], $line2[timemark]));
+			// array_push($clans[$line2[id]]->names, new NameHistory($line2[title], $line2[timemark]));
+		} else {
+			$clans[$line2[id]] = new HistoryClass($line2[id], new NameHistory($line2[title], $line2[timemark]));
+		}
+	}
+
+	$cities = array();
+	$query2 = "SELECT  timemark, id, name, clan from cities where timemark<='$tmp[ended]' and timemark>='$tmp[started]' order by timemark asc;\n";
+	$result2 = pg_query($query2) or die('Ошибка запроса: ' . pg_last_error());
+	while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
+		if (isset($cities[$line2[id]])) {
+			$cities[$line2[id]]->AddName(new NameHistory($line2[name], $line2[timemark]));
+			// array_push($cities[$line2[id]]->names, new NameHistory($line2[name], $line2[timemark]));
+		} else {
+			$cities[$line2[id]] = new HistoryClass($line2[id], new NameHistory($line2[name], $line2[timemark]));
+		}
+	}
+
 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-		$query2 = "SELECT distinct on (id) timemark,id,title, points, created, gone from clans where timemark<='$line[resolved]' order by id,timemark desc;\n";
-		$result2 = pg_query($query2) or die('Ошибка запроса: ' . pg_last_error());
-		while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
-			if ($line[attacker] == $line2[id]) {
-				$line[attacker] = $line2[title];
+
+		foreach ($clans[$line[attacker]]->names as $name) {
+			if ($name->time <= strtotime($line[resolved])) {
+				$line[attacker] = $name->name;
 			}
-			if ($line[defender] == $line2[id]) {
-				$line[defender] = $line2[title];
+		}
+		foreach ($clans[$line[defender]]->names as $name) {
+			if ($name->time <= strtotime($line[resolved])) {
+				$line[defender] = $name->name;
 			}
-			if ($line[winer] == $line2[id]) {
-				$line[winer] = $line2[title];
+		}
+		foreach ($clans[$line[winer]]->names as $name) {
+			if ($name->time <= strtotime($line[resolved])) {
+				$line[winer] = $name->name;
 			}
 		}
 
-		$query2 = "SELECT distinct on (id) timemark, id, name, clan from cities where timemark<='$line[resolved]' order by id,timemark desc;\n";
-		$result2 = pg_query($query2) or die('Ошибка запроса: ' . pg_last_error());
-		while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
-			if ($line[from] == $line2[id]) {
-				$line[from] = $line2[name];
-			}
-			if ($line[to] == $line2[id]) {
-				$line[to] = $line2[name];
+		foreach ($cities[$line[from]]->names as $name) {
+			if ($name->time <= strtotime($line[resolved])) {
+				$line[from] = $name->name;
 			}
 		}
+		foreach ($cities[$line[to]]->names as $name) {
+			if ($name->time <= strtotime($line[resolved])) {
+				$line[to] = $name->name;
+			}
+		}
+
 		if ($line[from] == -1) {
 			$line[from] = "Варвары";
 		}
@@ -403,17 +504,23 @@ function Timetable($array) {
 		array_push($timetable, $tmp);
 		$i++;
 	}
-	return $timetable;
+	if (intval($array["server_render"]) == 1) {
+		$return = Render($timetable, $pagination, $offset);
+	}
+	return $return;
 }
 function PlayersUpdates($array) {
-
-	$query = "select * from players_updates order by timemark desc;\n";
-
+	$limit = intval($array["limit"]);
+	$offset = intval($array["offset"]);
+	$query = "select * from players_updates order by timemark desc offset " . $offset * $limit . " limit " . $limit . "";
+	// echo $query;
 	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 	$log = array();
-	// echo $query;
+	$i = 1;
 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 		$tmp = array();
+		$tmp[№] = $offset * $limit + $i;
+		$i++;
 		$tmp[time] = $line[timemark];
 		if (($line[old_clan] == "") && ($line[new_clan] == "")) {
 			$tmp[log] = "Игрок <b>$line[nick] ($line[id])</b> сменил ник на <b>$line[new_nick]</b>";
@@ -427,13 +534,34 @@ function PlayersUpdates($array) {
 			if (($line[new_clan] != "Нет клана") && ($line[old_clan] != "Нет клана")) {
 				$tmp[log] = "Игрок <b>$line[nick] ($line[id])</b> сменил клан с <b>$line[old_clan]</b> на <b>$line[new_clan]</b>";
 			}
-			// $tmp="$line[nick] changed nick to $line[new_nick]";
 		}
-		// print_r($line);
-		// $tmp = new PlayerClass($line["timemark"], $line["id"], Restring($line["nick"]), $line["frags"], $line["deaths"], $line["level"], $line["clan_id"], null);
 		array_push($log, $tmp);
 	}
-	return $log;
+	$query = "select count(id) from players_updates";
+	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+	$lines_count = 0;
+	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+		$lines_count = $line["count"];
+	}
+	$pages = floor(($lines_count / $limit) - 0.1);
+	$pagination = array();
+	if ($offset != 0) {
+		array_push($pagination, 0);
+	}
+	if ($offset > 1) {
+		array_push($pagination, $offset - 1);
+	}
+	array_push($pagination, $offset);
+	if ($offset < $pages - 1) {
+		array_push($pagination, $offset + 1);
+	}
+	if ($offset != $pages) {
+		array_push($pagination, $pages);
+	}
+	if (intval($array["server_render"]) == 1) {
+		$return = Render($log, $pagination, $offset);
+	}
+	return $return;
 }
 function ClansUpdates($array) {
 
@@ -858,7 +986,6 @@ function Eras($array) {
 	// }
 }
 function EraDates($array) {
-	// print_r($array);
 	if ($array['id'] == -1) {
 		$dates = array();
 		// $query = "use berserk;\n";
@@ -954,44 +1081,18 @@ function Clans($array) {
 }
 
 function Index($array) {
-
-	// echo $today;
-	// $query = "use berserk;\n";
-	// $result = $connection->query($query);
-	// $connection = Connect($config);
-	// $query = "call {$config["base_database"]}.clans_list(\"$today\");\n";
-	// $result = $connection->query($query);
+	$limit = intval($array["limit"]);
+	$offset = intval($array["offset"]);
+	$order = pg_escape_string($array["order"]);
+	$order_way = pg_escape_string($array["order_way"]);
 	$clans = Clans($array);
-	// echo $query;
-	// if ($result->num_rows > 0) {
-	// 	while ($row = $result->fetch_assoc()) {
-	// 		// print_r($row);
-	// 		$tmp = new ClanClass($row["id"], $row["title"], $row["points"]);
-	// 		array_push($clans, $tmp);
-	// 	}
-	// }
-	// // print_r($clans);
-	// $connection = Connect($config);
-	// $query = "use berserk;\n";
-	// $result = $connection->query($query);
-	// print_r($clans);
-	// exit();
 	$today = $array["datee"];
-	// echo $today;
 	$d = explode("/", $today);
-	// print_r($d);
 	$today = $d[2] . "-" . $d[0] . "-" . $d[1];
-	$query = "select distinct on (id) timemark,id,nick, frags, deaths,level,clan from players where timemark<='" . $today . "' order by id,timemark DESC ";
-	// } else {
-	// 	$query = "select distinct on (id) timemark,id,nick, frags, deaths,level,clan from players where clan=" . $array['clan'] . " and timemark<='" . $array['datee'] . "' order by id,timemark DESC ";
-	// }
+	$query = "select * from (select distinct on (id) timemark,id,nick as nick2,UPPER(nick) as nick, frags, deaths,level,clan from players where timemark<='" . $today . "' order by id,timemark DESC ) t order by " . $order . " $order_way offset " . $offset * $limit . " limit " . $limit . "";
 	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 	$players = array();
-	// echo $query;
 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-
-		// print_r($row);
-		// if ($row["timemark"] == $today){
 		$clan_title = "Нет клана";
 		$clan_id = -2;
 		foreach ($clans as $clan) {
@@ -1000,104 +1101,16 @@ function Index($array) {
 				$clan_id = $line["clan"];
 			}
 		}
-		// }
-
-		// if ($array['clan'] == -1) {
-		// if (($nickname==$row["nick"])&&($nickname!=null)){
-		$tmp = new PlayerClass($line["timemark"], $line["id"], Restring($line["nick"]), $line["frags"], $line["deaths"], $line["level"], $clan_id, $clan_title);
-		// }
-		// } else {
-		// 	if ($array['clan'] == $clan_id) {
-		// 		// if (($nickname==$row["nick"])&&($nickname!=null)){
-		// 		$tmp = new PlayerClass($line["timemark"], $line["id"], Restring($line["nick"]), $line["frags"], $line["deaths"], $line["level"], $clan_id, $clan_title);
-		// 		// array_push($players, $tmp);
-		// 		// }
-		// 	}
-		// }
+		$tmp = new PlayerClass($line["timemark"], $line["id"], Restring($line["nick2"]), $line["frags"], $line["deaths"], $line["level"], $clan_id, $clan_title);
 		if ($line["clan"] == -1) {
 			$line["clan"] = -2;
 		}
 		if ((($array['clan'] != -1) && ($line["clan"] == $array['clan'])) || ($array['clan'] == -1)) {
 			array_push($players, $tmp);
 		}
-
-	}
-	// }
-	// print_r($players);
-	if ($array['order'] == "nick") {
-		$nicks = array();
-		$ids = array();
-		for ($i = 0; $i < count($players); $i++) {
-			array_push($nicks, $players[$i]->nick);
-			array_push($ids, $i);
-		}
-		for ($i = 0; $i < count($nicks); $i++) {
-			for ($j = 0; $j < count($nicks); $j++) {
-				if (strnatcmp(mb_strtolower($nicks[$i]), mb_strtolower($nicks[$j])) == -1) {
-					$tmp = $nicks[$i];
-					$nicks[$i] = $nicks[$j];
-					$nicks[$j] = $tmp;
-					$tmp = $ids[$i];
-					$ids[$i] = $ids[$j];
-					$ids[$j] = $tmp;
-				}
-			}
-		}
-		$new = array();
-		for ($i = 0; $i < count($ids); $i++) {
-			array_push($new, $players[$ids[$i]]);
-		}
-		$players = $new;
-	}
-	if ($array['order'] == "frags") {
-		for ($i = 0; $i < count($players); $i++) {
-			for ($j = 0; $j < count($players); $j++) {
-				if ($players[$i]->frags > $players[$j]->frags) {
-					$tmp = $players[$i];
-					$players[$i] = $players[$j];
-					$players[$j] = $tmp;
-				}
-			}
-		}
-	}
-	if ($array['order'] == "deaths") {
-		for ($i = 0; $i < count($players); $i++) {
-			for ($j = 0; $j < count($players); $j++) {
-				if ($players[$i]->deaths > $players[$j]->deaths) {
-					$tmp = $players[$i];
-					$players[$i] = $players[$j];
-					$players[$j] = $tmp;
-				}
-			}
-		}
-	}
-	if ($array['order'] == "level") {
-		for ($i = 0; $i < count($players); $i++) {
-			for ($j = 0; $j < count($players); $j++) {
-				if ($players[$i]->level > $players[$j]->level) {
-					$tmp = $players[$i];
-					$players[$i] = $players[$j];
-					$players[$j] = $tmp;
-				}
-			}
-		}
-	}
-	if ($array['order'] == "clan_id") {
-		for ($i = 0; $i < count($players); $i++) {
-			for ($j = 0; $j < count($players); $j++) {
-				if ($players[$i]->clan_id > $players[$j]->clan_id) {
-					$tmp = $players[$i];
-					$players[$i] = $players[$j];
-					$players[$j] = $tmp;
-				}
-			}
-		}
-	}
-	if ($array['order_way'] == "asc") {
-		$players = array_reverse($players);
 	}
 	$return = array();
-	$num = 1;
+	$num = $offset * $limit + 1;
 	foreach ($players as $player) {
 		if ($array['debug'] == "true") {
 			array_push($return, new PlayerClassIndexD($num, $player->nick, $player->frags, $player->deaths, $player->level, $player->clan_title, $player->timemark));
@@ -1107,26 +1120,93 @@ function Index($array) {
 		$num++;
 
 	}
-	// print_r($players);
+	$query = "select count (id) from (select distinct on(id) timemark,id from players where timemark<='" . $today . "' order by id,timemark DESC) t";
+	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
+	$lines_count = 0;
+	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+		$lines_count = $line["count"];
+	}
+	$pages = floor(($lines_count / $limit) - 0.1);
+	$pagination = array();
+	if ($offset != 0) {
+		array_push($pagination, 0);
+	}
+	if ($offset > 1) {
+		array_push($pagination, $offset - 1);
+	}
+	array_push($pagination, $offset);
+	if ($offset < $pages - 1) {
+		array_push($pagination, $offset + 1);
+	}
+	if ($offset != $pages) {
+		array_push($pagination, $pages);
+	}
+	if (intval($array["server_render"]) == 1) {
+		$return = Render($return, $pagination, $offset);
+	}
 	return $return;
 }
 
-function indexEra($array) {
-	$today = $array["datee"];
-	// echo $today;
-	$d = explode("/", $today);
-	// print_r($d);
-	$today = $d[2] . "-" . $d[0] . "-" . $d[1] . " 23:59:59";
+function Render($data, $pagination, $offset) {
+	$res = '<div class="data container-xl table-responsive table-bordered">
+	<table id="table1" class="table table-striped">
+	<thead>
+	<tr>';
+	// head
+	foreach ($data[0] as $key => $value) {
+		$res .= '<th scope="col">' . $key . '</th>';
+	}
+	$res .= '</tr>
+        </thead>
+        <tbody>';
 
-	// echo $today;
-	// $query = "use berserk;\n";
-	// $result = $connection->query($query);
-	// $connection = Connect($config);
-	// $query = "call {$config["base_database"]}.clans_list(\"$today\");\n";
-	// $result = $connection->query($query);
+	// Body
+	foreach ($data as $row) {
+		$i = 1;
+		$res .= '<tr>';
+		foreach ($row as $key => $value) {
+			if ($i == 1) {
+				$res .= '<th scope="col">' . $value . '</th>';
+			} else {
+				$res .= '<td>' . $value . '</td>';
+			}
+			$i++;
+		}
+		$res .= '</tr>';
+	}
+	$res .= '</tbody>
+    </table>
+</div>';
+
+// pagination
+	if ($pagination !== null) {
+		$res .= '<div class="container pagination">
+    <div class="col-md-12">
+        <ul class="nav justify-content-between">';
+		foreach ($pagination as $key => $value) {
+			if ($offset == $value) {
+				$res .= '<li><a class="active" onclick="setOffset(' . $value . ')">' . $value . '</a></li>';
+			} else {
+				$res .= '<li><a onclick="setOffset(' . $value . ')">' . $value . '</a></li>';
+			}
+		}
+		$res .= '</ul>
+    </div>
+</div>';
+	}
+	return $res;
+}
+
+function indexEra($array) {
+	$limit = intval($array["limit"]);
+	$offset = intval($array["offset"]);
+	$order = pg_escape_string($array["order"]);
+	$order_way = pg_escape_string($array["order_way"]);
+	$today = $array["datee"];
+	$d = explode("/", $today);
+	$today = $d[2] . "-" . $d[0] . "-" . $d[1] . " 23:59:59";
 	$era = EraDates($array);
 	$lbz = json_decode($era[0]->lbz, true);
-	// print_r($lbz);
 	$started = $era[0]->started . " 23:59:59";
 	$ended = $era[0]->ended . " 23:59:59";
 	if ($array['big'] != 1) {
@@ -1139,25 +1219,14 @@ function indexEra($array) {
 	}
 	$timestamp = strtotime($started);
 	$started2 = date("Y-m-d H:i:s", $timestamp - 24 * 60 * 60);
-	// print_r($era);
-	// exit();
 	$clans = Clans($array);
-	if ($array['clan'] < 0) {
-		$query = "select timemark,id,nick, frags, deaths,level,clan from players where timemark<='" . $ended . "' and timemark>= '" . $started . "' order by id,timemark DESC ";
-	} else {
-		$query = "select timemark,id,nick, frags, deaths,level,clan from players where clan=" . $array['clan'] . " and timemark<='" . $ended . "' and timemark>= '" . $started . "' order by id,timemark DESC ";
-	}
-	// echo $query;
+
+	$query = "select * from ((select id,timemark,nick, frags, deaths,level,clan from players where timemark<='" . $ended . "' and timemark>= '" . $started . "' order by id,timemark DESC) UNION ALL (select distinct on (id) id, timemark,nick, frags, deaths,level,clan from players where timemark< '" . $started2 . "' order by id,timemark DESC)) t order by id asc, timemark desc";
 	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
 	$players = array();
-	// exit();
 	$id_p = -1;
 	$rows = array();
-
 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-
-		// print_r($row);
-		// if ($row["timemark"] == $today){
 		$clan_title = "Нет клана";
 		$clan_id = -2;
 		foreach ($clans as $clan) {
@@ -1166,80 +1235,16 @@ function indexEra($array) {
 				$clan_id = $line["clan"];
 			}
 		}
-		// }
-
 		if ($array['clan'] == -1) {
-			// if (($nickname==$row["nick"])&&($nickname!=null)){
 			$tmp = new PlayerClass($line["timemark"], $line["id"], Restring($line["nick"]), $line["frags"], $line["deaths"], $line["level"], $clan_id, $clan_title);
-			// array_push($players, $tmp);
-			// }
 		} else {
 			if ($array['clan'] == $clan_id) {
-				// if (($nickname==$row["nick"])&&($nickname!=null)){
 				$tmp = new PlayerClass($line["timemark"], $line["id"], Restring($line["nick"]), $line["frags"], $line["deaths"], $line["level"], $clan_id, $clan_title);
-				// array_push($players, $tmp);
-				// }
 			}
 		}
 		if (($id_p == -1) || ($line["id"] == $id_p)) {
 			array_push($rows, $tmp);
 		} else {
-			// echo $id_p . PHP_EOL;
-			// echo "->";
-			// print_r($rows);
-			if ($array['clan'] < 0) {
-				$query = "select timemark,id,nick, frags, deaths,level,clan from players where id=" . $id_p . " and timemark< '" . $started2 . "' order by id,timemark DESC limit 1";
-			} else {
-				$query = "select timemark,id,nick, frags, deaths,level,clan from players where clan=" . $array['clan'] . " and id=" . $id_p . " and timemark< '" . $started2 . "' order by id,timemark DESC limit 1";
-			}
-			// echo $query . PHP_EOL;
-			$result2 = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
-			// $players = array();
-			// exit();
-			// $id_p = -1;
-			// $rows = array();
-
-			while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
-				// echo $line2["id"] . PHP_EOL;
-				// echo ";";
-
-				// print_r($row);
-				// if ($row["timemark"] == $today){
-				$clan_title = "Нет клана";
-				$clan_id = -2;
-				foreach ($clans as $clan) {
-					if ($line2["clan"] == $clan->id) {
-						$clan_title = $clan->title;
-						$clan_id = $line2["clan"];
-					}
-				}
-				// }
-
-				if ($array['clan'] == -1) {
-					// if (($nickname==$row["nick"])&&($nickname!=null)){
-					$tmp2 = new PlayerClass($line2["timemark"], $line2["id"], Restring($line2["nick"]), $line2["frags"], $line2["deaths"], $line2["level"], $clan_id, $clan_title);
-					// array_push($players, $tmp);
-					// }
-				} else {
-					if ($array['clan'] == $clan_id) {
-						// if (($nickname==$row["nick"])&&($nickname!=null)){
-						$tmp2 = new PlayerClass($line2["timemark"], $line2["id"], Restring($line2["nick"]), $line2["frags"], $line2["deaths"], $line2["level"], $clan_id, $clan_title);
-						// array_push($players, $tmp);
-						// }
-					}
-				}
-				// if (($id_p == -1) || ($line["id"] == $id_p)) {
-				array_push($rows, $tmp2);
-				// } else {
-				// 	array_push($players, new Big_player($rows));
-				// 	$players[count($players) - 1]->Cut();
-				// 	$rows = array();
-				// 	array_push($rows, $tmp);
-				// }
-				$id_p = $line2["id"];
-			}
-			// print_r($rows);
-
 			array_push($players, new BigPlayer($rows));
 			$players[count($players) - 1]->Cut();
 			$rows = array();
@@ -1247,17 +1252,15 @@ function indexEra($array) {
 		}
 		$id_p = $line["id"];
 	}
+
 	array_push($players, new BigPlayer($rows));
 	$players[count($players) - 1]->Cut();
 	$rows = array();
-	// }
-	// }
-	// print_r($players);
 	$new_players = array();
 	foreach ($players as $player) {
 		foreach ($player->cuts as $cut) {
-			// print_r($cut);
 			if (count($cut->rows) > 0) {
+				// echo "HERE".PHP_EOL;
 				$a = $cut->max_frags - $cut->min_frags;
 				$b = $cut->max_deaths - $cut->min_deaths;
 				$c = floor(2 * $a + 0.5 * $b);
@@ -1266,92 +1269,21 @@ function indexEra($array) {
 				$lbzz = "";
 				foreach ($lbz as $lb_k => $lb_v) {
 					if (intval($lb_k) <= $u) {
-						// echo intval($lb_k) . " " . $u . PHP_EOL;
 						$lbzz = $lb_v;
 					}
 				}
-				// if (($lazy != "true")) {
-				// 	array_push($new_players, new Player_class_era($cut->nick, $cut->max_frags, $cut->max_deaths, $cut->level, $cut->clan_id, $cut->clan_title, $a, $b, $u, $o, $lbzz));
-				// } else {
 				if ($o > 0) {
 					array_push($new_players, new PlayerClassEra($cut->time, $cut->nick, $cut->max_frags, $cut->max_deaths, $cut->level, $cut->clan_id, $cut->clan_title, $a, $b, $u, $o, $lbzz));
 				}
-				// }
-				// $lbzz=str_replace("+","<br>",$lbzz);
 			}
 		}
-		// if (count($player->cuts)>1){
-		// echo "more".PHP_EOL;
-		// print_r($player);
-		// }
 	}
 
-	$query = "select distinct on (id) timemark,id,nick, frags, deaths,level,clan from players where timemark<='" . $started2 . "' order by id,timemark DESC ";
-	// } else {
-	// 	$query = "select distinct on (id) timemark,id,nick, frags, deaths,level,clan from players where clan=" . $array['clan'] . " and timemark<='" . $array['datee'] . "' order by id,timemark DESC ";
-	// }
-	$result = pg_query($query) or die('Ошибка запроса: ' . pg_last_error());
-	$players_extra = array();
-	// echo $query;
-	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-
-		// print_r($row);
-		// if ($row["timemark"] == $today){
-		$clan_title = "Нет клана";
-		$clan_id = -2;
-		foreach ($clans as $clan) {
-			if ($line["clan"] == $clan->id) {
-				$clan_title = $clan->title;
-				$clan_id = $line["clan"];
-			}
-		}
-		// }
-
-		// if ($array['clan'] == -1) {
-		// if (($nickname==$row["nick"])&&($nickname!=null)){
-		$tmp = new PlayerClass($line["timemark"], $line["id"], Restring($line["nick"]), $line["frags"], $line["deaths"], $line["level"], $clan_id, $clan_title);
-		// }
-		// } else {
-		// 	if ($array['clan'] == $clan_id) {
-		// 		// if (($nickname==$row["nick"])&&($nickname!=null)){
-		// 		$tmp = new PlayerClass($line["timemark"], $line["id"], Restring($line["nick"]), $line["frags"], $line["deaths"], $line["level"], $clan_id, $clan_title);
-		// 		// array_push($players, $tmp);
-		// 		// }
-		// 	}
-		// }
-		if ($line["clan"] == -1) {
-			$line["clan"] = -2;
-		}
-		if ((($array['clan'] != -1) && ($line["clan"] == $array['clan'])) || ($array['clan'] == -1)) {
-			array_push($players_extra, $tmp);
-		}
-
-	}
-
-	// print_r($players_extra);
-	// print_r($new_players);
-
-	$players = $new_players;
-
-	foreach ($players_extra as $player_extra) {
-		$was = 0;
-		foreach ($players as $player) {
-			if ($player_extra->nick == $player->nick) {
-				$was = 1;
-			}
-		}
-		if ($was == 0) {
-			array_push($new_players, new PlayerClassEra(0, $player_extra->nick, $player_extra->frags, $player_extra->deaths, $player_extra->level, $player_extra->clan_id, $player_extra->clan_title, 0, 0, 0, 0, ""));
-
-		}
-	}
-	$players = $new_players;
-
-	if ($array['order'] == "nick") {
+	if ($array['order'] == "nick COLLATE \"C\"") {
 		$nicks = array();
 		$ids = array();
-		for ($i = 0; $i < count($players); $i++) {
-			array_push($nicks, $players[$i]->nick);
+		for ($i = 0; $i < count($new_players); $i++) {
+			array_push($nicks, $new_players[$i]->nick);
 			array_push($ids, $i);
 		}
 		for ($i = 0; $i < count($nicks); $i++) {
@@ -1368,134 +1300,93 @@ function indexEra($array) {
 		}
 		$new = array();
 		for ($i = 0; $i < count($ids); $i++) {
-			array_push($new, $players[$ids[$i]]);
+			array_push($new, $new_players[$ids[$i]]);
 		}
-		$players = $new;
+		$new_players = $new;
 	}
 	if ($array['order'] == "frags") {
-		for ($i = 0; $i < count($players); $i++) {
-			for ($j = 0; $j < count($players); $j++) {
-				if ($players[$i]->frags > $players[$j]->frags) {
-					$tmp = $players[$i];
-					$players[$i] = $players[$j];
-					$players[$j] = $tmp;
+		for ($i = 0; $i < count($new_players); $i++) {
+			for ($j = 0; $j < count($new_players); $j++) {
+				if ($new_players[$i]->frags > $new_players[$j]->frags) {
+					$tmp = $new_players[$i];
+					$new_players[$i] = $new_players[$j];
+					$new_players[$j] = $tmp;
 				}
 			}
 		}
 	}
 	if ($array['order'] == "deaths") {
-		for ($i = 0; $i < count($players); $i++) {
-			for ($j = 0; $j < count($players); $j++) {
-				if ($players[$i]->deaths > $players[$j]->deaths) {
-					$tmp = $players[$i];
-					$players[$i] = $players[$j];
-					$players[$j] = $tmp;
+		for ($i = 0; $i < count($new_players); $i++) {
+			for ($j = 0; $j < count($new_players); $j++) {
+				if ($new_players[$i]->deaths > $new_players[$j]->deaths) {
+					$tmp = $new_players[$i];
+					$new_players[$i] = $new_players[$j];
+					$new_players[$j] = $tmp;
 				}
 			}
 		}
 	}
 	if ($array['order'] == "level") {
-		for ($i = 0; $i < count($players); $i++) {
-			for ($j = 0; $j < count($players); $j++) {
-				if ($players[$i]->level > $players[$j]->level) {
-					$tmp = $players[$i];
-					$players[$i] = $players[$j];
-					$players[$j] = $tmp;
+		for ($i = 0; $i < count($new_players); $i++) {
+			for ($j = 0; $j < count($new_players); $j++) {
+				if ($new_players[$i]->level > $new_players[$j]->level) {
+					$tmp = $new_players[$i];
+					$new_players[$i] = $new_players[$j];
+					$new_players[$j] = $tmp;
 				}
 			}
 		}
 	}
 	if ($array['order'] == "clan_id") {
-		for ($i = 0; $i < count($players); $i++) {
-			for ($j = 0; $j < count($players); $j++) {
-				if ($players[$i]->clan_id > $players[$j]->clan_id) {
-					$tmp = $players[$i];
-					$players[$i] = $players[$j];
-					$players[$j] = $tmp;
-				}
-			}
-		}
-	}
-	if ($array['order'] == "fragse") {
-		for ($i = 0; $i < count($players); $i++) {
-			for ($j = 0; $j < count($players); $j++) {
-				if ($players[$i]->frags_era > $players[$j]->frags_era) {
-					$tmp = $players[$i];
-					$players[$i] = $players[$j];
-					$players[$j] = $tmp;
-				}
-			}
-		}
-	}
-	if ($array['order'] == "deathse") {
-		for ($i = 0; $i < count($players); $i++) {
-			for ($j = 0; $j < count($players); $j++) {
-				if ($players[$i]->deaths_era > $players[$j]->deaths_era) {
-					$tmp = $players[$i];
-					$players[$i] = $players[$j];
-					$players[$j] = $tmp;
-				}
-			}
-		}
-	}
-	// if ($order=="sodars"){
-	//   for ($i=0;$i<count($players);$i++){
-	//     for ($j=0;$j<count($players);$j++){
-	//       if ($players[$i]->games>$players[$j]->games){
-	//         $tmp=$players[$i];
-	//         $players[$i]=$players[$j];
-	//         $players[$j]=$tmp;
-	//       }
-	//     }
-	//   }
-	// }
-	if ($array['order'] == "actions") {
-		for ($i = 0; $i < count($players); $i++) {
-			for ($j = 0; $j < count($players); $j++) {
-				if ($players[$i]->games > $players[$j]->games) {
-					$tmp = $players[$i];
-					$players[$i] = $players[$j];
-					$players[$j] = $tmp;
-				}
-			}
-		}
-	}
-	if ($array['order'] == "points") {
-		for ($i = 0; $i < count($players); $i++) {
-			for ($j = 0; $j < count($players); $j++) {
-				if ($players[$i]->points > $players[$j]->points) {
-					$tmp = $players[$i];
-					$players[$i] = $players[$j];
-					$players[$j] = $tmp;
+		for ($i = 0; $i < count($new_players); $i++) {
+			for ($j = 0; $j < count($new_players); $j++) {
+				if ($new_players[$i]->clan_id > $new_players[$j]->clan_id) {
+					$tmp = $new_players[$i];
+					$new_players[$i] = $new_players[$j];
+					$new_players[$j] = $tmp;
 				}
 			}
 		}
 	}
 	if ($array['order_way'] == "asc") {
-		$players = array_reverse($players);
+		$new_players = array_reverse($new_players);
 	}
-	// print_r($players);
+
 	$return = array();
 	$num = 1;
-	foreach ($players as $player) {
+	foreach ($new_players as $player) {
 		$tmp = "";
 		foreach ($player->timemark as $time) {
 			$tmp .= $time . "<br>";
 		}
-		// if (($player->points==inf) || ($player->points==NaN)|| ($player->frags_era==inf) || ($player->frags_era==NaN) || ($player->deaths_era==inf) || ($player->deaths_era==NaN)){
-		//   print_r($player);
-		// }
 		if ($array['debug'] == "true") {
 			array_push($return, new PlayerClassEraReturnD($num, $player->nick, $player->frags, $player->deaths, $player->level, $player->clan_title, $player->frags_era, $player->deaths_era, $player->games, $player->points, $player->lbz, $tmp));
 		} else {
 			array_push($return, new PlayerClassEraReturn($num, $player->nick, $player->frags, $player->deaths, $player->level, $player->clan_title, $player->frags_era, $player->deaths_era, $player->games, $player->points, $player->lbz));
-			// }
 		}
 		$num++;
 	}
-	// print_r($players);
+	$pages = floor((count($new_players) / $limit) - 0.1);
+	$pagination = array();
+	if ($offset != 0) {
+		array_push($pagination, 0);
+	}
+	if ($offset > 1) {
+		array_push($pagination, $offset - 1);
+	}
+	array_push($pagination, $offset);
+	if ($offset < $pages - 1) {
+		array_push($pagination, $offset + 1);
+	}
+	if ($offset != $pages) {
+		array_push($pagination, $pages);
+	}
+	if (intval($array["server_render"]) == 1) {
+		$return = Render(array_slice($return, $offset * $limit, $limit), $pagination, $offset);
+	}
 	return $return;
 }
+
 function UploadFile($array, $file, $uploadFileDir, $message) {
 	// echo $uploadFileDir;
 	// print_r($array);

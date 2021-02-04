@@ -20,6 +20,19 @@ class PlayerClass {
 		$this->clan_id = $clan_id;
 		$this->clan_title = $clan_title;
 	}
+	public static function __set_state($array) {
+		$obj = new PlayerClass($array['timemark'], $array['id'], $array['nick'], $array['frags'], $array['deaths'], $array['level'], $array['clan_id'], $array['clan_title']);
+		// $obj->timemark = $array['timemark'];
+		// $obj->id = $id;
+		// $obj->nick = $nick;
+		// $obj->frags = $frags;
+		// $obj->deaths = $deaths;
+		// $obj->level = $level;
+		// $obj->clan_id = $clan_id;
+		// $obj->clan_title = $clan_title;
+		return $obj;
+
+	}
 }
 
 class PlayerClassMerge {
@@ -129,6 +142,7 @@ class BigPlayer {
 				array_push($this->cuts, new Cut($cuts, $clan_title, $nick, $level, $id));
 				$this->cuts[count($this->cuts) - 1]->Count();
 				$cuts = array();
+				array_push($cuts, $row);
 			}
 			$clan_id_p = $row->clan_id;
 			$clan_title = $row->clan_title;
