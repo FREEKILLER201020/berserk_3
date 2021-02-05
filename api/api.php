@@ -336,6 +336,8 @@ function History($array) {
 		$tmp[started] = $line[started] . " 00:00:00";
 		$tmp[ended] = $line[ended] . " 23:59:59";
 	}
+	$tmp[started2] = strtotime($tmp[started]);
+	$tmp[started2] = date("Y-m-d H:i:s", $tmp[started2] - 2 * 24 * 60 * 60);
 	if ($array[clan] == -1) {
 		$query = "select * from attacks where ended is not null and resolved>='$tmp[started]' and resolved <='$tmp[ended]'  order by resolved desc;\n";
 	} else {
@@ -345,7 +347,7 @@ function History($array) {
 	$i = 1;
 
 	$clans = array();
-	$query2 = "SELECT  timemark,id,title, points, created, gone from clans where timemark<='$tmp[ended]' and timemark>='$tmp[started]' order by timemark asc;\n";
+	$query2 = "SELECT  timemark,id,title, points, created, gone from clans where timemark<='$tmp[ended]' and timemark>='$tmp[started2]' order by timemark asc;\n";
 	$result2 = pg_query($query2) or die('Ошибка запроса: ' . pg_last_error());
 	while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
 		if (isset($clans[$line2[id]])) {
@@ -357,7 +359,7 @@ function History($array) {
 	}
 
 	$cities = array();
-	$query2 = "SELECT  timemark, id, name, clan from cities where timemark<='$tmp[ended]' and timemark>='$tmp[started]' order by timemark asc;\n";
+	$query2 = "SELECT  timemark, id, name, clan from cities where timemark<='$tmp[ended]' and timemark>='$tmp[started2]' order by timemark asc;\n";
 	$result2 = pg_query($query2) or die('Ошибка запроса: ' . pg_last_error());
 	while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
 		if (isset($cities[$line2[id]])) {
@@ -427,6 +429,8 @@ function Timetable($array) {
 		$tmp[started] = $line[started] . " 00:00:00";
 		$tmp[ended] = $line[ended] . " 23:59:59";
 	}
+	$tmp[started2] = strtotime($tmp[started]);
+	$tmp[started2] = date("Y-m-d H:i:s", $tmp[started2] - 2 * 24 * 60 * 60);
 	if ($array[clan] == -1) {
 		$query = "select * from attacks where ended is null and resolved>='$tmp[started]' and resolved <='$tmp[ended]'  order by resolved asc;\n";
 	} else {
@@ -437,7 +441,7 @@ function Timetable($array) {
 	$i = 1;
 
 	$clans = array();
-	$query2 = "SELECT  timemark,id,title, points, created, gone from clans where timemark<='$tmp[ended]' and timemark>='$tmp[started]' order by timemark asc;\n";
+	$query2 = "SELECT  timemark,id,title, points, created, gone from clans where timemark<='$tmp[ended]' and timemark>='$tmp[started2]' order by timemark asc;\n";
 	$result2 = pg_query($query2) or die('Ошибка запроса: ' . pg_last_error());
 	while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
 		if (isset($clans[$line2[id]])) {
@@ -447,9 +451,8 @@ function Timetable($array) {
 			$clans[$line2[id]] = new HistoryClass($line2[id], new NameHistory($line2[title], $line2[timemark]));
 		}
 	}
-
 	$cities = array();
-	$query2 = "SELECT  timemark, id, name, clan from cities where timemark<='$tmp[ended]' and timemark>='$tmp[started]' order by timemark asc;\n";
+	$query2 = "SELECT  timemark, id, name, clan from cities where timemark<='$tmp[ended]' and timemark>='$tmp[started2]' order by timemark asc;\n";
 	$result2 = pg_query($query2) or die('Ошибка запроса: ' . pg_last_error());
 	while ($line2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
 		if (isset($cities[$line2[id]])) {
@@ -459,7 +462,6 @@ function Timetable($array) {
 			$cities[$line2[id]] = new HistoryClass($line2[id], new NameHistory($line2[name], $line2[timemark]));
 		}
 	}
-
 	while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 
 		foreach ($clans[$line[attacker]]->names as $name) {
